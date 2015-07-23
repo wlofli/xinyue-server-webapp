@@ -40,8 +40,8 @@ public class LoginServiceImpl implements LoginService {
 	@Override
 	public boolean updateLoginTime(Member loginInfo) {
 		try {
-			//MD5加密
-			loginInfo.setPassword(Md5.encodeByMD5(loginInfo.getPassword()));
+//			//MD5加密
+//			loginInfo.setPassword(Md5.encodeByMD5(loginInfo.getPassword()));
 			
 			int result = loginDAO.updateLoginTime(loginInfo);
 			
@@ -52,6 +52,15 @@ public class LoginServiceImpl implements LoginService {
 			log.error(e.getMessage());
 		}
 		return false;
+	}
+
+	@Override
+	public Member getMemberInfo(Member loginInfo) {
+		
+//		//MD5加密
+//		loginInfo.setPassword(Md5.encodeByMD5(loginInfo.getPassword()));
+		
+		return loginDAO.getMemberInfo(loginInfo);
 	}
 
 }

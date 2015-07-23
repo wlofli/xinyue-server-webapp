@@ -8,6 +8,8 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import net.sf.json.JSONObject;
+
 import org.springframework.http.HttpRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -36,6 +38,7 @@ import com.xinyue.manage.service.MemberService;
 import com.xinyue.manage.service.OrderService;
 import com.xinyue.manage.util.CommonFunction;
 import com.xinyue.manage.util.GlobalConstant;
+import com.xinyue.server.model.Page;
 
 /**
  * author lzc
@@ -57,25 +60,21 @@ public class OrderController {
 
 	@RequestMapping("list")
 	public String getList(Model	model , int index, @ModelAttribute("order")SearchOrder searchOrder,HttpSession session){
-		
 System.out.println("list");
 System.out.println(index);
 		String string = (String)session.getAttribute("id");
-		
-		
 		List<Order> orderList = orderService.getListByMemberId(string, searchOrder, GlobalConstant.PAGE_SIZE , index);
 		model.addAttribute("search", orderService.getStatus(GlobalConstant.ORDER_INIT));
 		model.addAttribute("list", orderList);
 		
-		PageInfo pageInfo = new PageInfo();
-		CommonFunction cf = new CommonFunction();
 		
-		// 分页传值
+		//分页
+		Page page = new Page();
 		int countAll = orderService.getCountByMemberId(string, searchOrder);
-
-		pageInfo = cf.pageList(countAll, index + 1);
-		model.addAttribute("page", pageInfo);
-		
+		page.setTotalNum(countAll);
+		page.setPageNo(index);
+		page.setPageSize(GlobalConstant.PAGE_SIZE);
+		model.addAttribute("page", page);
 		
 		return "screens/order/orderList";
 	}
@@ -89,18 +88,33 @@ System.out.println("graph");
 		model.addAttribute("search", orderService.getStatus(GlobalConstant.ORDER_INIT));
 		model.addAttribute("list", orderList);
 		
-		PageInfo pageInfo = new PageInfo();
-		CommonFunction cf = new CommonFunction();
-		
-		// 分页传值
+		//分页
+		Page page = new Page();
 		int countAll = orderService.getCountByMemberId(string, searchOrder);
-
-		pageInfo = cf.pageList(countAll, index + 1);
-		model.addAttribute("page", pageInfo);
+		page.setTotalNum(countAll);
+		page.setPageNo(index);
+		page.setPageSize(GlobalConstant.PAGE_SIZE);
+		model.addAttribute("page", page);
 				
 		return "screens/order/orderGraphList";
 	}
 	
+	
+	@RequestMapping("getorder")
+	public @ResponseBody String getOrder(HttpSession session, int index){
+		JSONObject jsonObject = new JSONObject();
+		String string = (String)session.getAttribute("id");
+		List<Order> orderList = orderService.getListByMemberId(string, new SearchOrder(), GlobalConstant.PAGE_SIZE_ONE, index);
+		if(orderList != null && orderList.size() >0){
+			jsonObject.accumulate("order", orderList.get(0));
+			jsonObject.accumulate("result", GlobalConstant.RET_SUCCESS);
+		}else {
+			jsonObject.accumulate("result", GlobalConstant.RET_FAIL);
+		}
+System.out.println("getorder");
+System.out.println(jsonObject.get("order"));
+		return jsonObject.toString();
+	}
 	
 	
 	

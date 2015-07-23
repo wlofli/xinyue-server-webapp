@@ -17,4 +17,17 @@
 		where
 		    login_name = #{loginInfo.loginName} and password = #{loginInfo.password};
 	</update>
+	
+	<select id="getMemberInfo" parameterType="com.xinyue.manage.model.Member" resultType="com.xinyue.manage.model.Member">
+		select 
+		    id, 
+		    login_name as loginName, 
+		    contact_name as contactName, 
+		    company as company, 
+		    date_format(login_time,'%Y-%m-%d') as loginTime
+		from
+		    moke.m_member_info
+		where
+		    login_name = #{loginName} and password = #{password};
+	</select>
 </mapper>

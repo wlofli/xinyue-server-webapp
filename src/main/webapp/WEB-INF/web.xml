@@ -36,6 +36,10 @@
 	<listener>
 		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
 	</listener>
+	<session-config>
+		<session-timeout>60</session-timeout>
+	</session-config>
+	
 	<!-- 自定义监听器 -->
 <!-- 	<listener>
 		<listener-class>com.xinyue.manage.util.CustomListener</listener-class>

@@ -8,4 +8,6 @@ public interface LoginService {
 
 	boolean updateLoginTime(Member loginInfo);
 
+	Member getMemberInfo(Member loginInfo);
+
 }

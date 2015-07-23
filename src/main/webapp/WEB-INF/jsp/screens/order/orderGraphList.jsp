@@ -14,16 +14,17 @@
 function changeStatus(){
 	$("#searchForm").submit();
 }
+function changePage(n){
+	$("#searchForm").attr("action","${ctx }/order/graph?index=" + n);
+	changeStatus();
+}
 </script>
 </head>
-
 <body class="h_bj">
 <div class="container">
 <jsp:include page="../../common/head.jsp" />
 <div class="hy_i_center">
 <jsp:include page="../member/tree.jsp" />
-
-
 <div class="hy_right">
 <div class="ddxq_top">
 <Ul class="sdlc_ul">
@@ -87,19 +88,19 @@ function changeStatus(){
 <div class="hy_dd_nr3">
 <c:choose>
 	<c:when test="${list.status == '需求填写中' }">
-		<img src="../images/order_zt_bj.png" />
+		<img src="${ctx }/images/order_zt_bj.png" />
 	</c:when>
 	<c:when test="${list.status == '等待新越网审核'}">
-		<img src="../images/order_zt_bj1.png" />
+		<img src="${ctx }/images/order_zt_bj1.png" />
 	</c:when>
 	<c:when test="${list.status == '放款成功' }">
-		<img src="../images/order_zt_bj4.png" />
+		<img src="${ctx }/images/order_zt_bj4.png" />
 	</c:when>
 	<c:when test="${list.status == '新越网审核中' || list.status == '新越网审核通过' || list.status == '新越网审核不通过' }">
-		<img src="../images/order_zt_bj2.png" />
+		<img src="${ctx }/images/order_zt_bj2.png" />
 	</c:when>
 	<c:otherwise>
-		<img src="../images/order_zt_bj3.png" />
+		<img src="${ctx }/images/order_zt_bj3.png" />
 	</c:otherwise>
 </c:choose>
 </div>
@@ -107,7 +108,7 @@ function changeStatus(){
 </div>
 
 <!-- <div class="hy_dd_page"><span>共300条记录</span><a href="#" class="dd_page_n">上一页</a><span>第1/8页</span><a href="#" class="dd_page_h">下一页</a></div> -->
-<div class="hy_dd_page"><%@ include file="../../common/page.jsp" %></div>
+<%@ include file="../../common/page.jsp" %>
 
 </div>
  

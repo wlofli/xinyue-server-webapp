@@ -14,6 +14,11 @@
 		$("#searchForm").submit();
 	}
 	
+	function changePage(n){
+		$("#searchForm").attr("action","${ctx }/order/list?index=" + n);
+		changeStatus();
+	}
+	
 	function deleteOrder(id){
 		$.ajax({
 			url:"${ctx}/order/delete?list=" + id,
@@ -88,7 +93,7 @@
 <tbody class="h_z">
 <c:forEach items="${list }" var="list" varStatus="vs">
 <tr>
-<td colspan="1"><c:out value="${vs.count + (page.nowPage-1)*10}" /></td>
+<td colspan="1"><c:out value="${vs.count + (page.pageNo)*10}" /></td>
 <td colspan="2">${list.code }</td>
 <td colspan="2"><a href="undone->不知道去哪">${list.productName }</a></td>
 <td colspan="2">${list.bank }</td>
@@ -111,7 +116,7 @@
 </tbody>
  
 </table>
-<div class="hy_dd_page"><span>共10条记录</span><%@ include file="../../common/page.jsp" %></div>
+<%@ include file="../../common/page.jsp" %>
 
 </div>
 

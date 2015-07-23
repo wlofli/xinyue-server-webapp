@@ -66,10 +66,12 @@ System.out.println("login");
 			//更新登录时间
 			result = loginService.updateLoginTime(loginInfo);
 			
-			request.getSession().setAttribute(GlobalConstant.SESSION_MEMBER_INFO, loginInfo);
+			Member member = loginService.getMemberInfo(loginInfo);
+			
+			request.getSession().setAttribute(GlobalConstant.SESSION_MEMBER_INFO, member);
 			
 		//测试用lzc
-			request.getSession().setAttribute("id", "62aa452a34234048b548ff862e91a968");
+			request.getSession().setAttribute("id", "00022b625df943ab934299050c5d6f43");
 			
 			
 			return "screens/member/member_index";

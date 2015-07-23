@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- wenhai.you -->
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xinyue.server.dao.OrgCollectDao">
+	<select id="findPage" resultType="com.xinyue.server.model.OrgCollect">
+		select 
+		 c.id id,
+		 o.name orgName,
+		 (select count(*) from c_manager_info where organization = o.number) as creditCount,
+		 (select count(*) from m_product_info where bank = o.number) as proCount,
+		 c.create_time createTime,
+		 t.name orgType,
+		 o.site orgAddress,
+		 o.establish orgEstablish,
+		 o.scale orgScale,
+		 o.business_area businessArea,
+		 o.good_business business 
+		 from c_collect_org c 
+		left join m_member_info m on m.id = c.member_id 
+		left join m_organization_info o on o.number = c.org_id 
+		left join c_manager_info i on i.organization = o.number 
+		left join m_organization_type t on t.otypeid = o.genre 
+		where c.deleted = 0 and c.member_id = #{orgCollect.memberid} 
+		<if test="orgCollect.orgName != null and orgCollect.orgName != ''">
+		and o.name like concat(#{orgCollect.orgName} , '%')
+		</if>	
+		limit #{start} , #{pageSize}
+	</select>
+	
+	<select id="getOrgTotal" resultType="int">
+		select count(*) from c_collect_org c 
+		left join m_member_info m on m.id = c.member_id 
+		left join m_organization_info o on o.number = c.org_id 
+		left join c_manager_info i on i.organization = o.number 
+		left join m_organization_type t on t.otypeid = o.genre 
+		where c.deleted = 0 and c.member_id = #{orgCollect.memberid} 
+		<if test="orgCollect.orgName != null and orgCollect.orgName != ''">
+		and o.name like concat(#{orgCollect.orgName} , '%')
+		</if>	
+	</select>
+	
+	<update id="delOrgCollect">
+		update c_collect_org set deleted = 1 where id = 
+		<foreach collection="list" index="index" item="item" separator=" or id = ">
+			#{item}
+		</foreach>
+	</update>
+	
+<!-- 	<select id="showDetail" resultType="com.xinyue.server.model.Collect"> -->
+<!-- 		select  -->
+<!-- 		 c.id id, -->
+<!-- 		 (select count(*) from c_manager_info where organization = o.number) as creditCount, -->
+<!-- 		 (select count(*) from m_product_info where bank = o.number) as proCount, -->
+<!-- 		 c.create_time createTime, -->
+<!-- 		 t.name orgType, -->
+<!-- 		 o.site orgAddress, -->
+<!-- 		 o.establish orgEstablish, -->
+<!-- 		 o.scale orgScale, -->
+<!-- 		 o.business_area businessArea, -->
+<!-- 		 o.good_business business  -->
+<!-- 		 from c_collect_org c  -->
+<!-- 		left join m_member_info m on m.id = c.member_id  -->
+<!-- 		left join m_organization_info o on o.number = c.org_id  -->
+<!-- 		left join c_manager_info i on i.organization = o.number  -->
+<!-- 		left join m_organization_type t on t.otypeid = o.genre  -->
+<!-- 		where c.deleted = 0 and c.id = #{id} -->
+<!-- 	</select> -->
+</mapper>

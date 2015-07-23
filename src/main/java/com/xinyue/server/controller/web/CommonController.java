@@ -125,6 +125,10 @@ System.out.println("list in");
 					return "redirect:/member/docctr/show";
 				case "main" :
 					return "redirect:/member/home/index?index=0";
+				case "companyrecord" :
+					return "redirect:/member/record/applicant";
+				case "authentication" :
+					return "redirect:/member/authentication/page";
 				default:
 					break;
 				}

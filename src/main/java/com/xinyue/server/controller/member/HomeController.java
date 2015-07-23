@@ -1,5 +1,7 @@
 package com.xinyue.server.controller.member;
 
+import java.util.List;
+
 import javax.annotation.Resource;
 import javax.servlet.http.HttpSession;
 
@@ -10,6 +12,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.xinyue.manage.beans.PageInfo;
 import com.xinyue.manage.beans.SearchOrder;
 import com.xinyue.manage.model.Member;
+import com.xinyue.manage.model.Order;
 import com.xinyue.manage.service.MemberService;
 import com.xinyue.manage.service.OrderService;
 import com.xinyue.manage.service.ProductService;
@@ -40,14 +43,23 @@ public class HomeController {
 System.out.println("welcome");
 		ModelAndView mv = new ModelAndView("screens/member/member_index");
 		//测试用
-		String id = "62aa452a34234048b548ff862e91a968";
+		String id = "00022b625df943ab934299050c5d6f43";
 		Member member = memberService.editMember(id);
 //System.out.println(member);
 //System.out.println(member.getContactName());
 		session.setAttribute("user", member);
 		mv.addObject("product", productService.getListByRecommend(GlobalConstant.PRODUCT_RECOMMEND_ON));
-	
-		mv.addObject("order", orderService.getListByMemberId(id, new SearchOrder(), GlobalConstant.PAGE_SIZE, 0));
+		List<Order> list = orderService.getListByMemberId(id, new SearchOrder(), GlobalConstant.PAGE_SIZE, 0);
+		 Order order = null;
+		if(list.size() > 0){
+			order = list.get(0);
+		}
+//		else {
+//			order = new Order();
+//		}
+	   
+	    mv.addObject("orderNum",   orderService.getCountByMemberId(id, new SearchOrder()));
+		mv.addObject("order",order);
 		
 		PageInfo pageInfo = new PageInfo();
 		CommonFunction cf = new CommonFunction();

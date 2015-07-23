@@ -3,19 +3,18 @@
 <%@ taglib prefix="sf" uri="http://www.springframework.org/tags/form"%>
 <div class="hy_right_bt">
 	<ul class="menu1" id="menu">
-		<li class="hit"><a href="qyda_hy.html">申请人信息</a></li>
-		<li class=""><a href="qyda_hy1.html">企业基本信息</a></li>
-		<li class=""><a href="qyda_hy2.html">基本经营信息</a></li>
-		<li class=""><a href="qyda_hy3.html">抵押物与负债</a></li>
-		<li class=""><a href="qyda_hy4.html">上传资料</a></li>
-		<li class=""><a href="qyda_hy5.html">评级信息</a></li>
+		<li class="hit"><a href="${ctx}/member/record/applicant">申请人信息</a></li>
+		<li class=""><a href="${ctx}/member/record/company">企业基本信息</a></li>
+		<li class=""><a href="${ctx}/member/record/business">基本经营信息</a></li>
+		<li class=""><a href="${ctx}/member/record/debt">抵押物与负债</a></li>
+		<li class=""><a href="${ctx}/member/record/document">上传资料</a></li>
+		<li class=""><a href="${ctx}/member/record/rating">评级信息</a></li>
 	</ul>
 </div>
-<div class="tab" id="tab0">
-	<sf:form action="" commandName="applicantInfo" method="post"
-		id="applicantForm">
+<div class="tab">
+	<sf:form action="${ctx}/member/save" commandName="applicationInfo" method="post" id="applicantForm">
 		<p class="qiye_bt">
-			<strong>申请人信息（为必填项） </strong>
+			<strong>申请人信息 </strong>
 		</p>
 		<p>
 			<span>申请人姓名：</span>
@@ -75,13 +74,13 @@
 		<p>
 			<span>担保物所在地区：</span>
 			<sf:select path="guaranteeProvince" cssClass="s2" id="editP"
-				onchange="getCities()">
+				onchange="getCities('')">
 				<sf:option value="">请选择</sf:option>
 				<sf:options items="${provinceList}" itemValue="key"
 					itemLabel="value" />
 			</sf:select>
 			<sf:select path="guaranteeCity" cssClass="s2" id="editC"
-				onchange="getZones()">
+				onchange="getZones('','')">
 				<sf:option value="">请选择</sf:option>
 			</sf:select>
 			<sf:select path="guaranteeZone" cssClass="s2" id="editZ">
@@ -90,7 +89,7 @@
 		</p>
 		<p>
 			<span>担保物是否在本地：</span>
-			<sf:select path="guaranteeType" cssClass="s1">
+			<sf:select path="isLocation" cssClass="s1">
 				<sf:option value="">请选择</sf:option>
 				<sf:option value="1">是</sf:option>
 				<sf:option value="0">否</sf:option>
@@ -174,7 +173,7 @@ function getZones(val1,val2){
 					option.html(zone.value);
 					$("#editZ").append(option);
 				};
-				if(val != ""){
+				if(val2 != ""){
 					$("#editZ").val(val2);
 				}
 			}

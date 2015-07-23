@@ -10,4 +10,6 @@ public interface LoginDAO {
 
 	int updateLoginTime(@Param("loginInfo")Member loginInfo);
 
+	Member getMemberInfo(Member loginInfo);
+
 }
