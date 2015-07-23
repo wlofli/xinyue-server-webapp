@@ -46,23 +46,23 @@
 		</foreach>
 	</update>
 	
-<!-- 	<select id="showDetail" resultType="com.xinyue.server.model.Collect"> -->
-<!-- 		select  -->
-<!-- 		 c.id id, -->
-<!-- 		 (select count(*) from c_manager_info where organization = o.number) as creditCount, -->
-<!-- 		 (select count(*) from m_product_info where bank = o.number) as proCount, -->
-<!-- 		 c.create_time createTime, -->
-<!-- 		 t.name orgType, -->
-<!-- 		 o.site orgAddress, -->
-<!-- 		 o.establish orgEstablish, -->
-<!-- 		 o.scale orgScale, -->
-<!-- 		 o.business_area businessArea, -->
-<!-- 		 o.good_business business  -->
-<!-- 		 from c_collect_org c  -->
-<!-- 		left join m_member_info m on m.id = c.member_id  -->
-<!-- 		left join m_organization_info o on o.number = c.org_id  -->
-<!-- 		left join c_manager_info i on i.organization = o.number  -->
-<!-- 		left join m_organization_type t on t.otypeid = o.genre  -->
-<!-- 		where c.deleted = 0 and c.id = #{id} -->
-<!-- 	</select> -->
+	<select id="showDetail" resultType="com.xinyue.server.model.OrgCollect">
+		select 
+		 c.id id,
+		 (select count(*) from c_manager_info where organization = o.number) as creditCount,
+		 (select count(*) from m_product_info where bank = o.number) as proCount,
+		 c.create_time createTime,
+		 t.name orgType,
+		 o.site orgAddress,
+		 o.establish orgEstablish,
+		 o.scale orgScale,
+		 o.business_area businessArea,
+		 o.good_business business 
+		 from c_collect_org c 
+		left join m_member_info m on m.id = c.member_id 
+		left join m_organization_info o on o.number = c.org_id 
+		left join c_manager_info i on i.organization = o.number 
+		left join m_organization_type t on t.otypeid = o.genre 
+		where c.deleted = 0 and c.id = #{id}
+	</select>
 </mapper>
