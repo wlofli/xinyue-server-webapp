@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xinyue.server.dao.LoginDAO">
+	<select id="findMemberByLoginInfo" parameterType="com.xinyue.manage.model.Member" resultType="int">
+		select 
+		    count(*)
+		from
+		    m_member_info
+		where
+		    login_name = #{loginInfo.loginName} and password = #{loginInfo.password};
+	</select>
+	
+	<update id="updateLoginTime" parameterType="com.xinyue.manage.model.Member">
+		update m_member_info 
+		set 
+		    login_time = now()
+		where
+		    login_name = #{loginInfo.loginName} and password = #{loginInfo.password};
+	</update>
+</mapper>

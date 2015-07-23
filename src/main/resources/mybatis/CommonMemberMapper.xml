@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- wenhai.you -->
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xinyue.server.dao.CommonMemberDao">
+	
+	<select id="getBasicMember" resultType="com.xinyue.manage.model.Member">
+		select 
+		m.id id ,
+		m.login_name loginName,
+		m.sex sex,
+		m.contact_name contactName,
+		m.contact_phone contactPhone,
+		m.company company,
+		m.area_province provinceid,
+		m.area_city cityid,
+		m.area_city cityids,
+		m.area_zone zoneid,
+		m.area_zone zoneids,
+		m.address address,
+		m.email email 
+		from m_member_info m 
+		left join m_area_province p on m.area_province = p.code 
+		left join m_area_city c on m.area_city = c.code 
+		left join m_area_zone z on m.area_zone = z.code 
+		left join m_select_info s on m.sex = s.select_key 
+		where s.type_code = 'sex' and m.id = #{id};
+	</select>
+	
+	<update id="saveMember" parameterType="com.xinyue.manage.model.Member">
+		update m_member_info set sex = #{sex} , contact_name = #{contactName} , contact_phone = #{contactPhone} , company=#{company} , area_province = #{provinceid},
+			area_city = #{cityid} , area_zone = #{zoneid} , address = #{address} , email = #{email} , modified_id = #{loginName} , modified_time = now() where id = #{id}
+	</update>
+	
+	<select id="inspectPwd" resultType="string">
+		select password from m_member_info where id = #{id}
+	</select>
+	
+	<select id="findTel" resultType="string">
+		select contact_phone from m_member_info where id = #{id}
+	</select>
+	
+	<update id="updatePwd">
+		update m_member_info set password = #{password} where id = #{id}
+	</update>
+	
+	<update id="updateTel">
+		update m_member_info set contact_phone = #{contactPhone} where id = #{id}
+	</update>
+</mapper>

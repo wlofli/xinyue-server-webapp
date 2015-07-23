@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xinyue.server.dao.RegisterDAO">
+	<insert id="saveMember" parameterType="com.xinyue.manage.model.Member">
+		insert into 
+			m_member_info(
+				id,
+				login_name,
+				password,
+				sex,
+				contact_name,
+				contact_phone,
+				company,
+				area_province,
+				area_city,
+				area_zone,
+				applicant_info,
+				license_info,
+				rating_info,
+				real_estate,
+				debt_info,
+				realname_info,
+				control_info,
+				email,
+				register_time,
+				login_time,
+				email_time,
+				deleted,
+				created_time,
+				modified_time,
+				created_id,
+				modified_id
+			)
+		values(
+			replace(uuid(), '-', ''),
+			#{registerInfo.loginName},
+			#{registerInfo.password},
+			3,
+			#{registerInfo.contactName},
+			#{registerInfo.contactPhone},
+			#{registerInfo.company},
+			#{registerInfo.provinceid},
+			#{registerInfo.cityid},
+			#{registerInfo.zoneid},
+			null,
+			null,
+			null,
+			null,
+			null,
+			null,
+			null,
+			#{registerInfo.email},
+			now(),
+			now(),
+			now(),
+			0,
+			now(),
+			now(),
+			#{registerInfo.loginName},
+			#{registerInfo.loginName}
+		);
+	</insert>
+	
+	<select id="findMemberByEmail" parameterType="String" resultType="int">
+		select 
+			COUNT(*)
+		from
+			m_member_info
+		where
+			email=#{email};
+	</select>
+</mapper>
