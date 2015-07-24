@@ -18,10 +18,10 @@
 var maxPage = "${page.totalPage}";
 function changep(n){
 // 	alert(n)
- if(n <  0 || n >= maxPage){
+if(n <  0 || n >= maxPage){
 // 	 alert("nono");
 	 return;
- }
- changePage(n);
+}
+changePage(n);
 }
 </script>

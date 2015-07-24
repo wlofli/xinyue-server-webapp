@@ -58,9 +58,6 @@ public class LoginController {
 	public String login(HttpServletRequest request,Model model,Member loginInfo) {
 		
 		boolean result = loginService.login(loginInfo);
-		//测试用lzc
-		result = true;
-System.out.println("login");		
 		
 		if (result) {
 			//更新登录时间
@@ -69,10 +66,6 @@ System.out.println("login");
 			Member member = loginService.getMemberInfo(loginInfo);
 			
 			request.getSession().setAttribute(GlobalConstant.SESSION_MEMBER_INFO, member);
-			
-		//测试用lzc
-			request.getSession().setAttribute("id", "00022b625df943ab934299050c5d6f43");
-			
 			
 			return "screens/member/member_index";
 			
@@ -93,17 +86,14 @@ System.out.println("login");
 	 * @return
 	 */
 	@RequestMapping(value="/login/check/code",method=RequestMethod.POST)
-	public @ResponseBody String checkCode(String checkCode,HttpServletRequest request) {
-		
-		String sessionCode = request.getSession().getAttribute("randcode").toString();
-		
-//测试
-		return "true";
-		
+	public @ResponseBody boolean checkCode(String checkCode,HttpServletRequest request) {
+return true;		
+//		String sessionCode = request.getSession().getAttribute("randcode").toString();
+//		
 //		if (checkCode.toLowerCase().equals(sessionCode.toLowerCase())) {
-//			return "true";
+//			return true;
 //		}else {
-//			return "false";
+//			return false;
 //		}
 		
 	}

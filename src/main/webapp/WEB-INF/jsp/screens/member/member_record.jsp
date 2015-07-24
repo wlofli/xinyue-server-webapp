@@ -21,8 +21,17 @@
 				<c:if test="${recordType eq 'applicant'}">
 					<%@ include file="../member/applicant.jsp"%>
 				</c:if>
+				<c:if test="${recordType eq 'company'}">
+					<%@ include file="../member/company.jsp"%>
+				</c:if>
 				<c:if test="${recordType eq 'business'}">
 					<%@ include file="../member/business.jsp"%>
+				</c:if>
+				<c:if test="${recordType eq 'estate'}">
+					<%@ include file="../member/realEstate.jsp"%>
+				</c:if>
+				<c:if test="${recordType eq 'debt'}">
+					<%@ include file="../member/debt.jsp"%>
 				</c:if>
 			</div>
 		</div>

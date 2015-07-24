@@ -7,7 +7,8 @@
 		<li class=""><a href="${ctx}/member/record/applicant">申请人信息</a></li>
 		<li class=""><a href="${ctx}/member/record/company">企业基本信息</a></li>
 		<li class="hit"><a href="${ctx}/member/record/business">基本经营信息</a></li>
-		<li class=""><a href="${ctx}/member/record/debt">抵押物与负债</a></li>
+		<li class=""><a href="${ctx}/member/record/estate">抵押物信息</a></li>
+		<li class=""><a href="${ctx}/member/record/debt">负债信息</a></li>
 		<li class=""><a href="${ctx}/member/record/document">上传资料</a></li>
 		<li class=""><a href="${ctx}/member/record/rating">评级信息</a></li>
 	</ul>

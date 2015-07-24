@@ -6,7 +6,9 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.xinyue.manage.beans.PageInfo;
@@ -37,34 +39,36 @@ public class HomeController {
 	private ProductService productService;
 	
 	
-	//可以删除
+
 	@RequestMapping({"/","/index","index.jsp","index.html"})
-	public ModelAndView welcome(HttpSession session,int index) {
+	public ModelAndView welcome(HttpSession session, int index) {
 System.out.println("welcome");
 		ModelAndView mv = new ModelAndView("screens/member/member_index");
-		//测试用
-		String id = "00022b625df943ab934299050c5d6f43";
-		Member member = memberService.editMember(id);
+//测试用
+//		String id = "00022b625df943ab934299050c5d6f43";
+		Member member = (Member) session.getAttribute(GlobalConstant.SESSION_MEMBER_INFO);
+		
+//		Member member = memberService.editMember(id);
 //System.out.println(member);
 //System.out.println(member.getContactName());
-		session.setAttribute("user", member);
+//		session.setAttribute("user", member);
 		mv.addObject("product", productService.getListByRecommend(GlobalConstant.PRODUCT_RECOMMEND_ON));
-		List<Order> list = orderService.getListByMemberId(id, new SearchOrder(), GlobalConstant.PAGE_SIZE, 0);
-		 Order order = null;
+		List<Order> list = orderService.getListByMemberId(member.getId(), new SearchOrder(), GlobalConstant.PAGE_SIZE, 0);
+		Order order = null;
 		if(list.size() > 0){
 			order = list.get(0);
 		}
 //		else {
 //			order = new Order();
 //		}
-	   
-	    mv.addObject("orderNum",   orderService.getCountByMemberId(id, new SearchOrder()));
+	    mv.addObject("user", member);
+	    mv.addObject("orderNum",   orderService.getCountByMemberId(member.getId(), new SearchOrder()));
 		mv.addObject("order",order);
 		
 		PageInfo pageInfo = new PageInfo();
 		CommonFunction cf = new CommonFunction();
 		// 分页传值
-		int countAll = orderService.getCountByMemberId(id, new SearchOrder());
+		int countAll = orderService.getCountByMemberId(member.getId(), new SearchOrder());
 
 		pageInfo = cf.pageList(countAll, index + 1);
 		mv.addObject("page", pageInfo);
