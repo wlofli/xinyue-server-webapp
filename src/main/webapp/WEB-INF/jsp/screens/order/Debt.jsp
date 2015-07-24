@@ -11,7 +11,19 @@
 <link rel="icon" href="../images/moke.ico" />
 <%@include file="../../common/common.jsp" %>
 <script type="text/javascript">
+function save(n){
+alert("in");
+ $.ajax({
+	url:"${ctx}/order/save/debt",
+	data:$("#debtForm").serialize(),
+	type:"post",
+	success:function(data){
+		
+	}
+ });
 
+ 
+}
 
 </script>
 </head>
@@ -35,15 +47,16 @@
 </ul>
 </div>
 <div class="tab">
+<sf:form action="${ctx }/order/save/debt" id="debtForm">
 <p class="qiye_bt"><strong>未抵押的不动产</strong></p>
-<p><span>厂房：</span><input type="text" class="t1" /></p>
+<p><span>厂房：</span><input type="text" name="realEstate.factory" value="${realEstate.factory }" class="t1" /></p>
 <p><span>土地：</span><input type="radio" name="sex" class="r1"/><span class="r1_sex">是</span><input type="radio" name="sex" class="r1 m_l_20"/><span class="r1_sex">否</span><input type="radio" name="sex" class="r1 m_l_20" checked="checked"/><span class="r1_sex">保密</span></p>
 <p><span>办公楼：</span><input type="text" class="t1" /></p>
 <p><span>店铺：</span><input type="text" class="t1" /></p>
 <p><span>法人私有财产：</span><input type="text" class="t1" /></p>
 <p><span>机器设备：</span><input type="text" class="t1" /></p>
 <p class="qiye_bt"><strong>负债</strong></p>
-<p><span>公司资产负债率(%)：</span><input type="text" class="t1" /></p>
+<p><span>公司资产负债率(%)：</span><input type="text" name="debt.rate" value="${debt.rate }" class="t1" /></p>
 <p><span>公司收入负债比(%)：</span><input type="text" class="t1" /></p>
 <p><span>抵押物情况：</span><select class="s1"><option selected="selected">请选择</option></select></p>
 <p><span>第一还款来源年收入(万)：</span><input type="text" class="t1" /></p>
@@ -51,7 +64,8 @@
 <p><span>企业净资产：</span><input type="text" class="t1" /></p>
 <p><span>企业净资产流动比(%)：</span><input type="text" class="t1" /></p>
 <p><span>企业主资产：</span><input type="text" class="t1" /></p>
-<p><input type="button" value="保存" class="b1" /><input type="button" value="下一步" class="b4" /></p>
+<p><input type="button" value="保存" class="b1" onclick="save(0)"/><input type="button" value="下一步" class="b4" onclick="save(1)" /></p>
+</sf:form>
 </div>
 </div>
 </div>

@@ -173,7 +173,7 @@ function save(n){
 				<sf:option value="1">是</sf:option>
 				<sf:option value="0">否</sf:option>
 			</sf:select></p>
-<p><input type="button" value="保存" class="b1"  onclick="save(1)"/><input type="button" value="下一步" class="b4" onclick="save(2)"/></p>
+<p><input type="button" value="保存" class="b1"  onclick="save(0)"/><input type="button" value="下一步" class="b4" onclick="save(1)"/></p>
 </sf:form>
 </div>
 

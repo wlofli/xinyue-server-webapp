@@ -297,8 +297,8 @@ System.out.println("debtsave = " + order.getDebtSave());
 			realEstate = companyInfoService.getRealEstateInfoById(order.getRealEstate());
 			debt = companyInfoService.getDebtInfoById(order.getDebtInfo());
 		}
-		model.addAttribute("estateInfo", realEstate);
-		model.addAttribute("debtInfo", debt);
+		model.addAttribute("realEstate", realEstate);
+		model.addAttribute("debt", debt);
 		
 		
 		return "screens/order/orderDebt";
@@ -311,6 +311,7 @@ System.out.println("debtsave = " + order.getDebtSave());
 System.out.println(debt);
 System.out.println(debt.getRate());
 System.out.println(realEstate);
+System.out.println(realEstate.getFactory());
 		return GlobalConstant.RET_SUCCESS;
 	}
 	
