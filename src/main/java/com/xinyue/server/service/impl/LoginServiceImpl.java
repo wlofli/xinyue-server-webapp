@@ -63,4 +63,33 @@ public class LoginServiceImpl implements LoginService {
 		return loginDAO.getMemberInfo(loginInfo);
 	}
 
+	@Override
+	public boolean findMemberByPhone(String phone) {
+		
+		try {
+			int result = loginDAO.findMemberByPhone(phone);
+			if (result >0) {
+				return true;
+			}
+		} catch (Exception e) {
+			log.error(e.getMessage());
+		}
+		return false;
+	}
+
+	@Override
+	public boolean updatePsw(Member member) {
+		try {
+			Member temp = member;
+			temp.setPassword(Md5.encodeByMD5(temp.getPassword()));
+			int result = loginDAO.updatePsw(temp);
+			if (result > 0) {
+				return true;
+			}
+		} catch (Exception e) {
+			log.error(e.getMessage());
+		}
+		return false;
+	}
+
 }

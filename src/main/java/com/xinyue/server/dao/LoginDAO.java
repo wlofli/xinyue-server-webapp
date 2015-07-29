@@ -12,4 +12,8 @@ public interface LoginDAO {
 
 	Member getMemberInfo(Member loginInfo);
 
+	int findMemberByPhone(String phone);
+
+	int updatePsw(Member member);
+
 }

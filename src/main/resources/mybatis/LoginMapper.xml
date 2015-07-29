@@ -26,8 +26,20 @@
 		    company as company, 
 		    date_format(login_time,'%Y-%m-%d') as loginTime
 		from
-		    moke.m_member_info
+		    m_member_info
 		where
 		    login_name = #{loginName} and password = #{password};
 	</select>
+	
+	<select id="findMemberByPhone" parameterType="String" resultType="int">
+		select count(*) from m_member_info where contact_phone=#{phone};
+	</select>
+	
+	<update id="updatePsw" parameterType="com.xinyue.manage.model.Member">
+		update m_member_info
+		set
+			password=#{password}
+		where
+			contact_phone=#{contactPhone};
+	</update>
 </mapper>

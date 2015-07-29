@@ -108,7 +108,7 @@ public class CommonController {
 	 */
 	@RequestMapping("member/list")
 	public String getContent(@RequestParam("param")String param,HttpSession session){
-System.out.println("list in");
+//System.out.println("list in");
 				session.setAttribute("nav", param);
 				switch (param) {
 				case "graph":
@@ -123,6 +123,16 @@ System.out.println("list in");
 					return "redirect:/member/commonctr/showtel";
 				case "down":
 					return "redirect:/member/docctr/show";
+				case "product":
+					return "redirect:/member/procollectctr/show";
+				case "org":
+					return "redirect:/member/orgcollectctr/show";
+				case "recommend":
+					return "redirect:/member/recommendctr/show";
+				case "member":
+					return "redirect:/member/recommendctr/findMember";
+				case "credit":
+					return "redirect:/member/recommendctr/findCredit";
 				case "main" :
 					return "redirect:/member/home/index?index=0";
 				case "companyrecord" :

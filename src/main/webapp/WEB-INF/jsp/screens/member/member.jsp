@@ -28,9 +28,6 @@
 	<div class="container">
 		<%@ include file="../../common/head.jsp"%>
 		<div class="hy_i_center">
-			<div class="position">
-				<span>当前位置：</span><a href="#">网站首页</a>-<span>会员中心</span>
-			</div>
 			<%@ include file="tree.jsp"%>
 			<div class="hy_right">
 				<div class="hy_right_bt">

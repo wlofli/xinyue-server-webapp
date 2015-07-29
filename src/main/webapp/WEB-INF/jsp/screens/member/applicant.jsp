@@ -114,6 +114,22 @@ $(function () {
 	if (valC != "") {
  		getZones(valC,valZ);
 	}
+	
+	var message = "${message}";
+	var type = "${type}";
+	if (message != "") {
+		alert(message);
+		switch (type) {
+		case "p":
+			document.location.href = "${ctx}/member/record/applicant";
+			break;
+		case "n":
+			document.location.href = "${ctx}/member/record/company";
+			break;
+		default:
+			break;
+		}
+	}
 });
 
 function getCities(val){
@@ -180,5 +196,11 @@ function getZones(val1,val2){
 			}
 		});
 	}
+}
+function save(type){
+	
+	$("#applicantForm").attr("action","${ctx}/member/applicant/save?type="+type);
+	$("#applicantForm").submit();
+	
 }
 </script>

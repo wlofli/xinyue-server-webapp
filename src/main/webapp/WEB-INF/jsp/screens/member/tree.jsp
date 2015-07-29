@@ -55,21 +55,22 @@ $(function(){
 <li id="down"><a id="a" href="${ctx }/member/list?param=down">下载中心</a></li>
 <li><a id="a">收藏管理</a>
 <ul class="f_nav_ful">
-<li><a href="scgl_hy.html">产品收藏</a></li>
-<li><a href="scgl1_hy.html">机构收藏</a></li>
+<li id="product"><a href="${ctx }/member/list?param=product">产品收藏</a></li>
+<li id="org"><a href="${ctx }/member/list?param=org">机构收藏</a></li>
 </ul>
 </li>
 <li><a id="a">分享推荐会员</a>
 <ul class="f_nav_ful">
-<li><a href="tjhy_hy.html">推荐会员</a></li>
-<li><a href="tjhy_pt_hy.html">推荐普通会员列表</a></li>
-<li><a href="tjhy_xd_hy.html">推荐信贷经理列表</a></li>
+<li id="recommend"><a href="${ctx }/member/list?param=recommend">推荐会员</a></li>
+<li id="member"><a href="${ctx }/member/list?param=member">推荐普通会员列表</a></li>
+<li id="credit"><a href="${ctx }/member/list?param=credit">推荐信贷经理列表</a></li>
 </ul>
 </li>
 <li><a id="a">推荐奖励提现</a>
 <ul class="f_nav_ful">
 <li><a href="tjjltx_hy.html">推荐奖励记录</a></li>
 <li><a href="tjjltx1_hy.html">推荐奖励提现</a></li>
+<li><a href="#">绑定提现账号</a></li>
 <li><a href="sdskzh_hy.html">申请提现</a></li>
 </ul>
 </li>

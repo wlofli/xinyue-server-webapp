@@ -10,4 +10,8 @@ public interface LoginService {
 
 	Member getMemberInfo(Member loginInfo);
 
+	boolean findMemberByPhone(String phone);
+
+	boolean updatePsw(Member member);
+
 }

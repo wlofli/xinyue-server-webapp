@@ -32,3 +32,12 @@
 <span>所在地区:<strong>${order.province }${order.city }${order.zone }</strong></span>
 </div>
 </div>
+<div class="hy_right_bt">
+<ul class="menu1" id="menu">
+<li class="<c:if test="${ recordType eq 'applicant'}">hit</c:if>"><a href="${ctx }/order/detail/applicant?id=${order.id}">申请人信息</a></li>
+<li class="<c:if test="${ recordType eq 'companybase'}">hit</c:if>"><a href="${ctx }/order/detail/companybase?id=${order.id}">企业基本信息</a></li> 
+<li class="<c:if test="${ recordType eq 'business'}">hit</c:if>"><a href="${ctx }/order/detail/business?id=${order.id}">基本经营信息</a></li> 
+<li class="<c:if test="${ recordType eq 'debt'}">hit</c:if>"><a href="${ctx }/order/detail/debt?id=${order.id}">抵押物与负债</a></li> 
+<li class="<c:if test="${ recordType eq 'upload'}">hit</c:if>"><a href="${ctx }/order/detail/document?id=${order.id}">上传资料</a></li> 
+</ul>
+</div>

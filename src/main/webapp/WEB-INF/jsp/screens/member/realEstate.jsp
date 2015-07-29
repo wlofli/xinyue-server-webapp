@@ -57,8 +57,19 @@
 <script type="text/javascript">
 $(function () {
 	var message = "${message}";
+	var type = "${type}";
 	if (message != null && message != "") {
 		alert(message);
+		switch (type) {
+		case "p":
+			document.location.href = "${ctx}/member/record/business";
+			break;
+		case "n":
+			document.location.href = "${ctx}/member/record/debt";
+			break;
+		default:
+			break;
+		}
 	}
 });
 

@@ -32,7 +32,7 @@
 						</a>
 					</div>
 					<div class="btn">
-						<input type="button" value="确认登录" class="l_btn" onclick="login()" />
+						<input type="submit" value="确认登录" class="l_btn" />
 					</div>
 					<div class="mdl">
 						<input type="checkbox" class="left" checked="checked"/><span>5天内免登录</span><a
@@ -56,10 +56,22 @@
 $(function(){
 	$("#loginForm").validate({
 		rules:{
-			checkC:"required"
+			checkC:{
+				required:true,
+				remote:{
+					type: "post",
+                    url: "${ctx}/login/check/code",
+                    data:{
+                    	checkCode: function(){return $("#checkCode").val();}
+                    }
+				}
+			}
 		},
 		messages: {
-			checkC:"<span class='zc_zs'>* 请输入验证码</span>"
+			checkC:{
+				required:"<span class='zc_zs'>* 请输入验证码</span>",
+				remote:"<span class='zc_zs'>* 验证码不正确</span>"
+			}
 		},
 		errorPlacement: function(error, element) {
 			error.appendTo(element.parent());
@@ -72,24 +84,6 @@ $(function(){
 	}
 });
 
-function login(){
-	var checkCode = $("#checkCode").val();
-	
-	if ($("#loginForm").valid()) {
-		$.ajax({
-			url:"${ctx}/login/check/code?checkCode="+checkCode,
-			type:"post",
-			success:function(data){
-				if (data == "false") {
-					alert("验证码不正确！");
-					return;
-				}else{
-					$("#loginForm").submit();
-				}
-			}
-		});
-	}
-}
 function getSec(){
 	var myDate = new Date();
 	return myDate.getTime();

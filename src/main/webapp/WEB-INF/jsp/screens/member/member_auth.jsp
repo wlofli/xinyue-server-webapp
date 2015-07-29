@@ -459,8 +459,9 @@ function uploadFile(){
 		success:function(data){
 			if (data != "fail") {
 				hide();
-				$("#hid_"+imgType).val(data.name);
-				$("#img_"+imgType).attr("src",data.path);
+				data = eval(data);
+				$("#hid_"+imgType).val(data[0].name);
+				$("#img_"+imgType).attr("src",data[0].path);
 				
 				$("#div_"+imgType+"_1").css("display","none");
 				$("#div_"+imgType+"_2").css("display","block");

@@ -52,7 +52,7 @@ public class AuthenticationController {
 		String imagePath = "authentication/temp/"+df.format(new Date())+"/";
 		
 		//保存图片
-		String result = commonService.saveImage(request,suffix,imagePath);
+		String result = commonService.saveFile(request,suffix,imagePath);
 		
 		return result;
 	}

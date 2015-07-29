@@ -95,7 +95,7 @@ function getZones(val1,val2){
 function save(n){
 	alert("in");
 	$.ajax({
-		url:"${ctx}//order/save/applicant",
+		url:"${ctx}/order/save/applicant",
 		data:$("#applicantForm").serialize(),
 		type:'post',
 		success:function(data){
@@ -120,20 +120,12 @@ function save(n){
 <div class="ddxq_top">
 <jsp:include page="detailHead.jsp" />
 </div>
-<div class="hy_right_bt">
-<ul class="menu1" id="menu">
-<li class="hit"><a href="ddxq_hy.html">申请人信息</a></li>
-<li class=""><a href="ddxq_hy1.html">企业基本信息</a></li> 
-<li class=""><a href="ddxq_hy2.html">基本经营信息</a></li> 
-<li class=""><a href="${ctx }/order/detail/debt?id=${order.id}">抵押物与负债</a></li> 
-<li class=""><a href="ddxq_hy4.html">上传资料</a></li> 
-</ul>
-</div>
 <div class="tab" id="tab0" >
 
 <sf:form action="${ctx}/order/save/applicant" commandName="applicationInfo" method="post" id="applicantForm">
 <sf:hidden path="id" />
 <input type="hidden" name="orderId" value="${order.id }">
+<sf:hidden path="id"/>
 <p><span>申请人姓名：</span><sf:input path="name" cssClass="t1" /></p>
 <p><span>联系方式：</span><sf:input path="phone" cssClass="t1" /></p>
 <p><span>电子邮箱：</span><sf:input path="email" cssClass="t1" /></p>

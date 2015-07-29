@@ -98,11 +98,62 @@ return true;
 		
 	}
 	
+	@RequestMapping(value="/login/check/phone",method=RequestMethod.POST)
+	public @ResponseBody boolean checkPhone(String phone) {
+		
+		boolean ret = false;
+		
+		ret = loginService.findMemberByPhone(phone);
+		
+		return ret;
+	}
+	
 	@RequestMapping(value="/login/member")
 	public String gotoLogin(Model model,HttpServletRequest request) {
 		request.getSession().setAttribute(GlobalConstant.SESSION_MEMBER_INFO, null);
 		model.addAttribute("loginInfo", new Member());
 		
 		return "screens/login";
+	}
+	
+	@RequestMapping("/login/find/p")
+	public String gotoFindPsw(Model model,HttpServletRequest request) {
+		
+		String retPath = "";
+		model.addAttribute("pswInfo", new Member());
+		retPath = "screens/psw/find_psw";
+		return retPath;
+	}
+	
+	@RequestMapping(value="/login/find/psw",method=RequestMethod.POST)
+	public String findPsw(Model model,HttpServletRequest request,int step,Member member) {
+		String retPath = "";
+		
+		switch (step) {
+		case 1:
+			model.addAttribute("pswInfo", member);
+			retPath = "screens/psw/find_psw_1";
+			break;
+		case 2:
+			model.addAttribute("pswInfo", member);
+			retPath = "screens/psw/find_psw_2";
+			break;
+		case 3:
+			boolean result = loginService.updatePsw(member);
+			if (result) {
+				retPath = "screens/psw/find_psw_3";
+			}else {
+				retPath = "screens/psw/find_psw_2";
+				model.addAttribute("pswInfo", member);
+				model.addAttribute("message", "更新失败");
+			}
+			break;
+		default:
+			model.addAttribute("pswInfo", new Member());
+			retPath = "screens/psw/find_psw";
+			break;
+		}
+		
+		return retPath;
 	}
 }

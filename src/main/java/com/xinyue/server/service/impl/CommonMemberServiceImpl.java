@@ -1,14 +1,19 @@
 package com.xinyue.server.service.impl;
 
+import java.util.List;
+
 import javax.annotation.Resource;
 
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Service;
 
+import com.xinyue.manage.beans.PageData;
 import com.xinyue.manage.model.Member;
+import com.xinyue.manage.util.GlobalConstant;
 import com.xinyue.manage.util.SecurityUtils;
 import com.xinyue.server.been.PwdInfo;
 import com.xinyue.server.dao.CommonMemberDao;
+import com.xinyue.server.model.FileInfo;
 import com.xinyue.server.service.CommonMemberService;
 
 /**
@@ -91,5 +96,13 @@ public class CommonMemberServiceImpl implements CommonMemberService {
 			logger.error("会员手机号码修改失败  修改者为:"+id,  e);
 			return false;
 		}
+	}
+	
+	@Override
+	public PageData<FileInfo> showDoc(String topage) {
+		// TODO Auto-generated method stub
+		int currentPage = GlobalConstant.isNull(topage) || "0".equals(topage)?1:Integer.valueOf(topage);
+		int start = (currentPage - 1)*GlobalConstant.PAGE_SIZE;
+		return new PageData<FileInfo>(mdao.showDoc(start , GlobalConstant.PAGE_SIZE) ,mdao.getDoc() ,  currentPage);
 	}
 }

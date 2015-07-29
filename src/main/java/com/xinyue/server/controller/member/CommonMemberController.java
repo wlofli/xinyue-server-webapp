@@ -127,4 +127,5 @@ public class CommonMemberController {
 		}
 		return "fail";
 	}
+	
 }

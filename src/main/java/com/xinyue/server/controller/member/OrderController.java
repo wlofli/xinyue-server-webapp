@@ -21,6 +21,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.xinyue.authe.AutheManage;
+import com.xinyue.manage.beans.BusinessInfos;
+import com.xinyue.manage.beans.HoldInfos;
 import com.xinyue.manage.beans.SearchOrder;
 import com.xinyue.manage.beans.SelectInfo;
 import com.xinyue.manage.model.Applicant;
@@ -48,7 +50,6 @@ import com.xinyue.server.model.Page;
 @RequestMapping("order")
 public class OrderController {
 	
-	
 	@Resource 
 	private OrderService orderService;
 	
@@ -72,14 +73,27 @@ public class OrderController {
 		binder.setFieldDefaultPrefix("realEstate.");
 	}
 	
-	@InitBinder("")
+	@InitBinder("companyInfo")
+	public void CompanyBind(WebDataBinder binder){
+		binder.setFieldDefaultPrefix("companyInfo.");
+	}
+	
+	@InitBinder("control")
+	public void ComtrolBind(WebDataBinder binder){
+		binder.setFieldDefaultPrefix("control.");
+	}
+	
+	@InitBinder("hold")
+	public void HoldBind(WebDataBinder binder){
+		binder.setFieldDefaultPrefix("hold.");
+	}
 	
 	
 
 	@RequestMapping("list")
 	public String getList(Model	model , int index, @ModelAttribute("order")SearchOrder searchOrder,HttpSession session){
-System.out.println("list");
-System.out.println(index);
+//System.out.println("list");
+//System.out.println(index);
 		Member member = (Member)session.getAttribute(GlobalConstant.SESSION_MEMBER_INFO);
 		
 		List<Order> orderList = orderService.getListByMemberId(member.getId(), searchOrder, GlobalConstant.PAGE_SIZE , index);
@@ -187,8 +201,6 @@ System.out.println("applicantsave  = " + order.getApplicantSave());
 			applicant = companyInfoService.getApplicantInfoById(order.getApplicantInfo());
 		}
 		model.addAttribute("applicationInfo", applicant);
-System.out.println(applicant);
-System.out.println(applicant.getInterestRate());		
 		model.addAttribute("recordType", "applicant");
 		
 		return "screens/order/Applicant";
@@ -202,13 +214,13 @@ System.out.println(orderId);
 		Order order  = orderService.getOrderInfo(orderId);
 		Member member = (Member) request.getSession().getAttribute(GlobalConstant.SESSION_MEMBER_INFO);
 		try {
-			if(order.getApplicantInfo() != null && order .getApplicantInfo() != ""){
+			if(order.getApplicantSave() == 0){
 				String uuid = UUID.randomUUID().toString().replaceAll("-", "");
 				applicant.setId(uuid);
 				orderService.addOrUpdateApplicant(applicant, orderId, member.getId(),0);
 				
 			}else {
-				applicant.setId(order.getApplicantInfo());
+//				applicant.setId(order.getApplicantInfo());
 				orderService.addOrUpdateApplicant(applicant, orderId, member.getId(),1);
 			}
 			return GlobalConstant.RET_SUCCESS;
@@ -222,103 +234,196 @@ System.out.println(orderId);
 	
 	
 	@RequestMapping("detail/companybase")
-	public String getCompanyBase(Model model, String id, String status){
-		Order order  = orderService.getOrder(id);
+	public String getCompanyBase(Model model, String id, String status, HttpServletRequest request){
+		Order order  = orderService.getOrderInfo(id);
 		model.addAttribute("order", order);
-		//企业相关信息id获取
-		HashMap<String, String> companyDetail = companyInfoService.getDetailIdByMemberId(order.getMemberId());
-		
+		getPulldown(model);
+System.out.println("companysave = " + order.getCompanySave());	
 		//第二页企业基本信息
-		CompanyBase companyBase;//公司基本信息
+		Member member = (Member) request.getSession().getAttribute(GlobalConstant.SESSION_MEMBER_INFO);
+		// 企业相关信息id获取
+		HashMap<String, String> companyDetail = companyInfoService.getDetailIdByMemberId(member.getId());
+		// 企业基本信息
+		CompanyBase companyBase = new CompanyBase();
+		companyBase.setYearCheck("0");
 		List<Hold> holdList = null;//公司控股信息
-		Control control = null;//公司治理信息
-System.out.println("companysave = " + order.getCompanySave());		
+		//控股信息
+		HoldInfos holdInfos = new HoldInfos();
+		// 公司治理信息
+		Control control = new Control();
+		
+	
 		if(order.getCompanySave() == 0){
-			 companyBase  = companyInfoService.getCompanyBaseInfoById(companyDetail.get("license_id"));
-			 //undone->member控股信息 ->公司治理信息
+			 if (companyDetail.containsKey("license_id") && !companyDetail.get("license_id").equals("")) {
+					companyBase = companyInfoService.editCompanyBaseInfoById(companyDetail.get("license_id"));
+				}
+				if (companyDetail.containsKey("member_id") && !companyDetail.get("member_id").equals("")) {
+					holdInfos = companyInfoService.editHoldInfoById(companyDetail.get("member_id"));
+				}
+				model.addAttribute("hold", holdInfos);
+System.out.println("holdInfos= "+ holdInfos);
 		}else {
 			 companyBase  = companyInfoService.getCompanyBaseInfoById(order.getCompanyInfo());
 			 holdList = companyInfoService.getHoldInfoByOrderId(order.getId());
+			 model.addAttribute("hold", holdList);
+			 System.out.println("holdList= "+ holdInfos);
+
 		}
-System.out.println(order.getMemberId());
-System.out.println(companyBase);
-System.out.println(companyBase.getControlInfo());
-		if(companyBase.getControlInfo() != null){
-			control = companyInfoService.getControlInfoById(companyBase.getControlInfo());
+		if (companyBase != null && !companyBase.getControlInfo().equals("")) {
+			control = companyInfoService.editControlInfoById(companyBase.getControlInfo());
 		}
-		if(holdList == null){
-			holdList = new ArrayList<Hold>();
-			holdList.add(new Hold());
-		}
-		model.addAttribute("holdList", holdList);
+		
 		model.addAttribute("companyInfo", companyBase);
-		model.addAttribute("controlinfo", control);
+		model.addAttribute("control", control);
+		model.addAttribute("recordType", "companybase");
 		
 		
-		return "screens/order/orderCompanyBase";
+		return "screens/order/Company";
+	}
+	
+	
+	@RequestMapping
+	@ResponseBody
+	public String addOrUpdateCompany(@RequestParam(value="orderId") String orderId, 
+			CompanyBase companyBase, HoldInfos hold, Control control){
+System.out.println(orderId);
+			Order order = orderService.getOrderInfo(orderId);
+			
+		return GlobalConstant.RET_SUCCESS;
 	}
 	
 	@RequestMapping("detail/business")
-	public String getBusiness(Model model, String id, String status){
-		
-		Order order  = orderService.getOrder(id);
-		model.addAttribute("order", order);
-		//企业相关信息id获取
-		HashMap<String, String> companyDetail = companyInfoService.getDetailIdByMemberId(order.getMemberId());
+	public String getBusiness(Model model, String id, String status, HttpServletRequest request){
 		//第三页基本经营信息
+		Order order  = orderService.getOrderInfo(id);
+		model.addAttribute("order", order);
+		Member member = (Member) request.getSession().getAttribute(GlobalConstant.SESSION_MEMBER_INFO);
+		//企业相关信息id获取
+		HashMap<String, String> companyDetail = companyInfoService.getDetailIdByMemberId(member.getId());
 System.out.println("businesssave = " + order.getBusinessSave());
-		List<Business> businessList = null;//基本经营信息
+		BusinessInfos businessInfos = new BusinessInfos();
 		if(order.getBusinessSave() == 0){
-			businessList = companyInfoService.getBusinessInfoById(order.getMemberId());
+			if (companyDetail != null && companyDetail.containsKey("member_id") && !companyDetail.get("member_id").equals("")) {
+				businessInfos = companyInfoService.editBusinessInfoById(companyDetail.get("member_id"));
+			}else{
+				businessInfos = companyInfoService.initBusinessInfo();
+			}
 		}else {
-			businessList = companyInfoService.getBusinessInfoById(order.getId());
+			businessInfos = companyInfoService.editBusinessInfoById(order.getId());
 		}
-		model.addAttribute("businessList", businessList);
+		model.addAttribute("businessInfos", businessInfos);
+		model.addAttribute("recordType", "business");
 		
 		
-		return "screens/order/orderBusiness";
+		return "screens/order/Business";
+	}
+	
+	@RequestMapping("save/business")
+	@ResponseBody
+	public String  addOrUpdateBusiness(BusinessInfos businessInfos, @RequestParam(value="orderId") String orderId,
+			HttpServletRequest request, Model model){
+
+		Order order  = orderService.getOrderInfo(orderId);
+		Member member = (Member) request.getSession().getAttribute(GlobalConstant.SESSION_MEMBER_INFO);
+System.out.println("debtsave = " + order.getBusinessSave());
+		try {
+			if(order.getBusinessSave() == 0){
+				String[]  idList = new String[3];
+				for (int j = 0; j < businessInfos.getIds().length; j++) {
+					String id = UUID.randomUUID().toString().replaceAll("-", "");
+					idList[j] = id;
+				}
+
+//System.out.println(businessInfos.getIds().length);
+//for (int i = 0; i < idList.length; i++) {
+//System.out.println(idList[i]);	
+//}
+				businessInfos.setIds(idList);
+				orderService.addOrUpdateBusiness(businessInfos, orderId, member.getId(), 0);
+			}else {
+				orderService.addOrUpdateBusiness(businessInfos, orderId, member.getId(), 1);
+			}
+		} catch (Exception e) {
+			// TODO: handle exception
+			return GlobalConstant.RET_FAIL;
+		}
+		return GlobalConstant.RET_SUCCESS;
 	}
 	
 	@RequestMapping("detail/debt")
-	public String getDebt(Model model, String id, String status){
-		Order order  = orderService.getOrder(id);
+	public String getDebt(Model model, String id, String status, HttpServletRequest request){
+		Order order  = orderService.getOrderInfo(id);
 		model.addAttribute("order", order);
-		//企业相关信息id获取
-		HashMap<String, String> companyDetail = companyInfoService.getDetailIdByMemberId(order.getMemberId());
 		
+		Member member = (Member) request.getSession().getAttribute(GlobalConstant.SESSION_MEMBER_INFO);
 //第四页抵押与负债
 System.out.println("debtsave = " + order.getDebtSave());
+//System.out.println("orderid = " + order.getId());
+//System.out.println("debtinfo = " + order.getDebtInfo());
 		RealEstate realEstate = new RealEstate();//抵押物
 		Debt debt = new Debt();//负债
+		//抵质押物情况
+		List<SelectInfo> collateralTypeList = selectService.findSelectByType(GlobalConstant.COMPANY_COLLATERAL_TYPE);
+		model.addAttribute("collateralTypeList", collateralTypeList);
+		
+		
 		if(order.getDebtSave() == 0){
-			realEstate = companyInfoService.getRealEstateInfoById(companyDetail.get("estate_id"));
-			debt = companyInfoService.getDebtInfoById(companyDetail.get("debt_id"));
+			//企业相关信息id获取
+			HashMap<String, String> companyDetail = companyInfoService.getDetailIdByMemberId(member.getId());
+			if (companyDetail.containsKey("debt_id") && !companyDetail.get("debt_id").equals("")) {
+				debt = companyInfoService.editDebtInfoById(companyDetail.get("debt_id"));
+			}
+			if (companyDetail.containsKey("estate_id") && !companyDetail.get("estate_id").equals("")) {
+				realEstate = companyInfoService.editRealEstateInfoById(companyDetail.get("estate_id"));
+			}
 		}else {
 			realEstate = companyInfoService.getRealEstateInfoById(order.getRealEstate());
-			debt = companyInfoService.getDebtInfoById(order.getDebtInfo());
+			debt = companyInfoService.editDebtInfoById(order.getDebtInfo());
+//System.out.println(debt);
+//System.out.println(realEstate);
 		}
+
 		model.addAttribute("realEstate", realEstate);
 		model.addAttribute("debt", debt);
+		model.addAttribute("recordType", "debt");
 		
 		
-		return "screens/order/orderDebt";
+		return "screens/order/Debt";
 	}
 	
 	
 	@RequestMapping("save/debt")
 	@ResponseBody
-	public String saveDebt(Debt debt, RealEstate realEstate){
-System.out.println(debt);
-System.out.println(debt.getRate());
-System.out.println(realEstate);
-System.out.println(realEstate.getFactory());
+	public String addOrUpdateDebt(Debt debt, RealEstate realEstate,@RequestParam(value="orderId") String orderId, HttpServletRequest request){
+System.out.println("save/debt");
+		Order order  = orderService.getOrderInfo(orderId);
+		Member member = (Member) request.getSession().getAttribute(GlobalConstant.SESSION_MEMBER_INFO);
+System.out.println(order.getDebtSave());
+
+		try {
+			if(order.getDebtSave() == 0){
+				String uuid = UUID.randomUUID().toString().replaceAll("-", "");
+				debt.setId(uuid);
+				String uuid2 = UUID.randomUUID().toString().replaceAll("-", "");
+				realEstate.setId(uuid2);
+				orderService.addOrUpdateDebt(debt, realEstate, orderId, member.getId(), 0);
+			}else{
+//				debt.setId(order.getDebtInfo());
+//				realEstate.setId(order.getRealEstate());
+				orderService.addOrUpdateDebt(debt, realEstate, orderId, member.getId(), 1);
+			}
+		} catch (Exception e) {
+			// TODO: handle exception
+			return GlobalConstant.RET_FAIL;
+		}
 		return GlobalConstant.RET_SUCCESS;
 	}
 	
-	@RequestMapping("detail/updata")
-	public String getUpData(Model model, String id, String status){
-		Order order  = orderService.getOrder(id);
+	@RequestMapping("detail/document")
+	public String getDocument(Model model, String id, String status, HttpServletRequest request){
+		Order order  = orderService.getOrderInfo(id);
 		model.addAttribute("order", order);
+System.out.println("detail/document");
 		//企业相关信息id获取
 		HashMap<String, String> companyDetail = companyInfoService.getDetailIdByMemberId(order.getMemberId());
 		
@@ -326,14 +431,108 @@ System.out.println(realEstate.getFactory());
 		//上传资料信息
 		//undone
 		List<Document> documentList = new ArrayList<Document>();
-		documentList = orderService.getDocumentInfoById(order.getId());
+//		documentList = orderService.getDocumentInfoById(order.getId());
 		model.addAttribute("documentList", documentList);
+		model.addAttribute("recordType", "upload");
 		
-		return "screens/order/orderUpData";
+		return "screens/order/Document";
 	}
 	
+	/**
+	 * add by lzc     date: 2015年7月28日
+	 * copy from ->companyRecoreController.getpulldown
+	 * no change!
+	 */
+	private void getPulldown(Model model) {
+		// 证件类型
+		List<SelectInfo> idTypeList = selectService
+				.findSelectByType(GlobalConstant.COMPANY_IDCARD_TYPE);
+		model.addAttribute("idTypeList", idTypeList);
+
+		// 资本类型
+		List<SelectInfo> capitalList = selectService
+				.findSelectByType(GlobalConstant.COMPANY_CAPITAL_TYPE);
+		model.addAttribute("capitalList", capitalList);
+		// 企业性质
+		List<SelectInfo> companyNatureList = selectService
+				.findSelectByType(GlobalConstant.COMPANY_TYPE);
+		model.addAttribute("companyNatureList", companyNatureList);
+		// 省
+		List<SelectInfo> provinceList = selectService.findProvince();
+		model.addAttribute("provinceList", provinceList);
+		// 工商登记类型
+		List<SelectInfo> businessRegList = selectService
+				.findSelectByType(GlobalConstant.COMPANY_BUSINESS_TYPE);
+		model.addAttribute("businessRegList", businessRegList);
+		// 机构类型
+		List<SelectInfo> agencyTypeList = selectService
+				.findSelectByType(GlobalConstant.COMPANY_AGENCY_TYPE);
+		model.addAttribute("agencyTypeList", agencyTypeList);
+		
+		// 控股方式
+		List<SelectInfo> holdTypeList = selectService
+				.findSelectByType(GlobalConstant.COMPANY_HOLD_TYPE);
+		model.addAttribute("holdTypeList", holdTypeList);
+
+		// 学历
+		List<SelectInfo> educationTypeList = selectService
+				.findSelectByType(GlobalConstant.COMPANY_EDUCATION_TYPE);
+		model.addAttribute("educationTypeList", educationTypeList);
+
+		// 婚姻情况
+		List<SelectInfo> marriageTypeList = selectService
+				.findSelectByType(GlobalConstant.COMPANY_MARRIAGE_TYPE);
+		model.addAttribute("marriageTypeList", marriageTypeList);
+		
+		//行业
+		List<SelectInfo> industry = companyInfoService.getIndustryList();
+		model.addAttribute("industry", industry);
+		
+		// 产品销售区域
+		List<SelectInfo> businessAreaList = selectService
+				.findSelectByType(GlobalConstant.COMPANY_BUSINESS_AREA);
+		model.addAttribute("businessAreaList", businessAreaList);
+		
+		// 审计意见类型
+		List<SelectInfo> auditTypeList = selectService
+				.findSelectByType(GlobalConstant.COMPANY_AUDIT_TYPE);
+		model.addAttribute("auditTypeList", auditTypeList);
+	}
 	
-	
+	/**
+	 * add by lzc     date: 2015年7月28日
+	 * copy from ->companyRecoreController.getpulldown
+	 * no change!
+	 */
+	private void reLoadCompany(Model model,HttpServletRequest request){
+		
+		getPulldown(model);
+		
+		Member member = (Member) request.getSession().getAttribute(GlobalConstant.SESSION_MEMBER_INFO);
+		// 企业相关信息id获取
+		HashMap<String, String> companyDetail = companyInfoService.getDetailIdByMemberId(member.getId());
+		// 企业基本信息
+		CompanyBase companyBase = new CompanyBase();
+		companyBase.setYearCheck("0");
+		if (companyDetail.containsKey("license_id") && !companyDetail.get("license_id").equals("")) {
+			companyBase = companyInfoService.editCompanyBaseInfoById(companyDetail.get("license_id"));
+		}
+		model.addAttribute("companyInfo", companyBase);
+		
+		//控股信息
+		HoldInfos holdInfos = new HoldInfos();
+		if (companyDetail.containsKey("member_id") && !companyDetail.get("member_id").equals("")) {
+			holdInfos = companyInfoService.editHoldInfoById(companyDetail.get("member_id"));
+		}
+		model.addAttribute("holdInfos", holdInfos);
+		
+		// 公司治理信息
+		Control control = new Control();
+		if (companyBase != null && !companyBase.getControlInfo().equals("")) {
+			control = companyInfoService.editControlInfoById(companyBase.getControlInfo());
+		}
+		model.addAttribute("controlinfo", control);
+	}	
 	
 	
 	

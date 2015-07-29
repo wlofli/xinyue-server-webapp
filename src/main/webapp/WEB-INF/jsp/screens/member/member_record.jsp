@@ -5,6 +5,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <%@ include file="../../common/common.jsp"%>
+<script type="text/javascript" src="${ctx}/js/ajaxfileupload.js"></script>
 <title>普通会员_企业档案</title>
 </head>
 <body class="h_bj">
@@ -33,35 +34,16 @@
 				<c:if test="${recordType eq 'debt'}">
 					<%@ include file="../member/debt.jsp"%>
 				</c:if>
+				<c:if test="${recordType eq 'document'}">
+					<%@ include file="../member/document.jsp"%>
+				</c:if>
+				<%-- <c:if test="${recordType eq 'rating'}">
+					<%@ include file="../member/rating.jsp"%>
+				</c:if> --%>
 			</div>
 		</div>
-		<%@ include file="../../common/foot.jsp"%>
 	</div>
 </body>
 <script type="text/javascript">
-function save(type){
-	$.ajax({
-		url:"${ctx}/member/save/applicant",
-		type:"post",
-		data:$("#applicantForm").serialize(),
-		success:function(data){
-			if (type == 1) {
-				if (data== 'true') {
-					alert("保存成功");
-				} else {
-					alert("保存失败");
-				}
-			}else if (type == 2){
-				if (data== 'true') {
-					alert("保存成功");
-					document.location.href = "${ctx}/member/record/company";
-				} else {
-					alert("保存失败");
-				}
-			}
-		}
-	});
-	
-}
 </script>
 </html>

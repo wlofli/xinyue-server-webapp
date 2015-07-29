@@ -2,7 +2,11 @@ package com.xinyue.server.service;
 
 
 
+import java.util.List;
+
+import com.xinyue.manage.beans.PageData;
 import com.xinyue.manage.model.Member;
+import com.xinyue.server.model.FileInfo;
 
 /**
  * 
@@ -24,4 +28,6 @@ public interface CommonMemberService {
 	public String findTel(String id);
 	
 	public boolean updateTel(String id , String contactPhone);
+	
+	public PageData<FileInfo> showDoc(String topage);
 }

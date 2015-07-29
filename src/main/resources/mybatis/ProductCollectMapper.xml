@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- wenhai.you -->
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xinyue.server.dao.ProductCollectDao">
+	<select id="findPage" resultType="com.xinyue.server.model.Collect">
+		select c.id id ,  p.name productName , o.name orgName , p.credit credit , p.interest interest , 
+		p.period period , c.create_time collectTime , c.member_id memberid , c.product_id productid  
+		from c_collect_info  c 
+		inner join m_member_info m on m.id = c.member_id 
+		left join m_product_info p on p.id = c.product_id 
+		left join m_organization_info o on o.number = p.bank 
+		where c.deleted = 0 and c.member_id = #{collectBean.memberid}  
+		<if test="collectBean.proName != null and collectBean.proName != ''">
+		and p.name like concat(#{collectBean.proName} , '%') 
+		</if>
+		<if test="collectBean.orgName != null and collectBean.orgName != ''">
+		and o.name like concat(#{collectBean.orgName} , '%') 
+		</if>
+		limit #{start} , #{pageSize}
+	</select>
+	
+	<select id="getProTotal" resultType="int">
+		select count(*) from c_collect_info  c 
+		inner join m_member_info m on m.id = c.member_id 
+		left join m_product_info p on p.id = c.product_id 
+		left join m_organization_info o on o.number = p.bank 
+		where c.deleted = 0 and c.member_id = #{collectBean.memberid} 
+		<if test="collectBean.proName != null and collectBean.proName != ''">
+		and p.name like concat(#{collectBean.proName} , '%') 
+		</if>
+		<if test="collectBean.orgName != null and collectBean.orgName != ''">
+		and o.name like concat(#{collectBean.orgName} , '%') 
+		</if>
+	</select>
+	
+	<update id="delProCollect">
+		update c_collect_info set deleted = 1 where id = 
+		<foreach collection="list" index="index" item="item" separator=" or id = ">
+			#{item}
+		</foreach>
+	</update>
+	
+	<select id="showDetail" resultType="com.xinyue.server.model.Collect">
+		select c.id id ,  p.name productName , o.name orgName , p.credit credit , p.interest interest , 
+		p.period period , c.create_time collectTime , c.member_id memberid , c.product_id productid  
+		from c_collect_info  c 
+		inner join m_member_info m on m.id = c.member_id 
+		left join m_product_info p on p.id = c.product_id 
+		left join m_organization_info o on o.number = p.bank 
+		where c.deleted = 0 and c.id = #{id}
+	</select>
+</mapper>

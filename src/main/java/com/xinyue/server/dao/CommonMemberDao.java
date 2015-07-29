@@ -1,8 +1,11 @@
 package com.xinyue.server.dao;
 
+import java.util.List;
+
 import org.apache.ibatis.annotations.Param;
 
 import com.xinyue.manage.model.Member;
+import com.xinyue.server.model.FileInfo;
 
 /**
  * 
@@ -23,4 +26,8 @@ public interface CommonMemberDao {
 	public String findTel(@Param("id") String id);
 	
 	public int updateTel(@Param("id") String id , @Param("contactPhone") String contactPhone);
+	
+	public List<FileInfo> showDoc(@Param("start") int start  , @Param("pageSize") int pageSize);
+	
+	public int getDoc();
 }
