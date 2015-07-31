@@ -23,7 +23,7 @@
 		left join m_area_city c on m.area_city = c.code 
 		left join m_area_zone z on m.area_zone = z.code 
 		left join m_select_info s on m.sex = s.select_key 
-		where s.type_code = 'sex' and m.id = #{id};
+		where s.type_code = 'sex' and m.id = #{id}
 	</select>
 	
 	<update id="saveMember" parameterType="com.xinyue.manage.model.Member">
@@ -46,4 +46,13 @@
 	<update id="updateTel">
 		update m_member_info set contact_phone = #{contactPhone} where id = #{id}
 	</update>
+	
+	<select id="showDoc" resultType="com.xinyue.server.model.FileInfo">
+		select t.name name ,d.file_name fileName , d.file_dir fileDir from m_document_type t 
+		left join m_document_info d on t.type_id = d.file_type 
+		where t.deleted = 0 limit #{start} , #{pageSize} 
+	</select>
+	<select id="getDoc" resultType="int">
+		select count(*) from m_document_info 
+	</select>
 </mapper>
