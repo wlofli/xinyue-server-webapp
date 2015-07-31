@@ -36,7 +36,7 @@
 					</div>
 					<div class="mdl">
 						<input type="checkbox" class="left" checked="checked"/><span>5天内免登录</span><a
-							href="../html_gg/find_password.html" class="f_lj">忘记密码？</a>
+							href="${ctx}/login/find/p" class="f_lj">忘记密码？</a>
 					</div>
 				</sf:form>
 				<div class="smdl">

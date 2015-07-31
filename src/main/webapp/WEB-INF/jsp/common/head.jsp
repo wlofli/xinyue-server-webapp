@@ -6,13 +6,13 @@
 			<h1>400-860-9280</h1>
 			<span>（工作日：9:00-17:30）</span> <span> <a href="#" class="fx_xl"
 				onmouseover="show('xlfx')" onmouseout="hid('xlfx')"></a> <img
-				src="${ctx}/images/fx_xl.png" id="xlfx" />
+				src="${ctx}/images/fx_xl.png" id="xlfx" style="z-index:999;"/>
 			</span> <span> <a href="#" class="fx_wx" onmouseover="show('wxfx')"
 				onmouseout="hid('wxfx')"></a> <img src="${ctx}/images/fx_wx.png"
-				id="wxfx" />
+				id="wxfx" style="z-index:999;"/>
 			</span> <span> <a href="#" class="fx_qq" onmouseover="show('qqfx')"
 				onmouseout="hid('qqfx')"></a> <img src="${ctx}/images/fx_qq.png"
-				id="qqfx" />
+				id="qqfx" style="z-index:999;"/>
 			</span>
 		</div>
 		<div class="h_b_right">

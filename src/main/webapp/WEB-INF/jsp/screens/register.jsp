@@ -63,7 +63,8 @@
 					<div class="zc_wbk">
 						<span class="zc_bt">手机验证码:</span>
 						<input id="check_c" name="checkCode" value="" class="text1" />
-					<input type="button" class="btn_sjyz" value="获取验证码" id="code_btn" onclick="sendCode()" />
+						<input type="button" class="btn_sjyz" value="获取验证码" id="code_btn" onclick="sendCode()" />
+						<sf:hidden path="invited"/>
 					</div>
 					<div class="zc_tk">
 						<input type="checkbox" class="left" checked="checked" id="server_chk"/>

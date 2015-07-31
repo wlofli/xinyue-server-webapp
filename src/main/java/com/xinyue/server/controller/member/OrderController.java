@@ -1,8 +1,11 @@
 package com.xinyue.server.controller.member;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import javax.annotation.Resource;
@@ -20,9 +23,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.TypeReference;
 import com.xinyue.authe.AutheManage;
 import com.xinyue.manage.beans.BusinessInfos;
 import com.xinyue.manage.beans.HoldInfos;
+import com.xinyue.manage.beans.PageData;
 import com.xinyue.manage.beans.SearchOrder;
 import com.xinyue.manage.beans.SelectInfo;
 import com.xinyue.manage.model.Applicant;
@@ -41,13 +47,14 @@ import com.xinyue.manage.service.OrderService;
 import com.xinyue.manage.service.SelectService;
 import com.xinyue.manage.util.GlobalConstant;
 import com.xinyue.server.model.Page;
+import com.xinyue.server.service.CommonService;
 
 /**
  * author lzc
  * 2015年7月16日下午2:37:33
  */
 @Controller
-@RequestMapping("order")
+@RequestMapping("/order")
 public class OrderController {
 	
 	@Resource 
@@ -59,6 +66,8 @@ public class OrderController {
 	@Resource
 	private CompanyInfoService companyInfoService;
 	
+	@Resource
+	private CommonService commonService;
 	
 	@Resource
 	private SelectService selectService;
@@ -79,7 +88,7 @@ public class OrderController {
 	}
 	
 	@InitBinder("control")
-	public void ComtrolBind(WebDataBinder binder){
+	public void ControlBind(WebDataBinder binder){
 		binder.setFieldDefaultPrefix("control.");
 	}
 	
@@ -246,7 +255,6 @@ System.out.println("companysave = " + order.getCompanySave());
 		// 企业基本信息
 		CompanyBase companyBase = new CompanyBase();
 		companyBase.setYearCheck("0");
-		List<Hold> holdList = null;//公司控股信息
 		//控股信息
 		HoldInfos holdInfos = new HoldInfos();
 		// 公司治理信息
@@ -254,25 +262,25 @@ System.out.println("companysave = " + order.getCompanySave());
 		
 	
 		if(order.getCompanySave() == 0){
-			 if (companyDetail.containsKey("license_id") && !companyDetail.get("license_id").equals("")) {
+			if (companyDetail.containsKey("license_id") && !companyDetail.get("license_id").equals("")) {
 					companyBase = companyInfoService.editCompanyBaseInfoById(companyDetail.get("license_id"));
-				}
-				if (companyDetail.containsKey("member_id") && !companyDetail.get("member_id").equals("")) {
-					holdInfos = companyInfoService.editHoldInfoById(companyDetail.get("member_id"));
-				}
-				model.addAttribute("hold", holdInfos);
-System.out.println("holdInfos= "+ holdInfos);
+			}
+			if (companyDetail.containsKey("member_id") && !companyDetail.get("member_id").equals("")) {
+				holdInfos = companyInfoService.editHoldInfoById(companyDetail.get("member_id"));
+			}
+			if (companyBase != null && !companyBase.getControlInfo().equals("")) {
+				control = companyInfoService.editControlInfoById(companyBase.getControlInfo());
+			}
 		}else {
-			 companyBase  = companyInfoService.getCompanyBaseInfoById(order.getCompanyInfo());
-			 holdList = companyInfoService.getHoldInfoByOrderId(order.getId());
-			 model.addAttribute("hold", holdList);
-			 System.out.println("holdList= "+ holdInfos);
-
-		}
-		if (companyBase != null && !companyBase.getControlInfo().equals("")) {
-			control = companyInfoService.editControlInfoById(companyBase.getControlInfo());
+			 companyBase  = companyInfoService.editCompanyBaseInfoById(order.getLicenseInfo());
+			 holdInfos = companyInfoService.getHoldInfoByOrderId(order.getId());
+			 control = companyInfoService.editControlInfoById(order.getControlInfo());
+System.out.println(holdInfos.getIds()[0]);
+System.out.println(holdInfos.getIds()[1]);
 		}
 		
+//System.out.println("holdInfos= "+ holdInfos);
+		model.addAttribute("hold", holdInfos);
 		model.addAttribute("companyInfo", companyBase);
 		model.addAttribute("control", control);
 		model.addAttribute("recordType", "companybase");
@@ -282,12 +290,48 @@ System.out.println("holdInfos= "+ holdInfos);
 	}
 	
 	
-	@RequestMapping
+	@RequestMapping("save/company")
 	@ResponseBody
 	public String addOrUpdateCompany(@RequestParam(value="orderId") String orderId, 
-			CompanyBase companyBase, HoldInfos hold, Control control){
-System.out.println(orderId);
+			@ModelAttribute("companyInfo")CompanyBase companyBase, @ModelAttribute("hold")HoldInfos hold, 
+			@ModelAttribute("control")Control control, HttpServletRequest request){
+//System.out.println(orderId);
 			Order order = orderService.getOrderInfo(orderId);
+//System.out.println(companyBase.getLegalPerson());
+//System.out.println(companyBase.getPaperNumber());
+//System.out.println("================================");
+//System.out.println("companysave = " + order.getCompanySave());
+//System.out.println(hold);
+//System.out.println(hold.getMarriages()[0]);
+//System.out.println(hold.getEducations()[0]);
+//System.out.println("===================================");
+//System.out.println(control.getIndustry());
+//System.out.println(control.getPeopleNumber());
+//System.out.println("companyinspection = " + companyBase);
+			Member member = (Member) request.getSession().getAttribute(GlobalConstant.SESSION_MEMBER_INFO);	
+		try {
+			if(order.getCompanySave() == 0){
+				String[]  idList = new String[2];
+				for (int j = 0; j < hold.getIds().length; j++) {
+					String id = UUID.randomUUID().toString().replaceAll("-", "");
+					idList[j] = id;
+				}
+				hold.setIds(idList);
+				String companyId = UUID.randomUUID().toString().replaceAll("-", "");
+				String controlId = UUID.randomUUID().toString().replaceAll("-", "");
+				companyBase.setId(companyId);
+				companyBase.setControlInfo(controlId);
+				control.setId(controlId);
+System.out.println(1);
+				orderService.addOrUpdateCompany(companyBase, hold, control, orderId, member.getId(), 0);
+			}else {
+				orderService.addOrUpdateCompany(companyBase, hold, control, orderId, member.getId(), 1);
+			}
+		} catch (Exception e) {
+			// TODO: handle exception
+			return GlobalConstant.RET_FAIL;
+		}
+		
 			
 		return GlobalConstant.RET_SUCCESS;
 	}
@@ -420,23 +464,86 @@ System.out.println(order.getDebtSave());
 	}
 	
 	@RequestMapping("detail/document")
-	public String getDocument(Model model, String id, String status, HttpServletRequest request){
+	public String getDocument(Model model, String id, HttpServletRequest request){
 		Order order  = orderService.getOrderInfo(id);
 		model.addAttribute("order", order);
-System.out.println("detail/document");
-		//企业相关信息id获取
-		HashMap<String, String> companyDetail = companyInfoService.getDetailIdByMemberId(order.getMemberId());
-		
+//System.out.println("document_save = " + order.getDocumentSave());
+		Member member = (Member) request.getSession().getAttribute(GlobalConstant.SESSION_MEMBER_INFO);
 		//第五页上传资料信息
-		//上传资料信息
-		//undone
-		List<Document> documentList = new ArrayList<Document>();
-//		documentList = orderService.getDocumentInfoById(order.getId());
-		model.addAttribute("documentList", documentList);
-		model.addAttribute("recordType", "upload");
-		
+		int total = 0;
+		List<Document> documents = new ArrayList<Document>();
+		if(order.getDocumentSave() == 0){
+			documents = companyInfoService.getDocumentInfoById(member.getId(),0);
+			total = companyInfoService.getDocumentCount();
+			try {
+				orderService.addDocumentList(documents, id, member.getId());
+			} catch (Exception e) {
+				// TODO: handle exception
+				System.out.println("error!!!");
+				e.printStackTrace();
+			}
+		}else {
+			documents = orderService.getDocumentList(id,0);
+//for(Document document : documents){
+//	System.out.println(document.getDocumentId());
+//}
+			total = orderService.getDocumentCount(id);
+		}
+//System.out.println(total);
+		PageData<Document> pageData = new PageData<>(documents, total, 1);
+		model.addAttribute("documents", documents);
+		model.addAttribute("pageData", pageData);
+		model.addAttribute("recordType", "document");
 		return "screens/order/Document";
 	}
+	
+	@RequestMapping("/save/file/add")
+	@ResponseBody
+	public String upLoadDoc(String suffix,String fileId,String typeId, 
+			@RequestParam(value="orderId") String orderId, HttpServletRequest request){
+System.out.println("fileId = " + fileId);
+		SimpleDateFormat df = new SimpleDateFormat("YYYY_MM_dd");
+		//路径
+		String filePath = "record/document/"+df.format(new Date())+"/";
+		//保存文件
+		String result = commonService.saveFile(request,suffix,filePath);
+System.out.println("result = " + result);
+		String documentId = UUID.randomUUID().toString().replaceAll("-", "");
+		if(fileId.equals("")){
+			fileId = null;
+		}
+		try {
+			if (!result.equals("fail")) {
+				List<Map<String, Object>> jsonData = JSON.parseObject(result,new TypeReference<List<Map<String,Object>>>(){});
+				jsonData.get(0).get("name");
+				Member member = (Member) request.getSession().getAttribute(GlobalConstant.SESSION_MEMBER_INFO);
+				orderService.addOrUpdateDocument(jsonData.get(0).get("name").toString(),member.getId(),
+						typeId, documentId, orderId, fileId);
+			}
+//				companyInfoService.updateDocument(jsonData.get(0).get("name").toString(),fileId,typeId,member.getId());
+		} catch (Exception e) {
+		// TODO: handle exception
+		return GlobalConstant.RET_FAIL;
+		}
+System.out.println("return = " + documentId);
+		return documentId;
+	}
+	
+	@RequestMapping("detail/document/changepage")
+	public String changePage(HttpServletRequest request,Model model,int topage,String id) {
+		Order order  = orderService.getOrderInfo(id);
+		model.addAttribute("order", order);
+System.out.println("document_save = " + order.getDocumentSave());
+		//第五页上传资料信息
+		List<Document>	documents = orderService.getDocumentList(id,(topage-1)*10);
+		int	total = orderService.getDocumentCount(id);
+		PageData<Document> pageData = new PageData<>(documents, total, topage);
+		model.addAttribute("documents", documents);
+		model.addAttribute("pageData", pageData);
+		model.addAttribute("recordType", "document");
+		return "screens/order/Document";
+	}
+	
 	
 	/**
 	 * add by lzc     date: 2015年7月28日
@@ -499,40 +606,40 @@ System.out.println("detail/document");
 		model.addAttribute("auditTypeList", auditTypeList);
 	}
 	
-	/**
-	 * add by lzc     date: 2015年7月28日
-	 * copy from ->companyRecoreController.getpulldown
-	 * no change!
-	 */
-	private void reLoadCompany(Model model,HttpServletRequest request){
-		
-		getPulldown(model);
-		
-		Member member = (Member) request.getSession().getAttribute(GlobalConstant.SESSION_MEMBER_INFO);
-		// 企业相关信息id获取
-		HashMap<String, String> companyDetail = companyInfoService.getDetailIdByMemberId(member.getId());
-		// 企业基本信息
-		CompanyBase companyBase = new CompanyBase();
-		companyBase.setYearCheck("0");
-		if (companyDetail.containsKey("license_id") && !companyDetail.get("license_id").equals("")) {
-			companyBase = companyInfoService.editCompanyBaseInfoById(companyDetail.get("license_id"));
-		}
-		model.addAttribute("companyInfo", companyBase);
-		
-		//控股信息
-		HoldInfos holdInfos = new HoldInfos();
-		if (companyDetail.containsKey("member_id") && !companyDetail.get("member_id").equals("")) {
-			holdInfos = companyInfoService.editHoldInfoById(companyDetail.get("member_id"));
-		}
-		model.addAttribute("holdInfos", holdInfos);
-		
-		// 公司治理信息
-		Control control = new Control();
-		if (companyBase != null && !companyBase.getControlInfo().equals("")) {
-			control = companyInfoService.editControlInfoById(companyBase.getControlInfo());
-		}
-		model.addAttribute("controlinfo", control);
-	}	
+//	/**
+//	 * add by lzc     date: 2015年7月28日
+//	 * copy from ->companyRecoreController.getpulldown
+//	 * no change!
+//	 */
+//	private void reLoadCompany(Model model,HttpServletRequest request){
+//		
+//		getPulldown(model);
+//		
+//		Member member = (Member) request.getSession().getAttribute(GlobalConstant.SESSION_MEMBER_INFO);
+//		// 企业相关信息id获取
+//		HashMap<String, String> companyDetail = companyInfoService.getDetailIdByMemberId(member.getId());
+//		// 企业基本信息
+//		CompanyBase companyBase = new CompanyBase();
+//		companyBase.setYearCheck("0");
+//		if (companyDetail.containsKey("license_id") && !companyDetail.get("license_id").equals("")) {
+//			companyBase = companyInfoService.editCompanyBaseInfoById(companyDetail.get("license_id"));
+//		}
+//		model.addAttribute("companyInfo", companyBase);
+//		
+//		//控股信息
+//		HoldInfos holdInfos = new HoldInfos();
+//		if (companyDetail.containsKey("member_id") && !companyDetail.get("member_id").equals("")) {
+//			holdInfos = companyInfoService.editHoldInfoById(companyDetail.get("member_id"));
+//		}
+//		model.addAttribute("holdInfos", holdInfos);
+//		
+//		// 公司治理信息
+//		Control control = new Control();
+//		if (companyBase != null && !companyBase.getControlInfo().equals("")) {
+//			control = companyInfoService.editControlInfoById(companyBase.getControlInfo());
+//		}
+//		model.addAttribute("controlinfo", control);
+//	}	
 	
 	
 	

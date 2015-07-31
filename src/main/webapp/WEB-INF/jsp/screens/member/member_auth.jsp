@@ -46,6 +46,17 @@ function hide()
    $("#login").css("display","none");
    $("#over").css("display","none");
 }
+function hideM()
+{
+	$("#login1").css("display","none");
+	$("#over").css("display","none");
+	
+	document.location.href = "${ctx}/member/auth/wait";
+}
+function showM(){
+	$("#login1").css("display","block");
+	$("#over").css("display","block");
+}
 </script>
 </head>
 <body class="h_bj">
@@ -92,6 +103,7 @@ function hide()
 						<p>
 							<span>公司名称：</span>
 							<sf:input path="companyName" cssClass="t1 required"/>
+							<sf:hidden path="code"/>
 						</p>
 						<p>
 							<span>营业执照注册号：</span>
@@ -174,7 +186,7 @@ function hide()
 											</div>
 										</c:when>
 										<c:otherwise>
-											<img src="${authInfo.businessLicense}" id="img_bl" width="164px" height="105px"/>
+											<img src="${imgPath}${authInfo.businessLicense}" id="img_bl" width="164px" height="105px"/>
 											<div class="zs_li_cz" id="div_bl_2">
 												<span>已上传</span><a href="javascript:void(0);" onclick="show1('bl')">修改</a>
 											</div>
@@ -195,8 +207,8 @@ function hide()
 											</div>
 										</c:when>
 										<c:otherwise>
-											<img src="${authInfo.organizationCode}" id="img_oc" width="164px" height="105px"/>
-											<div class="zs_li_cz" id="div_oc_2" style="display: none">
+											<img src="${imgPath}${authInfo.organizationCode}" id="img_oc" width="164px" height="105px"/>
+											<div class="zs_li_cz" id="div_oc_2">
 												<span>已上传</span><a href="javascript:show1('oc')">修改</a>
 											</div>
 										</c:otherwise>
@@ -216,9 +228,9 @@ function hide()
 											</div>
 										</c:when>
 										<c:otherwise>
-											<img src="${authInfo.taxRegistration}" id="img_tr" width="164px" height="105px"/>
-											<div class="zs_li_cz" id="div_tr_1">
-												<input type="button" onclick="javascript:show1('tr')" value="立即上传" class="sc_btn" />
+											<img src="${imgPath}${authInfo.taxRegistration}" id="img_tr" width="164px" height="105px"/>
+											<div class="zs_li_cz" id="div_tr_2">
+												<span>已上传</span><a href="javascript:show1('tr')">修改</a>
 											</div>
 										</c:otherwise>
 									</c:choose>
@@ -244,9 +256,9 @@ function hide()
 											</div>
 										</c:when>
 										<c:otherwise>
-											<img src="${authInfo.identityCarda}" id="img_ida" width="164px" height="105px"/>
-											<div class="zs_li_cz" id="div_ida_1">
-												<input type="button" onclick="javascript:show1('ida')" value="立即上传" class="sc_btn" />
+											<img src="${imgPath}${authInfo.identityCarda}" id="img_ida" width="164px" height="105px"/>
+											<div class="zs_li_cz" id="div_ida_2">
+												<span>已上传</span><a href="javascript:show1('ida')">修改</a>
 											</div>
 										</c:otherwise>
 									</c:choose>
@@ -265,9 +277,9 @@ function hide()
 											</div>
 										</c:when>
 										<c:otherwise>
-											<img src="${authInfo.identityCardn}" id="img_idn" width="164px" height="105px"/>
-											<div class="zs_li_cz" id="div_idn_1">
-												<input type="button" onclick="javascript:show1('idn')" value="立即上传" class="sc_btn" />
+											<img src="${imgPath}${authInfo.identityCardn}" id="img_idn" width="164px" height="105px"/>
+											<div class="zs_li_cz" id="div_idn_2">
+												<span>已上传</span><a href="javascript:show1('idn')">修改</a>
 											</div>
 										</c:otherwise>
 									</c:choose>
@@ -286,9 +298,9 @@ function hide()
 											</div>
 										</c:when>
 										<c:otherwise>
-											<img src="${authInfo.identityCardp}" id="img_idp" width="164px" height="105px"/>
-											<div class="zs_li_cz" id="div_idp_1">
-												<input type="button" onclick="javascript:show1('idp')" value="立即上传" class="sc_btn" />
+											<img src="${imgPath}${authInfo.identityCardp}" id="img_idp" width="164px" height="105px"/>
+											<div class="zs_li_cz" id="div_idp_2">
+												<span>已上传</span><a href="javascript:show1('idp')">修改</a>
 											</div>
 										</c:otherwise>
 									</c:choose>
@@ -313,12 +325,34 @@ function hide()
 				<div class="clear"></div>
 			</div>
 			<div class="nr">
-				<p class="sc_tx">
-					<input type="file" id="id_file" name="authFiles" />
-				</p>
+				<p><span class="zs">图片大小为大于或等于300kb，文件为jpg、png或gif </span></p>
+				<p><input type="file" id="id_file" name="authFiles" class="file"/></p>
+				<p><span class="zs1" id="img_err"></span></p>
+				<a href="javascript:void();" onclick="uploadFile()" class="qd_btn">上传文件</a>
 			</div>
-			<div class="btn">
-				<a href="javascript:void();" onclick="uploadFile()">上传文件</a>
+		</div>
+	</div>
+	<div id="login1">
+		<div class="login1">
+			<div class="bt">
+				<h1>实名认证提示</h1>
+				<a href="javascript:hideM()"><img src="${ctx}/images/close.png" /></a>
+				<div class="clear"></div>
+			</div>
+			<div class="nr">
+				<p>
+					<i class="tc_icon">
+						<img src="${ctx}/images/f_p_cg.png" style="width: 35px; height: 35px;" />
+					</i>
+					<span>
+						您好，实名认证信息已经成功提交，新越网将在2-3个工作日内进行审核。你也可以拨打客服电话联系我们：
+						<strong>4008609280</strong>或
+						<strong>0571-88079229</strong>。
+					</span>
+				</p>
+				<p>
+					<a href="#" class="qd_btn" onclick="hideM()">我知道了</a>
+				</p>
 			</div>
 		</div>
 	</div>
@@ -381,6 +415,13 @@ $(function () {
 			error.appendTo(element.parent());
 		},
 	});
+	
+	var message = "${message}";
+	if (message == "true") {
+		showM();
+	} else if(message == "false"){
+		alert("实名认证保存失败，请联系管理员");
+	}
 });
 
 function sendCode(){
@@ -444,13 +485,23 @@ function authSubmit(){
 function uploadFile(){
 	var type = "";
 	var fileVal = $("#id_file").val();
+	var fileSize = document.getElementById("id_file").files[0].size;
+	$("#img_err").html("");
 	if (fileVal == "") {
-		alert("请选择文件");
+		$("#img_err").html("请选择文件");
 		return;
 	}
 	if (fileVal != "") {
 		type = fileVal.split(".");
+		if (type[1].toLowerCase() != "jpg" && type[1].toLowerCase() != "png" && type[1].toLowerCase() != "gif") {
+			$("#img_err").html("图片大小超过300kb或者格式不正确，请重新选择1");
+			return;
+		}else if (fileSize/1000 > 300) {
+			$("#img_err").html("图片大小超过300kb或者格式不正确，请重新选择2");
+			return;
+		}
 	}
+	
 	$.ajaxFileUpload({
 		url:'${ctx}/member/auth/file/add?suffix='+type[1],
 		secureuri:false,
@@ -475,5 +526,6 @@ function clearFile(){
 	file.after(file.clone().val(""));
 	file.remove();
 }
+
 </script>
 </html>

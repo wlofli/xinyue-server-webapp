@@ -126,6 +126,11 @@ function save(n){
 		   data:$("#companyForm").serialize(),
 		   sync:true,
 		   success:function(data){
+			   if(data == "success"){
+				   alert("保存成功");
+			   }else{
+				   alert("保存失败");
+			   }
 
 		   } 
 		});
@@ -143,6 +148,7 @@ function save(n){
 <div class="tab">
 <sf:form action="${ctx }/order/save/company"  method="post" id="companyForm">
 <input type="hidden" name="orderId" value="${order.id }"/>
+<input type="hidden" name="companyInfo.id" value="${companyInfo.id }"/>
 <p><span>公司名称：</span><input type="text" name="companyInfo.companyName" value="${companyInfo.companyName }" class="t1" /></p>
 <p><span>法人代表：</span><input type="text" name="companyInfo.legalPerson" value="${companyInfo.legalPerson }" class="t1" /></p>
 <p><span>证件类型：</span>
@@ -220,6 +226,7 @@ function save(n){
 
 <p class="qiye_bt"><strong>公司控股信息</strong></p>
 <c:forEach begin="0" end="1" varStatus="vs">
+<input type="hidden" name="hold.ids[${vs.index }]" value="${hold.ids[vs.index] }"/>
 <p><span>股东控股方式：</span>
 <select name="hold.holdTypes[${vs.index}]" class="s1">
 <option value="">请选择</option>
@@ -260,6 +267,7 @@ function save(n){
 
 
 <p class="qiye_bt"><strong>公司治理信息</strong></p>
+<input type="hidden" name="control.id" value="${control.id }"/>
 <p><span>所属行业：</span><select class="s1" name="control.industry">
 <option value="">请选择</option>
 <c:forEach items="${industry }" var="list">

@@ -27,7 +27,7 @@
 					<c:forEach items="${finfo.data }" var="file">
 						<p class="xzzx">
 							<i><img src="${ctx }/images/xy_icon.png" /></i><a class="span">${file.name }</a><a
-								href="javascript:void(0)" onclick="document.location.href='${ctx}/member/docctr/filedown?file=${file.fileDir }/${file.fileName }.${file.fileType }'" class="down">立即下载</a>
+								href="javascript:void(0)" onclick="document.location.href='${ctx}/member/docctr/filedown?file=${file.fileDir }'" class="down">立即下载</a>
 						</p>
 					</c:forEach>
 				</div>

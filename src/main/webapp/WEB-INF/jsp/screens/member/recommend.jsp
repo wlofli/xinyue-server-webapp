@@ -93,7 +93,7 @@ function sendEmail(node){
 		}
 		$("#recommend_credit_link").val(htl);
 		$.ajax({
-			url:'${ctx}/member/recommendctr/emailMember',
+			url:'${ctx}/member/recommendctr/emailCredit',
 			data:$("#recommend_credit").serialize(),
 			type:'post',
 			success:function(data){
@@ -140,7 +140,7 @@ function sendEmail(node){
 							</p>
 							<p class="tjhyxq b_t_20">
 								<span>推荐普通会员人数：</span><span class="tjrs"><strong>${member.ordinaryNum }</strong>人</span><a
-									href="javascript:void(0)" class="ckxq_a">查看详情</a>
+									href="javascript:void(0)" class="ckxq_a" onclick="${ctx }/member/list?param=member">查看详情</a>
 							</p>
 							<p class="tjhyxq">
 								<span>推荐会员奖励：</span><span class="tjrs"><strong>${member.ordinaryScore }</strong>分</span><a
@@ -170,7 +170,7 @@ function sendEmail(node){
 							</p>
 							<p class="tjhyxq b_t_20">
 								<span>推荐信贷经理人数：</span><span class="tjrs"><strong>${credit.creditNum }</strong>人</span><a
-									href="javascript:void(0)" class="ckxq_a">查看详情</a>
+									href="javascript:void(0)" class="ckxq_a" onclick="${ctx }/member/list?param=credit">查看详情</a>
 							</p>
 							<p class="tjhyxq">
 								<span>推荐信贷经理奖励：</span><span class="tjrs"><strong>${credit.creditScore }</strong>分</span><a
