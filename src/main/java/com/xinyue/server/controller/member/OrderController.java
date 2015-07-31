@@ -548,7 +548,7 @@ System.out.println("document_save = " + order.getDocumentSave());
 	/**
 	 * add by lzc     date: 2015年7月28日
 	 * copy from ->companyRecoreController.getpulldown
-	 * no change!
+	 * no change!                    
 	 */
 	private void getPulldown(Model model) {
 		// 证件类型
