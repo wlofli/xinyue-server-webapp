@@ -103,7 +103,7 @@
 <td colspan="2">
 <c:choose>
 	<c:when test="${list.status == '需求填写中' || list.status == '等待新越网审核' }">
-		<a href="#">附件补充</a>|<a href="#">完善资料</a>
+		<a href="${ctx }/order/detail/document?id=${list.id}">附件补充</a>|<a href="${ctx }/order/detail/applicant?id=${list.id}">完善资料</a>
 		<a href="${ctx }/order/detail/applicant?id=${list.id}">查看详情</a>|<a href="javascript:deleteOrder('${list.id }')">取消订单</a>
 	</c:when>
 	<c:otherwise>

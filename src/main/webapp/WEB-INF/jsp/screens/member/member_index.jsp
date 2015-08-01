@@ -85,8 +85,8 @@ function getOrder(n){
 		 		 +"<div class='float_l_hy1'><span>产品名称：<strong>" + jsonData.order.productName + "</strong></span>"
 		 		 +"<span>所属机构：<strong>" + jsonData.order.bank + " </strong></span><span>订单状态：<strong>" +jsonData.order.status + "</strong></span>"
 		 		 +"</div><div class='float_y_hy'><p>"
-		 		 +"<a class='float_y_hy_a' href='#'>附件补充</a><a class='float_y_hy_a' href='#'>完善资料</a>"
-		 		 +"<a class='float_y_hy_a' href='#'>查看详情</a><a class='float_y_hy_a' href='javascript:deleteOrder(&quot;" + jsonData.order.id + "&quot;)'>取消订单</a></p></div>"
+		 		 +"<a class='float_y_hy_a' href='${ctx }/order/detail/document?id=${order.id}'>附件补充</a><a class='float_y_hy_a' href='${ctx }/order/detail/applicant?id=${list.id}'>完善资料</a>"
+		 		 +"<a class='float_y_hy_a' href='${ctx }/order/detail/applicant?id=${list.id}'>查看详情</a><a class='float_y_hy_a' href='javascript:deleteOrder(&quot;" + jsonData.order.id + "&quot;)'>取消订单</a></p></div>"
 		 		 +"<div class='clear'></div><div class='hy_dd_nr2'></div>");
 		 		 $(".hy_dd_nr3").empty();
 		 		 if(jsonData.order.status == "需求填写中"){
@@ -177,8 +177,8 @@ function deleteOrder(id){
 <div class="float_y_hy">
 <p>
 <a class="float_y_hy_a" href="#undone">附件补充</a>
-<a class="float_y_hy_a" href="#undone">完善资料</a>
-<a class="float_y_hy_a" href="#undone">查看详情</a>
+<a class="float_y_hy_a" href="${ctx }/order/detail/applicant?id=${list.id}">完善资料</a>
+<a class="float_y_hy_a" href="${ctx }/order/detail/applicant?id=${list.id}">查看详情</a>
 <a class="float_y_hy_a" href="javascript:deleteOrder('${order.id }')">取消订单</a></p>
 </div>
 <div class="clear"></div>
