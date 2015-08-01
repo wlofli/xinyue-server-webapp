@@ -14,6 +14,8 @@ import javax.servlet.http.HttpSession;
 
 import net.sf.json.JSONObject;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.WebDataBinder;
@@ -22,6 +24,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.context.WebApplicationContext;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.TypeReference;
@@ -44,6 +47,7 @@ import com.xinyue.manage.service.MemberService;
 import com.xinyue.manage.service.OrderService;
 import com.xinyue.manage.service.SelectService;
 import com.xinyue.manage.util.GlobalConstant;
+import com.xinyue.manage.util.Water;
 import com.xinyue.server.model.Page;
 import com.xinyue.server.service.CommonService;
 
@@ -54,7 +58,8 @@ import com.xinyue.server.service.CommonService;
 @Controller
 @RequestMapping("/order")
 public class OrderController {
-	
+	@Resource
+	private WebApplicationContext WebApplicationContext;
 	@Resource 
 	private OrderService orderService;
 	
@@ -66,6 +71,9 @@ public class OrderController {
 	
 	@Resource
 	private CommonService commonService;
+	
+//	@Autowired
+//	private Water water;
 	
 	@Resource
 	private SelectService selectService;
@@ -127,7 +135,6 @@ System.out.println("graph");
 		List<Order> orderList = orderService.getListByMemberId(member.getId(), searchOrder, GlobalConstant.PAGE_SIZE , index);
 		model.addAttribute("search", orderService.getStatus(GlobalConstant.ORDER_INIT));
 		model.addAttribute("list", orderList);
-		
 		//分页
 		Page page = new Page();
 		int countAll = orderService.getCountByMemberId(member.getId(), searchOrder);
