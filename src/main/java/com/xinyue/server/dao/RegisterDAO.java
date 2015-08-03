@@ -10,4 +10,6 @@ public interface RegisterDAO {
 
 	int findMemberByEmail(String email);
 
+	int findMemberByInvitationCode(String invitationCode);
+
 }

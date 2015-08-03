@@ -2,7 +2,6 @@ package com.xinyue.server.controller.web;
 
 import javax.annotation.Resource;
 
-import org.apache.log4j.Logger;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -27,32 +26,20 @@ public class RegisterController {
 	@Resource
 	private CityService cityService;
 	
-	private Logger log = Logger.getLogger(RegisterController.class);
+//	private Logger log = Logger.getLogger(RegisterController.class);
 	
 	@RequestMapping(value="/register/member")
-	public String gotoRegister(Model model) {
+	public String gotoRegister(Model model,String invitationCode) {
 		
 		model.addAttribute("provinces", cityService.getAllProvince());
 		
-		model.addAttribute("registerInfo", new Member());
+		Member member = new Member();
+		member.setInvited(invitationCode);
+		
+		model.addAttribute("registerInfo", member);
 		
 		return "screens/register";
 	}
-	
-//	@RequestMapping(value="/register/check/code",method=RequestMethod.POST)
-//	public @ResponseBody boolean checkCode(String checkCode,HttpServletRequest request) {
-//		
-//		try {
-//			String sessionCode = request.getSession().getAttribute(GlobalConstant.SESSION_CHECK_CODE).toString();
-//			
-//			if (checkCode.toLowerCase().equals(sessionCode.toLowerCase())) {
-//				return true;
-//			}
-//		} catch (Exception e) {
-//			log.error(e.getMessage());
-//		}
-//		return false;
-//	}
 	
 	@RequestMapping(value="/register/check/email",method=RequestMethod.POST)
 	public boolean checkEmail(String email) {

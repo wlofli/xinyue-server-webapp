@@ -114,16 +114,12 @@
 </tr>
 </c:forEach>
 </tbody>
- 
 </table>
 <%@ include file="../../common/page.jsp" %>
-
 </div>
-
 </div>
 </div>
 <jsp:include page="../../common/foot.jsp" />
 </div>
-
 </body>
 </html>

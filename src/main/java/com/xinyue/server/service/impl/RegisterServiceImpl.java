@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.xinyue.authe.util.Md5;
 import com.xinyue.manage.model.Member;
+import com.xinyue.manage.util.SecurityUtils;
 import com.xinyue.server.dao.RegisterDAO;
 import com.xinyue.server.service.RegisterService;
 
@@ -29,6 +30,15 @@ public class RegisterServiceImpl implements RegisterService {
 		
 		try {
 			registerInfo.setPassword(Md5.encodeByMD5(registerInfo.getPassword()));
+			
+			while (true) {
+				String invitationCode = SecurityUtils.randomStr(6);
+				
+				if (registerDAO.findMemberByInvitationCode(invitationCode) == 0) {
+					registerInfo.setInvitationCode(invitationCode);
+					break;
+				}
+			}
 			
 			int result = registerDAO.saveMember(registerInfo);
 			

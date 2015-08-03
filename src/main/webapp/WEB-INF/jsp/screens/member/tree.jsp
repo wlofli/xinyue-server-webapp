@@ -68,13 +68,13 @@ $(function(){
 </li>
 <li><a id="a">推荐奖励提现</a>
 <ul class="f_nav_ful">
-<li><a href="tjjltx_hy.html">推荐奖励记录</a></li>
-<li><a href="tjjltx1_hy.html">推荐奖励提现</a></li>
-<li><a href="#">绑定提现账号</a></li>
-<li><a href="sdskzh_hy.html">申请提现</a></li>
+<li id="reward"><a href="${ctx }/member/list?param=reward">推荐奖励记录</a></li>
+<li id="withdraw"><a href="${ctx }/member/list?param=withdraw">推荐奖励提现</a></li>
+<li id="bind"><a href="${ctx }/member/list?param=bind">绑定提现账号</a></li>
+<li id="appwithdraw"><a href="${ctx }/member/list?param=appwithdraw">申请提现</a></li>
 </ul>
 </li>
-<li><a href="wdgl_hy.html">问答管理</a></li>
+<li id="question"><a href="${ctx }/member/list?param=question">问答管理</a></li>
 
 </ul>
 </div>

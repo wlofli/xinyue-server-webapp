@@ -22,6 +22,7 @@
 					<div class="zc_wbk">
 						<span class="zc_bt">用户名:</span>
 						<sf:input path="loginName" class="text" placeholder="4-20个字符，用户名只能输入数字、字母或中文"/>
+						<sf:hidden path="invited"/>
 					</div>
 					<div class="zc_wbk">
 						<span class="zc_bt">密码:</span>

@@ -35,7 +35,7 @@
 								<td colspan="2">推荐会员手机号</td>
 								<td colspan="2">推荐会员类型</td>
 								<td colspan="2">
-									<s:select path="sort" class="s3">
+									<s:select path="rank" class="s3" onchange="show()">
 										<s:option value="0">注册时间</s:option>
 										<s:option value="1">降序排列</s:option>
 										<s:option value="2">升序排列</s:option>
@@ -70,6 +70,9 @@
 <script type="text/javascript">
 	function changePage(url , topage){
 		$("#member_recommmend_topage").val(topage);
+		$("#member_recommmend_form").submit();
+	}
+	function show(){
 		$("#member_recommmend_form").submit();
 	}
 </script>

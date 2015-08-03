@@ -20,11 +20,11 @@ public interface RecommendDao {
 	
 	public RecommendCredit getRecommendCredit(@Param("code") String code);
 	
-    public List<Presenter> findRecommendMember(@Param("memberid")String memberid , @Param("sort") String sort , @Param("start") int start , @Param("pageSize")int pageSize);
+    public List<Presenter> findRecommendMember(@Param("memberid")String memberid , @Param("rank") String rank , @Param("start") int start , @Param("pageSize")int pageSize);
     
     public int getMemberCount(@Param("memberid")String memberid);
     
-    public List<Presenter> findRecommendCredit(@Param("memberid")String memberid , @Param("sort") String sort , @Param("start") int start , @Param("pageSize")int pageSize);
+    public List<Presenter> findRecommendCredit(@Param("memberid")String memberid , @Param("rank") String rank , @Param("start") int start , @Param("pageSize")int pageSize);
     
     public int getCreditCount(@Param("memberid")String memberid);
 }

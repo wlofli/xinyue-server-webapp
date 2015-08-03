@@ -37,8 +37,8 @@ public class RecommendController {
 	public String show(Model model , HttpServletRequest req){
 		Member member = (Member)req.getSession().getAttribute(GlobalConstant.SESSION_MEMBER_INFO);
 		String code = member.getInvitationCode();
-		model.addAttribute("member", rbiz.getRecommendMember("2015"));
-		model.addAttribute("credit", rbiz.getRecommendCredit("2015"));
+		model.addAttribute("member", rbiz.getRecommendMember(code));
+		model.addAttribute("credit", rbiz.getRecommendCredit(code));
 		model.addAttribute("code", code);
 		return "screens/member/recommend";
 	}
@@ -95,7 +95,7 @@ public class RecommendController {
 	@RequestMapping("/findMember")
 	public String findMember(Model model , HttpServletRequest req , RecommendInfo reinfo){
 		Member member = (Member)req.getSession().getAttribute(GlobalConstant.SESSION_MEMBER_INFO);
-		reinfo.setMemberid(member.getMemberid());
+		reinfo.setMemberid("00022b625df943ab934299050c5d6f43");
 		model.addAttribute("pageMember", rbiz.findRecommendMember(reinfo));
 		model.addAttribute("reinfo", reinfo);
 		return "screens/member/recmember";
@@ -107,6 +107,6 @@ public class RecommendController {
 		reinfo.setMemberid(member.getMemberid());
 		model.addAttribute("pageCredit", rbiz.findRecommendCredit(reinfo));
 		model.addAttribute("reinfo", reinfo);
-		return "screens/member/recmember";
+		return "screens/member/reccredit";
 	}
 }

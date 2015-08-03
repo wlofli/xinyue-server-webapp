@@ -34,7 +34,7 @@ public class ProductCollectController {
 	public String show(Model model , CollectBean cbean , HttpServletRequest req){
 		if(GlobalConstant.isNull(cbean.getMemberid())){
 			Member m = (Member)req.getSession().getAttribute(GlobalConstant.SESSION_MEMBER_INFO);
-			cbean.setMemberid("00022b625df943ab934299050c5d6f43");
+			cbean.setMemberid(m.getId());
 		}
 		PageData<Collect> pdata = pbiz.findPageData(cbean);
 		System.out.println(pdata.getTotal()+","+pdata.getPageSize()+","+pdata.getTotalPage());

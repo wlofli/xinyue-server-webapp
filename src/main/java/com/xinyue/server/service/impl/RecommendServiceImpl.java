@@ -42,7 +42,7 @@ public class RecommendServiceImpl implements RecommendService {
 		// TODO Auto-generated method stub
 		int currentPage = GlobalConstant.isNull(info.getTopage()) || "0".equals(info.getTopage())?1:Integer.valueOf(info.getTopage());
 		int start = (currentPage - 1)*GlobalConstant.PAGE_SIZE;
-		return new PageData<Presenter>(rdao.findRecommendMember(info.getMemberid(), info.getSort(), start, GlobalConstant.PAGE_SIZE), rdao.getMemberCount(info.getMemberid()), currentPage);
+		return new PageData<Presenter>(rdao.findRecommendMember(info.getMemberid(), info.getRank(), start, GlobalConstant.PAGE_SIZE), rdao.getMemberCount(info.getMemberid()), currentPage);
 	}
 
 	@Override
@@ -50,6 +50,6 @@ public class RecommendServiceImpl implements RecommendService {
 		// TODO Auto-generated method stub
 		int currentPage = GlobalConstant.isNull(info.getTopage()) || "0".equals(info.getTopage())?1:Integer.valueOf(info.getTopage());
 		int start = (currentPage - 1)*GlobalConstant.PAGE_SIZE;
-		return new PageData<Presenter>(rdao.findRecommendMember(info.getMemberid(), info.getSort(), start, GlobalConstant.PAGE_SIZE), rdao.getMemberCount(info.getMemberid()), currentPage);
+		return new PageData<Presenter>(rdao.findRecommendMember(info.getMemberid(), info.getRank(), start, GlobalConstant.PAGE_SIZE), rdao.getMemberCount(info.getMemberid()), currentPage);
 	}
 }

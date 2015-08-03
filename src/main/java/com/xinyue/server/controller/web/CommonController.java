@@ -133,12 +133,22 @@ public class CommonController {
 					return "redirect:/member/recommendctr/findMember";
 				case "credit":
 					return "redirect:/member/recommendctr/findCredit";
+				case "question":
+					return "redirect:/member/questionctr/show";
 				case "main" :
 					return "redirect:/member/home/index?index=0";
 				case "companyrecord" :
 					return "redirect:/member/record/applicant";
 				case "authentication" :
 					return "redirect:/member/authentication/page";
+				case "reward":
+					return "redirect:/reward/reward/list";
+				case "withdraw":
+					return "redirect:/reward/withdraw/list";
+				case "appwithdraw":
+					return "redirect:/reward/withdraw";
+				case "bind":
+					return "redirect:/reward/bind";
 				default:
 					break;
 				}

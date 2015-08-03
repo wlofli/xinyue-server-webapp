@@ -12,7 +12,7 @@ public class RecommendInfo implements Serializable {
 
 	private String memberid;
 	private String topage; 
-	private String sort;
+	private String rank;
 	
 	public String getMemberid() {
 		return memberid;
@@ -26,11 +26,10 @@ public class RecommendInfo implements Serializable {
 	public void setTopage(String topage) {
 		this.topage = topage;
 	}
-	public String getSort() {
-		return sort;
+	public String getRank() {
+		return rank;
 	}
-	public void setSort(String sort) {
-		this.sort = sort;
+	public void setRank(String rank) {
+		this.rank = rank;
 	}
-			
 }

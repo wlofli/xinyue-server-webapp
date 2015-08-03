@@ -58,8 +58,6 @@ import com.xinyue.server.service.CommonService;
 @Controller
 @RequestMapping("/order")
 public class OrderController {
-	@Resource
-	private WebApplicationContext WebApplicationContext;
 	@Resource 
 	private OrderService orderService;
 	
@@ -71,9 +69,6 @@ public class OrderController {
 	
 	@Resource
 	private CommonService commonService;
-	
-//	@Autowired
-//	private Water water;
 	
 	@Resource
 	private SelectService selectService;

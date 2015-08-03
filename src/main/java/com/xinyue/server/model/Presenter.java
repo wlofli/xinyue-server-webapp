@@ -3,6 +3,8 @@ package com.xinyue.server.model;
 import java.io.Serializable;
 import java.util.Date;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 /**
  * 
  * @author wenhai.you
@@ -16,7 +18,8 @@ public class Presenter implements Serializable {
 	private String presenteeTel;
 	private String memberType="普通会员";
 	private String creditType="信贷会员";
-	private Date presenteeRegTime;
+	
+	private String presenteeRegTime;
 	private String presenterScore;
 	private String presenterMoney;
 	
@@ -38,10 +41,10 @@ public class Presenter implements Serializable {
 	public void setPresenteeTel(String presenteeTel) {
 		this.presenteeTel = presenteeTel;
 	}
-	public Date getPresenteeRegTime() {
+	public String getPresenteeRegTime() {
 		return presenteeRegTime;
 	}
-	public void setPresenteeRegTime(Date presenteeRegTime) {
+	public void setPresenteeRegTime(String presenteeRegTime) {
 		this.presenteeRegTime = presenteeRegTime;
 	}
 	public String getPresenterScore() {
