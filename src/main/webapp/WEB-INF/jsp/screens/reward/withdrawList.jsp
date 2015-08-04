@@ -32,7 +32,7 @@ function changePage(n){
 <div class="hy_top">
 <div class="bt"><strong>推荐奖励提现</strong></div>
 <div class="nr"><span class="f_l_s">奖励账户余额：<strong>${outline.totalRecord }</strong>元</span>
-<a href="${ctx }/reward/withdraw" class="f_l_s">申请提现</a>
+<a href="${ctx }/member/list?param=appwithdraw" class="f_l_s">申请提现</a>
 <span class="f_r_s">累计奖励金额：<strong>${outline.totalPrice }</strong>元</span>
 <span class="f_r_s">累计奖励提现金额：<strong>${outline.totalWithdrawCash }</strong>元</span></div>
 </div>

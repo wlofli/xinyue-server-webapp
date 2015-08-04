@@ -26,8 +26,9 @@
 </div> 
 <div class="tab">
 <ul class="sd_skzh">
-<li class="skzh1"><a class="skzh1_a" href="bdzfb.html"><i></i><span>绑定支付宝</span></a><span class="xytx">新越网，可提现到支付宝</span></li>
-<li class="skzh2"><a class="skzh2_a" href="bdyhk.html"><i></i><span>绑定银行卡</span></a><span class="xytx">新越网，可提现到银行卡。支持上百家银行，<a href="#">点此查看</a></span></li>
+<li class="skzh1"><a class="skzh1_a" href="${ctx }/reward/addbind?type=alipay"><i></i><span>绑定支付宝</span></a><span class="xytx">新越网，可提现到支付宝</span></li>
+<li class="skzh2"><a class="skzh2_a" href="${ctx }/reward/addbind?type=bank"><i></i><span>绑定银行卡</span></a>
+<span class="xytx">新越网，可提现到银行卡。支持上百家银行，<a href="#undone">点此查看</a></span></li>
 </ul> 
 </div>
 

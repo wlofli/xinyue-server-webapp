@@ -10,36 +10,39 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.SessionAttributes;
 
 import com.xinyue.manage.beans.SearchReward;
 import com.xinyue.manage.model.Member;
-import com.xinyue.manage.model.RewardOutLine;
-import com.xinyue.manage.model.RewardReward;
-import com.xinyue.manage.model.RewardWithdraw;
+import com.xinyue.manage.model.OutLine;
+import com.xinyue.manage.model.Reward;
+import com.xinyue.manage.model.WithdrawMoney;
 import com.xinyue.manage.service.RewardService;
 import com.xinyue.manage.util.GlobalConstant;
 import com.xinyue.server.model.Page;
+import com.xinyue.server.service.CommonMemberService;
 
 /**
  * author lzc
  */
 @Controller
 @RequestMapping("reward")
+@SessionAttributes(value=GlobalConstant.SESSION_MEMBER_INFO)
 public class RewardController {
 
 	@Resource
 	private RewardService rewardService;
 	
+	@Resource
+	private CommonMemberService commonMemberService;
+	
 	
 	@RequestMapping("/reward/list")
-	public String getRewardList(HttpSession session, Model model, 
+	public String getRewardList(@ModelAttribute(GlobalConstant.SESSION_MEMBER_INFO) Member member ,HttpSession session, Model model, 
 			@RequestParam(defaultValue= "0")int index, @ModelAttribute("search")SearchReward searchReward ){
-
-		Member member = (Member)session.getAttribute(GlobalConstant.SESSION_MEMBER_INFO);
-//System.out.println(member.getContactPhone());		
-		RewardOutLine outline = rewardService.getOutLine(member.getId());
+		OutLine outline = rewardService.getOutLine(member.getId());
 		
-		List<RewardReward> reward = rewardService.getRewardList(member.getId(), index * GlobalConstant.PAGE_SIZE, 
+		List<Reward> reward = rewardService.getRewardList(member.getId(), index * GlobalConstant.PAGE_SIZE, 
 				GlobalConstant.PAGE_SIZE,searchReward);
 		
 		//分页
@@ -58,12 +61,11 @@ public class RewardController {
 	
 	
 	@RequestMapping("/withdraw/list")
-	public String getWithdrawList(HttpSession session, Model model, 
+	public String getWithdrawList(HttpSession session, Model model, @ModelAttribute(GlobalConstant.SESSION_MEMBER_INFO) Member member ,
 			@RequestParam(defaultValue= "0")int index, @ModelAttribute("search")SearchReward searchReward ){
-		Member member = (Member)session.getAttribute(GlobalConstant.SESSION_MEMBER_INFO);
-		RewardOutLine outline = rewardService.getOutLine(member.getId());
+		OutLine outline = rewardService.getOutLine(member.getId());
 		
-		List<RewardWithdraw> withdraw = rewardService.getRewardWithdrawList(member.getId(), index * GlobalConstant.PAGE_SIZE, 
+		List<WithdrawMoney> withdraw = rewardService.getRewardWithdrawList(member.getId(), index * GlobalConstant.PAGE_SIZE, 
 				GlobalConstant.PAGE_SIZE, searchReward);
 		//分页
 		Page page = new Page();
@@ -80,10 +82,8 @@ public class RewardController {
 	
 	
 	@RequestMapping("withdraw")
-	public String withdraw(Model model, HttpSession session){
-
-		Member member = (Member)session.getAttribute(GlobalConstant.SESSION_MEMBER_INFO);
-		RewardOutLine outline = rewardService.getOutLine(member.getId());
+	public String withdraw(@ModelAttribute(GlobalConstant.SESSION_MEMBER_INFO) Member member ,Model model, HttpSession session){
+		OutLine outline = rewardService.getOutLine(member.getId());
 		model.addAttribute("outline", outline);
 		
 		return "screens/reward/withdraw";
@@ -101,6 +101,45 @@ System.out.println("withdrawPrice = " + withdrawPrice);
 	public String bind(Model model, HttpSession session){
 		return "screens/reward/bind";
 	}
+	
+	@RequestMapping("addbind")
+	public String addBind(Model model, HttpSession session,String type){
+		if (type.equals("alipay")) {
+			return "screens/reward/bindAlipay";
+		}else if(type.equals("bank")) {
+			return "screens/reward/bindBank";
+		}else {
+			return "";
+		}
+	}
+	
+	@RequestMapping("bindalipay")
+	public String BindAlipay(String account, @ModelAttribute(GlobalConstant.SESSION_MEMBER_INFO)Member member,
+			Model model){
+		String memberphone = commonMemberService.findTel(member.getId());
+		StringBuffer phone = new StringBuffer(memberphone);
+		phone.replace(3, 7, "***");
+System.out.println(phone);
+		model.addAttribute("phone", phone);
+		return "screens/reward/bindAlipay2";
+	}
+	
+	
+	@RequestMapping("bindalipay2")
+	public String BindAlipay2(){
+		return "screens/reward/bindAlipay3";
+	}
+	
+	@RequestMapping("bindbank")
+	public String BindBank(){
+		return "screens/reward/bindBank2";
+	}
+	
+	@RequestMapping("bindbank2")
+	public String BindBank2(){
+		return "screens/reward/bindBank3";
+	}
+	
 	
 	
 	
