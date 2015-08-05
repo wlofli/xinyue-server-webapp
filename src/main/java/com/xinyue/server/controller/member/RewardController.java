@@ -40,9 +40,10 @@ public class RewardController {
 	@RequestMapping("/reward/list")
 	public String getRewardList(@ModelAttribute(GlobalConstant.SESSION_MEMBER_INFO) Member member ,HttpSession session, Model model, 
 			@RequestParam(defaultValue= "0")int index, @ModelAttribute("search")SearchReward searchReward ){
-System.out.println(member.getId());
+//System.out.println(member.getId());
 		OutLine outline = rewardService.getOutLine(member.getId());
-System.out.println(outline);
+		member.setContactPhone(commonMemberService.findTel(member.getId()));
+//System.out.println(outline);
 		List<Reward> reward = rewardService.getRewardList(member.getId(), index * GlobalConstant.PAGE_SIZE, 
 				GlobalConstant.PAGE_SIZE,searchReward);
 		
@@ -65,7 +66,7 @@ System.out.println(outline);
 	public String getWithdrawList(HttpSession session, Model model, @ModelAttribute(GlobalConstant.SESSION_MEMBER_INFO) Member member ,
 			@RequestParam(defaultValue= "0")int index, @ModelAttribute("search")SearchReward searchReward ){
 		OutLine outline = rewardService.getOutLine(member.getId());
-		
+		member.setContactPhone(commonMemberService.findTel(member.getId()));
 		List<WithdrawMoney> withdraw = rewardService.getRewardWithdrawList(member.getId(), index * GlobalConstant.PAGE_SIZE, 
 				GlobalConstant.PAGE_SIZE, searchReward);
 		//分页
@@ -93,10 +94,15 @@ System.out.println(outline);
 	
 	@RequestMapping("addwithdraw")
 	public String addWithdraw(Model model, HttpSession session, float withdrawPrice){
-System.out.println("withdrawPrice = " + withdrawPrice);
+//System.out.println("withdrawPrice = " + withdrawPrice);
 		return "screens/reward/withdraw2";
 	}
 	
+	
+	@RequestMapping("addwithdraw2")
+	public String addWithdraw2(Model model ,HttpSession session){
+		return "screens/reward/withdraw3";
+	}
 	
 	@RequestMapping("bind")
 	public String bind(Model model, HttpSession session){
@@ -120,7 +126,7 @@ System.out.println("withdrawPrice = " + withdrawPrice);
 		String memberphone = commonMemberService.findTel(member.getId());
 		StringBuffer phone = new StringBuffer(memberphone);
 		phone.replace(3, 7, "***");
-System.out.println(phone);
+//System.out.println(phone);
 		model.addAttribute("phone", phone);
 		return "screens/reward/bindAlipay2";
 	}
@@ -130,12 +136,12 @@ System.out.println(phone);
 	public String BindAlipay2(HttpSession session, String authcode){
 		Member m = (Member) session.getAttribute(GlobalConstant.SESSION_MEMBER_INFO);
 		String code = (String) session.getAttribute(GlobalConstant.SESSION_BIND_ALIPAY_CODE);
-		if(code.equals(authcode)){
-//			undone->做一些操作
-			
-		}else {
-			//绑定失败返回界面
-		}
+//		if(code.equals(authcode)){
+////			undone->做一些操作
+//			
+//		}else {
+//			//绑定失败返回界面
+//		}
 		
 		
 		return "screens/reward/bindAlipay3";
