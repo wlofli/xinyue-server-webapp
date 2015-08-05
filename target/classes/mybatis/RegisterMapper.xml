@@ -26,6 +26,8 @@
 				login_time,
 				email_time,
 				deleted,
+				invited_code,
+				invitation_code,
 				created_time,
 				modified_time,
 				created_id,
@@ -54,6 +56,8 @@
 			now(),
 			now(),
 			0,
+			#{registerInfo.invited},
+			#{registerInfo.invitationCode},
 			now(),
 			now(),
 			#{registerInfo.loginName},
@@ -68,5 +72,14 @@
 			m_member_info
 		where
 			email=#{email};
+	</select>
+	
+	<select id="findMemberByInvitationCode" parameterType="String" resultType="int">
+		select 
+			COUNT(*)
+		from
+			m_member_info
+		where
+			invitation_code=#{invitationCode};
 	</select>
 </mapper>

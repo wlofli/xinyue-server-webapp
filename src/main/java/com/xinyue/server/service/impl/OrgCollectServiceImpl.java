@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.xinyue.manage.beans.PageData;
 import com.xinyue.manage.util.GlobalConstant;
-import com.xinyue.server.been.OrgCollectBean;
+import com.xinyue.server.bean.OrgCollectBean;
 import com.xinyue.server.dao.OrgCollectDao;
 import com.xinyue.server.model.OrgCollect;
 import com.xinyue.server.service.OrgCollectService;

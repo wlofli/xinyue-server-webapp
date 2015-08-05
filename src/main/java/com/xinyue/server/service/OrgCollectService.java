@@ -3,7 +3,7 @@ package com.xinyue.server.service;
 import java.util.List;
 
 import com.xinyue.manage.beans.PageData;
-import com.xinyue.server.been.OrgCollectBean;
+import com.xinyue.server.bean.OrgCollectBean;
 import com.xinyue.server.model.OrgCollect;
 
 /**

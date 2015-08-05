@@ -4,9 +4,8 @@ import java.util.List;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
-import org.apache.commons.httpclient.HttpMethod;
-import org.springframework.http.HttpRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -20,7 +19,7 @@ import com.xinyue.manage.service.CityService;
 import com.xinyue.manage.service.SelectService;
 import com.xinyue.manage.util.GlobalConstant;
 import com.xinyue.manage.util.SecurityUtils;
-import com.xinyue.server.been.PwdInfo;
+import com.xinyue.server.bean.PwdInfo;
 import com.xinyue.server.service.CommonMemberService;
 import com.xinyue.server.service.CommonService;
 
@@ -127,5 +126,24 @@ public class CommonMemberController {
 		}
 		return "fail";
 	}
+	
+	
+	
+	//add by lzc
+	@RequestMapping("sendnote")
+	@ResponseBody
+	public String sendNote(HttpSession session){
+		Member m = (Member)session.getAttribute(GlobalConstant.SESSION_MEMBER_INFO);
+		String phone = cbiz.findTel(m.getId());
+		String code = SecurityUtils.randomStr(4);
+		boolean result = cmbiz.sendCode(phone, code);
+		
+		if(result){
+			session.setAttribute(GlobalConstant.SESSION_BIND_ALIPAY_CODE, code);
+			return GlobalConstant.RET_SUCCESS;
+		}
+		return GlobalConstant.RET_FAIL;
+	}
+	
 	
 }

@@ -10,10 +10,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.xinyue.manage.model.Member;
 import com.xinyue.manage.util.GlobalConstant;
-import com.xinyue.server.been.EmailBean;
-import com.xinyue.server.been.RecommendCredit;
-import com.xinyue.server.been.RecommendInfo;
-import com.xinyue.server.been.RecommendMember;
+import com.xinyue.server.bean.EmailBean;
+import com.xinyue.server.bean.RecommendCredit;
+import com.xinyue.server.bean.RecommendInfo;
+import com.xinyue.server.bean.RecommendMember;
 import com.xinyue.server.service.CommonService;
 import com.xinyue.server.service.RecommendService;
 

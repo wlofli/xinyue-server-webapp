@@ -1,26 +1,19 @@
-package com.xinyue.server.been;
+package com.xinyue.server.bean;
 
 import java.io.Serializable;
 
 /**
  * 
  * @author wenhai.you
- * @2015年7月21日
- * @下午2:06:36
+ * @2015年7月22日
+ * @下午3:40:26
  */
-public class CollectBean implements Serializable {
+public class OrgCollectBean implements Serializable {
 
-	private String proName;
 	private String orgName;
 	private String topage;
 	private String memberid;
 	
-	public String getProName() {
-		return proName;
-	}
-	public void setProName(String proName) {
-		this.proName = proName;
-	}
 	public String getOrgName() {
 		return orgName;
 	}

@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.xinyue.manage.beans.PageData;
 import com.xinyue.manage.model.Member;
 import com.xinyue.manage.util.GlobalConstant;
-import com.xinyue.server.been.OrgCollectBean;
+import com.xinyue.server.bean.OrgCollectBean;
 import com.xinyue.server.model.OrgCollect;
 import com.xinyue.server.service.OrgCollectService;
 

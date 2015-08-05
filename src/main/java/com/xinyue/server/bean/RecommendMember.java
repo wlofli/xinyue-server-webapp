@@ -1,4 +1,4 @@
-package com.xinyue.server.been;
+package com.xinyue.server.bean;
 
 import java.io.Serializable;
 

@@ -3,16 +3,16 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.xinyue.server.dao.RecommendDao">
 	
-	<select id="getRecommendMember" resultType="com.xinyue.server.been.RecommendMember">
+	<select id="getRecommendMember" resultType="com.xinyue.server.bean.RecommendMember">
 		select count(*) ordinaryNum , sum(l.score) ordinaryScore 
 		from m_member_info i inner join c_member_loan l on i.id = l.presenter 
 		where i.invitation_code =  #{code}
 	</select>
 	
 	
-	<select id="getRecommendCredit" resultType="com.xinyue.server.been.RecommendCredit">
+	<select id="getRecommendCredit" resultType="com.xinyue.server.bean.RecommendCredit">
 		select count(*) creditNum , sum(c.score) creditScore from c_manager_info m 
-		inner join c_credit_loan c on m.id = c.presentee where m.invite = #{code}
+		inner join c_credit_loan c on m.id = c.presentee where m.invited_code = #{code}
 	</select>
 	
 	<select id="findRecommendMember" resultType="com.xinyue.server.model.Presenter">
@@ -20,17 +20,17 @@
 		l.id id , 
 		m.contact_name presenteeName , 
 		m.contact_phone	presenteeTel , 
-		m.register_time presenteeRegTime , 
+		date_format(m.register_time, '%Y-%m-%d') presenteeRegTime , 
 		l.score presenterScore ,
 		l.money presenterMoney 
 		from c_member_loan l 
 		left join m_member_info i on i.id = l.presenter 
 		left join m_member_info m on m.id = l.presentee 
 		where l.presenter = #{memberid} 
-		<if test="sort!=null and sort=='1'">
+		<if test="rank!=null and rank==1">
 			order by m.register_time desc 
 		</if>
-		<if test="sort!=null and sort=='2'">
+		<if test="rank!=null and rank==2">
 			order by m.register_time asc 
 		</if>
 		limit #{start} , #{pageSize}
@@ -48,17 +48,17 @@
 		l.id id , 
 		m.real_name presenteeName , 
 		m.tel_number presenteeTel , 
-		m.created_time presenteeRegTime , 
+		date_format(m.created_time, '%Y-%m-%d') presenteeRegTime , 
 		l.score presenterScore ,
 		l.money presenterMoney 
 		from c_credit_loan l 
 		left join m_member_info i on i.id = l.presenter 
 		left join c_manager_info m on m.id = l.presentee 
 		where l.presenter = #{memberid}
-		<if test="sort!=null and sort=='1'">
+		<if test="rank!=null and rank=='1'.toString()">
 			order by m.register_time desc 
 		</if>
-		<if test="sort!=null and sort=='2'">
+		<if test="rank!=null and rank=='2'.toString()">
 			order by m.register_time asc 
 		</if>
 		limit #{start} , #{pageSize}

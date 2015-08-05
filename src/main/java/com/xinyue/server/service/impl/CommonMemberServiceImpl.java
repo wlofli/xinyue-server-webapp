@@ -11,7 +11,7 @@ import com.xinyue.manage.beans.PageData;
 import com.xinyue.manage.model.Member;
 import com.xinyue.manage.util.GlobalConstant;
 import com.xinyue.manage.util.SecurityUtils;
-import com.xinyue.server.been.PwdInfo;
+import com.xinyue.server.bean.PwdInfo;
 import com.xinyue.server.dao.CommonMemberDao;
 import com.xinyue.server.model.FileInfo;
 import com.xinyue.server.service.CommonMemberService;

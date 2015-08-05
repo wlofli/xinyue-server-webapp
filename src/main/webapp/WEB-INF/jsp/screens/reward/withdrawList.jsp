@@ -31,10 +31,10 @@ function changePage(n){
 <div class="hy_right">
 <div class="hy_top">
 <div class="bt"><strong>推荐奖励提现</strong></div>
-<div class="nr"><span class="f_l_s">奖励账户余额：<strong>${outline.totalRecord }</strong>元</span>
+<div class="nr"><span class="f_l_s">奖励账户余额：<strong>${outline.remainingSum }</strong>元</span>
 <a href="${ctx }/member/list?param=appwithdraw" class="f_l_s">申请提现</a>
-<span class="f_r_s">累计奖励金额：<strong>${outline.totalPrice }</strong>元</span>
-<span class="f_r_s">累计奖励提现金额：<strong>${outline.totalWithdrawCash }</strong>元</span></div>
+<span class="f_r_s">累计奖励金额：<strong>${outline.rewardTotal }</strong>元</span>
+<span class="f_r_s">累计奖励提现金额：<strong>${outline.withdrawTotal }</strong>元</span></div>
 </div>
 <div class="hy_right_bt">
 <ul class="menu1" id="menu">
@@ -70,14 +70,14 @@ function changePage(n){
 <tbody class="h_z">
 <c:forEach items="${withdrawList }" var="list" varStatus="vs">
 <tr>
-<td colspan="2"><fmt:formatDate value="${list.createdTime }" pattern="yyyy-MM-dd"/></td>
-<td colspan="2">${list.code }</td>
-<td colspan="2">${list.type }</td>
-<td colspan="2" class="txje">+${list.withdrawPrice }</td>
+<td colspan="2"><fmt:formatDate value="${list.withdrawTime }" pattern="yyyy-MM-dd"/></td>
+<td colspan="2">${list.id }</td>
+<td colspan="2">${list.withdrawType }</td>
+<td colspan="2" class="txje">+${list.withdrawAmount }</td>
 <td colspan="3">${list.status }</td>
 <td colspan="2">${list.remark } </td>
-<td colspan="2">${list.waterId }</td>
-<td colspan="2">${list.totalRecord }</td>
+<td colspan="2">${list.sericalNumber }</td>
+<td colspan="2">${list.currentAmount }</td>
 </tr> 
 </c:forEach>
 

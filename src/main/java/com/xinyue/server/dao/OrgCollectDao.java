@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Param;
 
-import com.xinyue.server.been.OrgCollectBean;
+import com.xinyue.server.bean.OrgCollectBean;
 import com.xinyue.server.model.OrgCollect;
 
 /**

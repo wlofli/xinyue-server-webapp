@@ -11,7 +11,7 @@
 <link rel="icon" href="../images/moke.ico" />
 <%@include file="../../common/common.jsp" %>
 <script type="text/javascript">
-var record = ${outline.totalRecord};
+var record = ${outline.remainingSum};
 
 
 function save(){
@@ -37,13 +37,13 @@ function save(){
 <div class="hy_top">
 <div class="bt"><strong>推荐奖励提现</strong></div>
 <div class="nr">
-<span class="f_l_s">奖励账户余额：<strong>${outline.totalRecord }</strong>元</span>
-<span class="f_r_s">累计奖励金额：<strong>${outline.totalPrice }</strong>元</span>
-<span class="f_r_s">累计奖励提现金额：<strong>${outline.totalWithdrawCash }</strong>元</span></div>
+<span class="f_l_s">奖励账户余额：<strong>${outline.remainingSum }</strong>元</span>
+<span class="f_r_s">累计奖励金额：<strong>${outline.rewardTotal }</strong>元</span>
+<span class="f_r_s">累计奖励提现金额：<strong>${outline.withdrawTotal }</strong>元</span></div>
 </div> 
 <div class="tab">
 <form action="${ctx }/reward/addwithdraw" id="form" method="post">
-<p><span>提现金额：</span><input type="text" id="withdrawPrice" name="withdrawPrice" class="t1 number" /><span class="yts">提现金额必须小于或等于奖励账户余额</span></p>
+<p><span>提现金额：</span><input type="text" id="withdrawPrice" name="withdrawPrice" class="t1 number required" /><span class="yts">提现金额必须小于或等于奖励账户余额</span></p>
 <p>
 <input type="button" value="确认提现" name="withdrawPrice" onclick="save()"  class="b1" /></p>
 </form>

@@ -40,8 +40,9 @@ public class RewardController {
 	@RequestMapping("/reward/list")
 	public String getRewardList(@ModelAttribute(GlobalConstant.SESSION_MEMBER_INFO) Member member ,HttpSession session, Model model, 
 			@RequestParam(defaultValue= "0")int index, @ModelAttribute("search")SearchReward searchReward ){
+System.out.println(member.getId());
 		OutLine outline = rewardService.getOutLine(member.getId());
-		
+System.out.println(outline);
 		List<Reward> reward = rewardService.getRewardList(member.getId(), index * GlobalConstant.PAGE_SIZE, 
 				GlobalConstant.PAGE_SIZE,searchReward);
 		
@@ -126,7 +127,17 @@ System.out.println(phone);
 	
 	
 	@RequestMapping("bindalipay2")
-	public String BindAlipay2(){
+	public String BindAlipay2(HttpSession session, String authcode){
+		Member m = (Member) session.getAttribute(GlobalConstant.SESSION_MEMBER_INFO);
+		String code = (String) session.getAttribute(GlobalConstant.SESSION_BIND_ALIPAY_CODE);
+		if(code.equals(authcode)){
+//			undone->做一些操作
+			
+		}else {
+			//绑定失败返回界面
+		}
+		
+		
 		return "screens/reward/bindAlipay3";
 	}
 	
@@ -136,7 +147,9 @@ System.out.println(phone);
 	}
 	
 	@RequestMapping("bindbank2")
-	public String BindBank2(){
+	public String BindBank2(HttpSession session, String authcode){
+		Member m = (Member) session.getAttribute(GlobalConstant.SESSION_MEMBER_INFO);
+		String code = (String) session.getAttribute(GlobalConstant.SESSION_BIND_BANK_CODE);
 		return "screens/reward/bindBank3";
 	}
 	
