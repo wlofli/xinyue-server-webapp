@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<c:set var="ctx" value="${pageContext.request.contextPath}" />
 <div class="header">
 	<div class="h_bar">
 		<div class="h_b_left">
@@ -57,7 +58,7 @@
 				<li><a href="#">贷款产品</a></li>
 				<li><a href="#">融资机构</a></li>
 				<li><a href="#">信贷经理</a></li>
-				<li><a href="#">新闻资讯</a></li>
+				<li><a href="${ctx }/new/homelist">新闻资讯</a></li>
 				<li><a href="#">帮助中心</a></li>
 				<li><a href="#">问答中心</a></li>
 				<li class="clear"></li>

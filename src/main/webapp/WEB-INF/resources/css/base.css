@@ -2899,7 +2899,7 @@ ul.xzxx li a.xxsm{
 	width:100px;
 	text-align:center;
 	line-height:25px;
-	margin-top:5px;
+	margin-top:20px;
 	height:25px; 
 	background:#0075a9;
 	color:#fff;}
@@ -2951,7 +2951,7 @@ ul.xzxx li a.xxsm{
 	margin:0 10px;
 	height:auto;}
 .tx_right p{
-	width:100%;
+	width:auto;
 	height:auto;}
 .tx_right p span{
 	display:block;

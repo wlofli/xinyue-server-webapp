@@ -1,0 +1,10 @@
+﻿ 
+#full-screen-slider { width:100%; height:444px; float:left; position:relative;
+margin-top:10px;}
+#full-screen-slider #slides { display:block; width:100%; height:444px; list-style:none; padding:0; margin:0; position:relative}
+#full-screen-slider #slides li { display:block; width:100%; height:100%; list-style:none; padding:0; margin:0; position:absolute}
+#full-screen-slider #slides li a { display:block; width:100%; height:100%; text-indent:-9999px}
+#full-screen-slider #pagination { display:block; list-style:none; position:absolute; left:25%; top:410px; z-index:9900;  padding:5px 15px 5px 0; margin:0}
+#full-screen-slider #pagination li { display:block; list-style:none; width:10px; height:10px; float:left; margin-left:15px; border-radius:5px; background:#FFF }
+#full-screen-slider #pagination li a { display:block; width:100%; height:100%; padding:0; margin:0;  text-indent:-9999px;}
+#full-screen-slider #pagination li.current { background:#0092CE}
