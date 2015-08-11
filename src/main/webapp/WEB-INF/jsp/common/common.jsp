@@ -3,12 +3,15 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"  %> 
 <c:set var="ctx" value="${pageContext.request.contextPath}" />
 <link href="${ctx}/css/style.css" type="text/css" rel="stylesheet" />
+<link rel="stylesheet" type="text/css" href="${ctx}/css/jquery.jslides.css" media="screen" />
 <link rel="icon" href="${ctx}/images/moke.ico" />
 <script type="text/javascript" src="${ctx}/js/tab.js"></script>
 <script type="text/javascript" src="${ctx}/js/jquery-1.9.0.min.js"></script>
 <script type="text/javascript" src="${ctx}/js/jquery.validate.js"></script>
 <script type="text/javascript" src="${ctx}/js/messages_zh.min.js"></script>
 <script type="text/javascript" src="${ctx }/js/My97DatePicker.4.8/WdatePicker.js"></script>
+<script type="text/javascript" src="${ctx}/js/scroll.js"></script>
+<script type="text/javascript" src="${ctx}/js/jquery.jslides.js"></script>
 
 <script type="text/javascript">
 jQuery.validator.addMethod("charstr", function(value, element) { 

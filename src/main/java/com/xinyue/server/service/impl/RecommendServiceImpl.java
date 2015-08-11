@@ -5,6 +5,7 @@ import javax.annotation.Resource;
 import org.springframework.stereotype.Service;
 
 import com.xinyue.manage.beans.PageData;
+import com.xinyue.manage.util.CommonFunction;
 import com.xinyue.manage.util.GlobalConstant;
 import com.xinyue.server.bean.RecommendCredit;
 import com.xinyue.server.bean.RecommendInfo;
@@ -51,5 +52,15 @@ public class RecommendServiceImpl implements RecommendService {
 		int currentPage = GlobalConstant.isNull(info.getTopage()) || "0".equals(info.getTopage())?1:Integer.valueOf(info.getTopage());
 		int start = (currentPage - 1)*GlobalConstant.PAGE_SIZE;
 		return new PageData<Presenter>(rdao.findRecommendMember(info.getMemberid(), info.getRank(), start, GlobalConstant.PAGE_SIZE), rdao.getMemberCount(info.getMemberid()), currentPage);
+	}
+	
+	public String createCode(String url){
+		try {
+			String date = CommonFunction.createCode(url, CommonFunction.getValue("upload.path")+"code/");
+			return new StringBuffer(CommonFunction.getValue("down.path")).append("moko/images/code/").append(date).append("_qrCode.jpg").toString();
+		} catch (Exception e) {
+			// TODO: handle exception
+			return "";
+		}
 	}
 }

@@ -8,6 +8,16 @@ public class Page {
 	private int totalNum;//总条数
 	private int pageNo;//当前页数
 	private int pageSize;//页码大小
+	private int startIndex;//开始显示页数 n
+//	private int endIndex;//结束显示页数
+	
+	public int getStartIndex() {
+		return startIndex;
+	}
+
+	public void setStartIndex(int startIndex) {
+		this.startIndex = startIndex;
+	}
 	
 	
 	
@@ -19,7 +29,10 @@ public class Page {
 			return 1;
 		}
 	}
-//	public void setTotalPage(int totalPage) {
+
+	
+
+	//	public void setTotalPage(int totalPage) {
 //		this.totalPage = totalPage;
 //	}
 	public int getTotalNum() {

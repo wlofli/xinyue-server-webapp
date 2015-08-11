@@ -21,4 +21,6 @@ public interface RecommendService {
 	public PageData<Presenter> findRecommendMember(RecommendInfo info);
 	
 	public PageData<Presenter> findRecommendCredit(RecommendInfo info);
+	
+	public String createCode(String url);
 }

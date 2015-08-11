@@ -81,8 +81,9 @@ public class CommonServiceImpl implements CommonService {
 			}
 
 			if (!result.equals("100")) {
-				log.info("<<<短信验证码发送失败代码-->" + result + ">>>");
+				log.info("<<<短信验证码发送失败代码-->" + result + ">>>手机号码为:"+phone);
 			} else {
+				log.info("<<<短信验证码发送成功-->" + result + ">>>手机号码为:"+phone);
 				return true;
 			}
 

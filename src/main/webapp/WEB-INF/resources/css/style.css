@@ -4687,7 +4687,7 @@ p.f_b{
 	float:left;}	
 .zx_index_top_center{
 	height:auto;
-	width:598px;
+	width:498px;
 	float:left;
 	margin-left:15px;
 	background:#fff;
@@ -4711,7 +4711,7 @@ p.f_b{
 .zx_index_top_center .menu1 li .xq{
 	float:left;
 	margin-left:10px;
-	width:450px;
+	width:350px;
 	height:auto;}
 .zx_index_top_center .menu1 li .xq a.bt{
 	font-size:16px;
@@ -4754,10 +4754,10 @@ p.f_b{
 .zx_index_top_right{
 	float:right;
 	height:auto;
-	width:245px;}
+	width:345px;}
 .zx_index_top_right .sc_dk{
 	height:auto;
-	width:243px;
+	width:343px;
 	border:1px #aaa solid;
 	background:#fff;
 	border-radius:5px;}
@@ -4790,19 +4790,19 @@ p.f_b{
 .zx_index_top_right .sc_dk .sc_dk_nr p .dk_s{
 	height:33px;
 	line-height:33px;
-	width:130px;
+	width:230px;
 	float:left;
 	margin-left:10px;
 	border:1px #aaa solid;
 	border-radius:5px;
 	margin-top:10px;}
 .zx_index_top_right .sc_dk .sc_dk_nr p .dk_sc{
-	height:28px;
+	height:38px;
 	color:#fff;
 	border:1px #02a2aa solid;
 	background:#02a2aa;
 	border-radius:5px;
-	width:120px;
+	width:220px;
 	display:block;
 	margin:10px auto;}
 .dkjsq{
@@ -5056,6 +5056,7 @@ filter:progid:DXImageTransform.Microsoft.gradient( GradientType = 0,startColorst
 	color:#02a2aa;}
 .zxxq_wz_ul{
 	float:left;
+	width:430px;
 	height:auto;
 	overflow:hidden;}
 .zxxq_wz_ul li{

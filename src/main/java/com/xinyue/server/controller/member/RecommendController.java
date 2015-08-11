@@ -5,6 +5,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -76,6 +77,7 @@ public class RecommendController {
 		if(result){
 			return "success";
 		}else{
+			
 			return "fail";
 		}
 	}
@@ -108,5 +110,20 @@ public class RecommendController {
 		model.addAttribute("pageCredit", rbiz.findRecommendCredit(reinfo));
 		model.addAttribute("reinfo", reinfo);
 		return "screens/member/reccredit";
+	}
+	
+	@RequestMapping("/createCode")
+	@ResponseBody
+	public String createCode(@RequestBody String url){
+		try {
+			String codeimg = rbiz.createCode(url);
+			if(GlobalConstant.isNull(codeimg)){
+				return "fail";
+			}
+			return codeimg;
+		} catch (Exception e) {
+			// TODO: handle exception
+			return "fail";
+		}
 	}
 }
