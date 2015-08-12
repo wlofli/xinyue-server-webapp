@@ -80,6 +80,11 @@ public class CompanyRecordController {
 		List<SelectInfo> provinceList = selectService.findProvince();
 		model.addAttribute("provinceList", provinceList);
 		
+		//两年内信用
+		List<SelectInfo> creditList = selectService
+				.findSelectByType(GlobalConstant.COMPANY_CREDIT_TYPE);
+		model.addAttribute("creditList", creditList);
+		
 		//企业相关信息id获取
 		HashMap<String, String> companyDetail = companyInfoService.getDetailIdByMemberId(member.getId());
 		
