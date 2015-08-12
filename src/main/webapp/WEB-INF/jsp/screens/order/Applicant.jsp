@@ -93,7 +93,9 @@ function getZones(val1,val2){
 }
 
 function save(n){
-	alert("in");
+// 	alert("in");
+	var order_status = "${order.status}"
+	
 	$.ajax({
 		url:"${ctx}/order/save/applicant",
 		data:$("#applicantForm").serialize(),

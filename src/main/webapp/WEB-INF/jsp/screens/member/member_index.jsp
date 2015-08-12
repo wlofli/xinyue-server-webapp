@@ -47,6 +47,7 @@ Date.prototype.Format = function (fmt) { //author: meizz
 // 		 $("#end").hide();
 // 	 }
 //  });
+
 var order_i = 0;//订单初始值
 var orderlen = "${orderNum}";
 

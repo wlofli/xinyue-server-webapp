@@ -12,32 +12,13 @@
 </head>
 <%@include file="../../common/common.jsp" %>
 <link href="../css/style.css" type="text/css" rel="stylesheet" />
-<link rel="stylesheet" type="text/css" href="../css/jquery.jslides.css" media="screen" />
+<link rel="stylesheet" type="text/css" href="${ctx }/css/jquery.jslides.css" media="screen" />
 <script src="../js/tab.js" runat="server" type="text/javascript"></script>
-<script type="text/javascript" src="../js/jquery-1.8.0.min.js"></script>
-<script type="text/javascript" src="../js/jquery.jslides.js"></script>
+<script type="text/javascript" src="${ctx }/js/jquery.jslides.js"></script>
 <body class="h_bj">
 <div class="container">
 <jsp:include page="../../common/head.jsp" />
 </div>
-<!-- <div class="container1"> -->
-<!-- <div id="full-screen-slider"> -->
-<!-- 	<ul id="slides"> -->
-<!-- 		<li style="background:url('../images/01.png') no-repeat center top"><a href="#" target="_blank">新越网</a></li> -->
-<!-- 		<li style="background:url('../images/02.png') no-repeat center top"><a href="#" target="_blank">新越网</a></li> -->
-<!-- 		<li style="background:url('../images/03.jpg') no-repeat center top"><a href="#" target="_blank">新越网</a></li> -->
-<!-- 		<li style="background:url('../images/04.png') no-repeat center top"><a href="#" target="_blank">新越网</a></li> -->
-<!-- 	</ul> -->
-<!-- </div> -->
-
-<!-- <div class="form_sd">  -->
-
-<!-- </div> -->
-<!-- </div> -->
-
-<!-- <div class="container2"> -->
-<!-- <div class="banner_bottom_gg">税贷通-税收信用“贷”动企业快速发展</div> -->
-<!-- </div> -->
 <!--中间部分-->
 <div class="nr_main">
 <div class="nr_center">
@@ -135,51 +116,46 @@ function qqWeiboShare(){
 		window.open( _u,'', 'width=700, height=680, top=0, left=0, toolbar=no, menubar=no, scrollbars=no, location=yes, resizable=no, status=no' );
 
 }
-
 function createCode(){
-	var v = $("#recommend_share").val();
-	var param;
-	if(v==1){
-		param = JSON.stringify($("#recommend_member_html").html());
-	}else{
-		param = JSON.stringify($("#recommend_credit_html").html());
-	}
-	$.ajax({
-		url:'${ctx}/credit/memberctr/createCode',
-		type:'post',
-		dataType:'json',
-		contentType:'application/json',
-		data:param,
-		success:function(data){
-			if(data != 'fail'){
-				alert("分享成功");
-			}else{
-				alert("分享失败");
+// 	alert("in");
+		var param = "www.baidu.com";
+		$.ajax({
+			url:'${ctx}/member/recommendctr/createCode?url=' + param,
+			type:'post',
+			dataType:'json',
+			contentType:'application/json',
+			success:function(data){
+				if(data != 'fail'){
+					alert("分享成功");
+				}else{
+					alert("分享失败");
+				}
 			}
-		}
-	});
+		});
 }
+</script>
 
-  <script type="text/javascript">
-(function(){
-var p = {
-url:location.href, /*获取URL，可加上来自分享到QQ标识，方便统计*/
-desc:'', /*分享理由(风格应模拟用户对话),支持多分享语随机展现（使用|分隔）*/
-title:'', /*分享标题(可选)*/
-summary:'', /*分享摘要(可选)*/
-pics:'', /*分享图片(可选)*/
-flash: '', /*视频地址(可选)*/
-site:'', /*分享来源(可选) 如：QQ分享*/
-style:'201',
-width:32,
-height:32
-};
-var s = [];
-for(var i in p){
-s.push(i + '=' + encodeURIComponent(p[i]||''));
-}
-document.write(['<a class="qcShareQQDiv" href="http://connect.qq.com/widget/shareqq/index.html?',s.join('&'),'" target="_blank">分享到QQ</a>'].join(''));
-})();
+
+<script type="text/javascript">
+// (function(){
+// var p = {
+// url:location.href, /*获取URL，可加上来自分享到QQ标识，方便统计*/
+// desc:'', /*分享理由(风格应模拟用户对话),支持多分享语随机展现（使用|分隔）*/
+// title:'', /*分享标题(可选)*/
+// summary:'', /*分享摘要(可选)*/
+// pics:'', /*分享图片(可选)*/
+// flash: '', /*视频地址(可选)*/
+// site:'', /*分享来源(可选) 如：QQ分享*/
+// style:'201',
+// width:32,
+// height:32
+// };
+// var s = [];
+// for(var i in p){
+// s.push(i + '=' + encodeURIComponent(p[i]||''));
+// }
+// document.write(['<a class="qcShareQQDiv" href="http://connect.qq.com/widget/shareqq/index.html?',s.join('&'),'" target="_blank">分享到QQ</a>'].join(''));
+// })();
 </script>
 <script src="http://connect.qq.com/widget/loader/loader.js" widget="shareqq" charset="utf-8"></script>
 <a title="分享到QQ空间" href="javascript:void(0)" class="bshare-qzone" onclick="qqZoneShare()"></a>
@@ -196,8 +172,6 @@ document.write(['<a class="qcShareQQDiv" href="http://connect.qq.com/widget/shar
 <p><span>上一篇：</span><a href="${ctx }/new/detail?id=${before.key}">${before.value }</a></p>
 <p><span>下一篇：</span><a href="${ctx }/new/detail?id=${after.key}">${after.value }</a></p>
 </div>
-
-
 </div>
 <div class="pro_xq_right">
 <div class="p_r_dk">
@@ -219,7 +193,6 @@ document.write(['<a class="qcShareQQDiv" href="http://connect.qq.com/widget/shar
 </c:forEach>
 </ul>
 </div>
-
 </div>
 <div class="ad_mk1">
 <c:forEach items="${advertise1 }" var="list" begin="0" end="0">
@@ -227,14 +200,11 @@ document.write(['<a class="qcShareQQDiv" href="http://connect.qq.com/widget/shar
 <img src="${ctx }/${list.thumbnail}" /></a>
 </c:forEach>
 </div>
-
 </div>
 <div class="clear"></div>
 </div>
-
 </div>
 <!--中间部分-->
 <jsp:include page="../../common/foot_main.jsp" />
- 
 </body>
 </html>
