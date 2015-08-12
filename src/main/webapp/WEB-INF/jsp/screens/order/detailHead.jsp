@@ -41,3 +41,15 @@
 <li class="<c:if test="${ recordType eq 'document'}">hit</c:if>"><a href="${ctx }/order/detail/document?id=${order.id}">上传资料</a></li> 
 </ul>
 </div>
+<script>
+function checkOrder(){
+	var order_status = "${order.status}"
+		if(order_status != "需求填写中" && order_status != "等待新越网审核"){
+			alert("无法修改订单");
+			return false;
+		}else{
+			return true;
+		}
+}
+
+</script>

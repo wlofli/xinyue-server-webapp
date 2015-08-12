@@ -13,7 +13,10 @@
 <%@include file="../../common/common.jsp" %>
 <script type="text/javascript">
 function save(n){
-	alert("in");
+// 	alert("in");
+	if(!checkOrder()){
+		return;
+	}
 	$.ajax({
 		url:"${ctx}/order/save/business",
 		data:$("#businessForm").serialize(),

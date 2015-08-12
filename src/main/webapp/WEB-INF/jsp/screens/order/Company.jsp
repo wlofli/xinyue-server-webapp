@@ -120,6 +120,9 @@ function getZones(val1, val2) {
 }
 
 function save(n){
+	if(!checkOrder()){
+		return;
+	}
 	$.ajax({
 		   url:"${ctx}/order/save/company",
 		   method:"post",

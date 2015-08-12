@@ -102,33 +102,26 @@ public class NewController {
 	public String getHomeList(Model model,HttpServletRequest request,@ModelAttribute("newlist")List<NewInfo> newList ){
 		request.getSession().setAttribute(GlobalConstant.INDEX_TYPE, "new");
 		
-		NewType newType = newService.getNewType(GlobalConstant.NEW_HOTNEWS_ID);
-		model.addAttribute("hotnew", newType);
-		
+		List<SelectInfo> newTypeList = newService.getAllNewTypeList();
+		model.addAttribute("newtype",newTypeList);
 		
 		SearchNew searchNew = new SearchNew();
-		searchNew.setNewType(GlobalConstant.NEW_HOTNEWS_ID);
+		searchNew.setNewType(newTypeList.get(0).getKey());
 		//设置所在城市 
 		//undone ->需要获取ip所在城市再设置城市
 //		searchNew.setCity(city);
-		List<NewInfo> hotNewList = newService.getNewInfoListByTime(searchNew, 0, GlobalConstant.PAGE_SIZE_TWO);
+		List<NewInfo> firsttNewList = newService.getNewInfoListByTime(searchNew, 0, GlobalConstant.PAGE_SIZE_TWO);
 		//热门资讯
-		model.addAttribute("hotnewlist", hotNewList);
+		model.addAttribute("firstnewlist", firsttNewList);
 		
 		//最新资讯
 		model.addAttribute("newlist", newList);
 		
-		List<String> idList = new ArrayList<String>();
-		idList.add(GlobalConstant.NEW_HOTNEWS_ID);
 		//除热门资讯以外的新闻id与名字
-		List<SelectInfo> newTypeList = newService.getAllNewTypeList(idList);
-		model.addAttribute("othernew",newTypeList);
-		searchNew = new SearchNew();
-		searchNew.setNewType(newTypeList.get(0).getKey());
+		searchNew.setNewType(newTypeList.get(1).getKey());
 		//第一个新闻列表
-		List<NewInfo> firstList = newService.getNewInfoListByTime(searchNew, 0, GlobalConstant.PAGE_SIZE_NEWLIST);
-		model.addAttribute("othernewlist", firstList);
-//		model.addAttribute("showpath", SHOW_PATH);
+		List<NewInfo> secondList = newService.getNewInfoListByTime(searchNew, 0, GlobalConstant.PAGE_SIZE_NEWLIST);
+		model.addAttribute("secondnewlist", secondList);
 		
 
 		//首页小广告
@@ -137,7 +130,7 @@ public class NewController {
 		List<Advertising> advertisingList = advertisingService.getAdvertising(advertisingInfo);
 		model.addAttribute("advertise2", advertisingList);
 		
-		
+		//轮播图的四个新闻
 		List<NewInfo> topNewList = newService.getNewINfoTop(GlobalConstant.PAGE_SIZE_SHOW_PICTURE);
 		model.addAttribute("top", topNewList);
 		

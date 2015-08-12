@@ -3398,6 +3398,17 @@ p.f_b{
 
 	
 	}	
+#tck1 .zx_tck .nr .nr_left p .sdzl_s1,#tck2 .zx_tck .nr .nr_left p .sdzl_s1{
+	width:80px;
+	height:33px;
+	line-height:33px;
+	border:1px #aaa solid;
+	border-radius:5px;
+	margin-top:10px;
+	margin-left:10px;
+	padding-left:5px;
+	
+	}
 #tck .zx_tck .nr .nr_right,#tck1 .zx_tck .nr .nr_right,#tck2 .zx_tck .nr .nr_right{
 	float:left;
 	margin-top:50px;
@@ -3519,14 +3530,34 @@ p.f_b{
 	font-size:16px;}	
 .pro_ssk_nr{
 	height:auto;
-	width:1235px;
+	width:1195px;
 	margin:10px 20px;
 	}	
 .pro_ssk_nr li{
 	width:100%;
-	height:auto;
 	border-bottom:1px #eee dotted;
-	line-height:50px;}
+	line-height:50px;
+	height:auto;
+	position:relative;
+	overflow:hidden;}
+	
+.pro_ssk_nr li a.zk,.pro_ssk_nr li a.sq{
+	position:absolute;
+	right:10px;
+	bottom:0;
+	font-size:12px;
+	color:#aaa;
+	border:none;
+	display:inline-block;
+	width:auto; }
+.pro_ssk_nr li a.sq{
+	display:none; }
+.pro_ssk_nr li a.zk:hover,.pro_ssk_nr li a.sq:hover{
+	background:none;
+	color:#02a2aa; 
+	border:none;}
+
+	
 .pro_ssk_nr li.bor_none{
 	border-bottom:none;
 	margin-top:20px;
@@ -3539,7 +3570,14 @@ p.f_b{
 	font-size:16px;
 	float:left;
 	text-align:center;}
-.pro_ssk_nr li a{
+.pro_ssk_nr li p{
+	display:block;
+	width:1050px;
+	float:left; 
+	line-height:50px;
+	height:50px;
+	overflow:hidden;}	
+.pro_ssk_nr li p a{
 	display:block;
 	font-size:16px;
 	width:auto;
@@ -5117,6 +5155,7 @@ filter:progid:DXImageTransform.Microsoft.gradient( GradientType = 0,startColorst
 	height:35px;
 	line-height:35px;
 	width:auto;
+	overflow:hidden;
 	background:url(../images1/li_icon1.png) no-repeat left;}
 .zxxq_bot_left li a{
 	margin-left:30px;

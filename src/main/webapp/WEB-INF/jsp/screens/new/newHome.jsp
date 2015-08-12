@@ -55,8 +55,8 @@ marginTop: 0
 <div class="position">
 <div class="site"> 
 
-<a href="${ctx }/new/list?index=0&typeId=${hotnew.id}" class="a">${hotnew.name }</a>
-<c:forEach items="${othernew }" var="list"> 
+
+<c:forEach items="${newtype }" var="list"> 
 <a href="${ctx }/new/list?index=0&typeId=${list.key}" class="a">${list.value }</a>
 </c:forEach>
 </div>
@@ -117,9 +117,11 @@ Qfast(false, 'widgets', function () {
 </div>
 </div>
 <div class="zx_index_top_center"> 
-<div class="zx_rm_bt"><span>热门资讯</span><a href="${ctx }/new/list?typeId=${hotnew.id}">更多&gt;</a></div>
+<c:forEach items="${newtype }" var="list" begin="0" end="0">
+<div class="zx_rm_bt"><span>${list.value }</span><a href="${ctx }/new/list?typeId=${list.key}">更多&gt;</a></div>
+</c:forEach>
 <ul class="menu1">
-	<c:forEach items="${hotnewlist }" var="list" >
+	<c:forEach items="${firstnewlist }" var="list" >
 	<li>
 		<a href="${ctx }/new/detail?id=${list.id}" class="litpic1"><img src="${ctx }${showpath}${list.fileDir}${list.fileName}" width="115px" /></a>
 		<div class="xq">
@@ -230,13 +232,13 @@ function turnList(typeid){
 
 <!-- menu li -->
 
-<c:forEach items="${othernew }" var="list" varStatus="vs" >
+<c:forEach items="${newtype }" var="list" varStatus="vs" begin="1">
 <li class="<c:if test="${vs.count == 1 }">hit</c:if> newType" id="${list.key }">
 <a href="javascript:turnList('${list.key}')">${list.value }</a></li>
 </c:forEach>
 <!-- <div class="clear"></div> -->
 </ul>
-<c:forEach items="${othernew }"  var="list" begin="0" end="0">
+<c:forEach items="${newtype }"  var="list" begin="1" end="1">
 <a href="${ctx }/new/list?typeId=${list.key}" class="more" id="more">更多&gt;</a>
 </c:forEach>
 </div>
@@ -245,13 +247,13 @@ function turnList(typeid){
 <div class="zxxq_top">
 
 <ul class="zxxq_lit_ul">
-<c:forEach items="${othernewlist }" varStatus="vs" var="list" begin="0" end="0" >
+<c:forEach items="${secondnewlist }" varStatus="vs" var="list" begin="0" end="0" >
 <li class="h${vs.count }_li"><a href="${ctx }/new/detail?id=${list.id}">
 	<img src="${ctx}${showpath}${list.fileDir}${list.fileName}" width="368" height="200" />
 	<span>${list.title }</span>
 </a></li>
 </c:forEach>
-<c:forEach items="${othernewlist }" varStatus="vs" var="list" begin="1" end="2" >
+<c:forEach items="${secondnewlist }" varStatus="vs" var="list" begin="1" end="2" >
 <li class="h${vs.count + 1 }_li"><a href="${ctx }/new/detail?id=${list.id}">
 	<img src="${ctx}${showpath}${list.fileDir}${list.fileName}" width="178" />
 	<span>${list.title }</span>
@@ -259,10 +261,10 @@ function turnList(typeid){
 </c:forEach>
 </ul>
 <ul class="zxxq_wz_ul">
-<c:forEach items="${othernewlist }"  var="list" begin="3" end="8" varStatus="vs">
+<c:forEach items="${secondnewlist }"  var="list" begin="3" end="8" varStatus="vs">
 	<li class="<c:if test="${vs.first }">wz_ul_h</c:if>"><a href="${ctx }/new/detail?id=${list.id}">${list.title }</a></li>
 </c:forEach>
-<c:forEach items="${othernewlist }"  var="list" begin="9" end="13" varStatus="vs">
+<c:forEach items="${secondnewlist }"  var="list" begin="9" end="13" varStatus="vs">
 	<li class="<c:if test="${vs.first }">wz_ul_h mar_top</c:if>"><a href="${ctx }/new/detail?id=${list.id}">${list.title }</a></li>
 </c:forEach>
 </ul>
@@ -271,7 +273,7 @@ function turnList(typeid){
 <div class="zxxq_bottom">
 <ul class="zxxq_bot_left">
 <li class="b_h_li">
-<c:forEach  items="${othernewlist }"  var="list" begin="14" end="14" varStatus="vs">
+<c:forEach  items="${secondnewlist }"  var="list" begin="14" end="14" varStatus="vs">
 <a class="b_h_li_lit" href="new_xq.html">
 <img src="${ctx}${showpath}${list.fileDir}${list.fileName}" width="80" height="70" />
 </a>
@@ -281,12 +283,12 @@ function turnList(typeid){
 </div>
 </c:forEach>
 </li>
-<c:forEach  items="${othernewlist }"  var="list" begin="15" end="20" >
+<c:forEach  items="${secondnewlist }"  var="list" begin="15" end="20" >
 <li><a href="${ctx }/new/detail?id=${list.id}">${list.title }</a></li>
 </c:forEach>
  </ul>
 <ul class="zxxq_bot_left">
-<c:forEach  items="${othernewlist }"  var="list" begin="21" end="21" varStatus="vs">
+<c:forEach  items="${secondnewlist }"  var="list" begin="21" end="21" varStatus="vs">
 <li class="b_h_li">
 <a class="b_h_li_lit" href="new_xq.html">
 <img src="${ctx}${showpath}${list.fileDir}${list.fileName}" width="80" height="70" /></a>
@@ -296,7 +298,7 @@ function turnList(typeid){
 </div>
 </li>
 </c:forEach>
-<c:forEach  items="${othernewlist }"  var="list" begin="22" end="27" varStatus="vs">
+<c:forEach  items="${secondnewlist }"  var="list" begin="22" end="27" varStatus="vs">
 <li><a href="${ctx }/new/detail?id=${list.id}">${list.title }</a></li>
 </c:forEach>
  </ul>
