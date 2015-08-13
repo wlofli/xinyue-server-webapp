@@ -117,7 +117,7 @@ public class NewController {
 		//最新资讯
 		model.addAttribute("newlist", newList);
 		
-		//除热门资讯以外的新闻id与名字
+		//第二个type
 		searchNew.setNewType(newTypeList.get(1).getKey());
 		//第一个新闻列表
 		List<NewInfo> secondList = newService.getNewInfoListByTime(searchNew, 0, GlobalConstant.PAGE_SIZE_NEWLIST);

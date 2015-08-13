@@ -38,7 +38,8 @@
 <a href="new_xq.html" class="new_lit">
 <img src="${ctx }${showpath}${list.fileDir }${list.fileName }" width="110px" /></a>
 <div class="new_xq">
-<p><a href="${ctx }/new/detail?id=${list.id}">${list.title }</a><span><fmt:formatDate value="${list.sendDate }" pattern="yyyy-MM-dd"/></span><div class="clear"></div></p>
+<p><a href="${ctx }/new/detail?id=${list.id}">${list.title }</a>
+<span><fmt:formatDate value="${list.sendDate }" pattern="yyyy-MM-dd"/></span><div class="clear"></div></p>
 <p>${list.showTitle }</p>
 </div>
 </li> 

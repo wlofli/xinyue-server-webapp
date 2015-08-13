@@ -31,7 +31,7 @@
 <div class="pro_xq">
 <div class="pro_xq_left">
 <div class="new_xq_bt"><span>${news.title }</span></div>
-<div class="new_xq_zs"><span><fmt:formatDate value="${news.sendDate }" pattern="yyyy-MM-dd h:m"/> 来源：中国税务报</span></div>
+<div class="new_xq_zs"><span><fmt:formatDate value="${news.sendDate }" pattern="yyyy-MM-dd h:m"/>${news.compositionSource }</span></div>
 <div class="new_xq_nr">
 ${news.newContent }
 
@@ -166,6 +166,10 @@ function createCode(){
 <a title="更多平台" class="bshare-more bshare-more-icon more-style-addthis"></a><span style="float: none;" class="BSHARE_COUNT bshare-share-count">0</span></div>
 <script type="text/javascript" charset="utf-8" src="http://static.bshare.cn/b/buttonLite.js#style=-1&amp;uuid=&amp;pophcol=2&amp;lang=zh"></script>
 <script type="text/javascript" charset="utf-8" src="http://static.bshare.cn/b/bshareC0.js"></script></div>
+
+
+
+
 <div class="clear"></div>
 </div>
 <div class="new_link">
@@ -185,7 +189,7 @@ function createCode(){
 </div>
 </div>
 <div class="rm_zx">
-<div class="zx_bt"><span>最新资讯</span><a href="#">更多&gt;</a><div class="clear"></div></div>
+<div class="zx_bt"><span>最新资讯</span><a href="${ctx }/new/list">更多&gt;</a><div class="clear"></div></div>
 <div class="zx_lb">
 <ul>
 <c:forEach items="${newlist }" var="list" >
