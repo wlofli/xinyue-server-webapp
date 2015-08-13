@@ -162,8 +162,11 @@ public class NewController {
 	public String getNewDetail(Model model,String id,@ModelAttribute("newlist")List<NewInfo> newList ){
 		NewInfo newInfo = newService.getNewInfo(id);
 		model.addAttribute("news", newInfo);
-		SelectInfo before = newService.getRecentNew(newInfo.getNewType(), newInfo.getSendDate(), 0);
-		SelectInfo after  = newService.getRecentNew(newInfo.getNewType(), newInfo.getSendDate(), 1);
+//System.out.println(newInfo.get());
+		SelectInfo before = newService.getRecentNew(newInfo.getNewType(), newInfo.getModifiedTime(), 0);
+//System.out.println(before.getValue());
+		SelectInfo after  = newService.getRecentNew(newInfo.getNewType(), newInfo.getModifiedTime(), 1);
+//System.out.println(after.getValue());
 		model.addAttribute("newlist", newList);
 		model.addAttribute("before", before);
 		model.addAttribute("after", after);
