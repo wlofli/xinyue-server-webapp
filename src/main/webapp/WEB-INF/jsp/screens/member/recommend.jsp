@@ -127,7 +127,7 @@ function sendEmail(node){
 							</p>
 							<p>
 								<span>A：推荐链接</span><span class="tjhy_s2" id="recommend_member_html">${member.ordinary }${code }</span><a
-									class="tj_btn" onclick="javascript:show2()">分享</a>
+									class="tj_btn" onclick="javascript:show2(1)">分享</a>
 							</p>
 							<p>
 								<span>B：手机短信</span>
@@ -156,7 +156,7 @@ function sendEmail(node){
 							</p>
 							<p>
 								<span>A：推荐链接</span><span class="tjhy_s2" id="recommend_credit_html">${credit.credit }${code }</span><a
-									class="tj_btn" onclick="javascript:show2()">分享</a>
+									class="tj_btn" onclick="javascript:show2(2)">分享</a>
 							</p>
 							<p>
 								<span>B：手机短信</span>
@@ -191,7 +191,7 @@ function sendEmail(node){
 				<div class="login1">
 					<div class="bt">
 						<h1>分享到</h1>
-						<a href="javascript:hide2()"><img src="../images/close.png" /></a>
+						<a href="javascript:hide2()"><img src="${ctx }/images/close.png" /></a>
 						<div class="clear"></div>
 					</div>
 					<div class="fx_nr">
@@ -263,16 +263,17 @@ function sendEmail(node){
 					var url = "http://v.t.sina.com.cn/share/share.php";
 					//key
 					var appKey = "2469601826";
+					var htl = $("#recommend_member_html").html();
 					//分享内容
-					var title = encodeURIComponent("网站");
+					var title = encodeURIComponent(htl);
 					if(v==1){
 						//分享网址
-						var source = encodeURIComponent($("#recommend_member_html").html());
+						var source = encodeURIComponent(htl);
 						
 						window.open(url+"?appkey="+appKey+"&title="+title+"&url="+source,"share","toolbar=0,height=400,width=400,top=100,left=100");
 					}else{
 						//分享网址
-						var source = encodeURIComponent($("#recommend_credit_html").html());
+						var source = encodeURIComponent(htl);
 						
 						window.open(url+"?appkey="+appKey+"&title="+title+"&url="+source,"share","toolbar=0,height=400,width=400,top=100,left=100");
 					}
@@ -402,13 +403,14 @@ function sendEmail(node){
 						param = JSON.stringify($("#recommend_credit_html").html());
 					}
 					$.ajax({
-						url:'${ctx}/credit/memberctr/createCode',
+						url:'${ctx}/member/recommendctr/createCode',
 						type:'post',
 						dataType:'json',
 						contentType:'application/json',
 						data:param,
 						success:function(data){
 							if(data != 'fail'){
+								alert(data);
 								alert("分享成功");
 							}else{
 								alert("分享失败");

@@ -106,6 +106,9 @@
 		<a href="${ctx }/order/detail/document?id=${list.id}">附件补充</a>|<a href="${ctx }/order/detail/applicant?id=${list.id}">完善资料</a>
 		<a href="${ctx }/order/detail/applicant?id=${list.id}">查看详情</a>|<a href="javascript:deleteOrder('${list.id }')">取消订单</a>
 	</c:when>
+	<c:when test="${list.status == '放款成功' }">
+		<a href="${ctx }/order/detail?id=${list.id}">确认收款</a>
+	</c:when>
 	<c:otherwise>
 		<a href="${ctx }/order/detail/applicant?id=${list.id}">查看详情</a>
 	</c:otherwise>

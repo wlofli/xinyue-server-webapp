@@ -126,14 +126,22 @@ function save(n){
 <div class="tab" id="tab0" >
 
 <sf:form action="${ctx}/order/save/applicant" commandName="applicationInfo" method="post" id="applicantForm">
-<sf:hidden path="id" />
 <input type="hidden" name="orderId" value="${order.id }">
 <sf:hidden path="id"/>
 <p><span>申请人姓名：</span><sf:input path="name" cssClass="t1" /></p>
 <p><span>联系方式：</span><sf:input path="phone" cssClass="t1" /></p>
 <p><span>电子邮箱：</span><sf:input path="email" cssClass="t1" /></p>
+<p><span>两年内信用：</span>
+<sf:select path="twoYearCredit" cssClass="s1">
+<sf:option value="">请选择</sf:option>
+<sf:options items="${creditList}" itemValue="key" itemLabel="value" />
+</sf:select></p>
 <p><span>申贷期限(月)：</span><sf:input path="limitDate" cssClass="t1" /></p>
 <p><span>申贷金额(万)：</span><sf:input path="money" cssClass="t1" /></p>
+<p><span>申贷用途：</span><sf:select path="creditPurpose" cssClass="s1">
+				<sf:option value="">请选择</sf:option>
+				<sf:options items="${purposeList}" itemValue="key" itemLabel="value" />
+			</sf:select></p>
 <p><span>可接受最高利率：</span><sf:select path="interestRate" cssClass="s1">
 				<sf:option value="">请选择</sf:option>
 				<sf:options items="${maxRateList}" itemValue="key" itemLabel="value" />

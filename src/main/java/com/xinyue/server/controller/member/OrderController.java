@@ -167,6 +167,35 @@ System.out.println(jsonObject.get("order"));
 	}
 	
 	
+	
+	@RequestMapping("detail")
+	public String getDetail(Model model, String id){
+		Order order = orderService.getOrderInfo(id);
+		model.addAttribute("order", order);
+		return "screens/order/checkOrder";
+	}
+	
+	@RequestMapping("detail/evaluate")
+	public String turnEvaluate(Model model, String id){
+		Order order = orderService.getOrderInfo(id);
+		model.addAttribute("order", order);
+		return "screens/order/evaluate";
+	}
+	
+	@RequestMapping("save/evaluate")
+	@ResponseBody
+	public String saveEvaluate(Order order, HttpSession session){
+		Member member = (Member) session.getAttribute(GlobalConstant.SESSION_MEMBER_INFO);
+		try {
+			orderService.updateOrderEvaluate(order, member.getId());
+		} catch (Exception e) {
+			// TODO: handle exception
+			return GlobalConstant.RET_FAIL;
+		}
+		return GlobalConstant.RET_SUCCESS;
+	}
+	
+	
 	@RequestMapping("detail/applicant")
 	public String getApplicant(Model model, String id,
 			//undone ->status
@@ -175,7 +204,6 @@ System.out.println(jsonObject.get("order"));
 		Order order  = orderService.getOrderInfo(id);
 		Member member = (Member) request.getSession().getAttribute(GlobalConstant.SESSION_MEMBER_INFO);
 		model.addAttribute("order", order);
-		
 		//第一页申请人信息
 		Applicant applicant = new Applicant();
 System.out.println("applicantsave  = " + order.getApplicantSave());
@@ -194,6 +222,17 @@ System.out.println("applicantsave  = " + order.getApplicantSave());
 		// 省
 		List<SelectInfo> provinceList = selectService.findProvince();
 		model.addAttribute("provinceList", provinceList);
+		
+		//两年内信用
+		List<SelectInfo> creditList = selectService
+				.findSelectByType(GlobalConstant.COMPANY_CREDIT_TYPE);
+		model.addAttribute("creditList", creditList);
+		
+		//申贷用途
+		List<SelectInfo> creditPurposeList = selectService
+				.findSelectByType(GlobalConstant.COMPANY_CREDIT_PURPOSE);
+		model.addAttribute("purposeList", creditPurposeList);
+
 		
 		if(order.getApplicantSave() == 0){
 			//企业相关信息id获取
@@ -215,7 +254,7 @@ System.out.println("applicantsave  = " + order.getApplicantSave());
 	@ResponseBody
 	public String addOrUpdateApplicant(Applicant applicant,
 			@RequestParam(value="orderId") String orderId, HttpServletRequest request){
-System.out.println(orderId);
+//System.out.println(orderId);
 		Order order  = orderService.getOrderInfo(orderId);
 		Member member = (Member) request.getSession().getAttribute(GlobalConstant.SESSION_MEMBER_INFO);
 		try {
@@ -226,6 +265,7 @@ System.out.println(orderId);
 				
 			}else {
 //				applicant.setId(order.getApplicantInfo());
+System.out.println(applicant.getId());
 				orderService.addOrUpdateApplicant(applicant, orderId, member.getId(),1);
 			}
 			return GlobalConstant.RET_SUCCESS;
@@ -602,40 +642,6 @@ System.out.println("document_save = " + order.getDocumentSave());
 		model.addAttribute("auditTypeList", auditTypeList);
 	}
 	
-//	/**
-//	 * add by lzc     date: 2015年7月28日
-//	 * copy from ->companyRecoreController.getpulldown
-//	 * no change!
-//	 */
-//	private void reLoadCompany(Model model,HttpServletRequest request){
-//		
-//		getPulldown(model);
-//		
-//		Member member = (Member) request.getSession().getAttribute(GlobalConstant.SESSION_MEMBER_INFO);
-//		// 企业相关信息id获取
-//		HashMap<String, String> companyDetail = companyInfoService.getDetailIdByMemberId(member.getId());
-//		// 企业基本信息
-//		CompanyBase companyBase = new CompanyBase();
-//		companyBase.setYearCheck("0");
-//		if (companyDetail.containsKey("license_id") && !companyDetail.get("license_id").equals("")) {
-//			companyBase = companyInfoService.editCompanyBaseInfoById(companyDetail.get("license_id"));
-//		}
-//		model.addAttribute("companyInfo", companyBase);
-//		
-//		//控股信息
-//		HoldInfos holdInfos = new HoldInfos();
-//		if (companyDetail.containsKey("member_id") && !companyDetail.get("member_id").equals("")) {
-//			holdInfos = companyInfoService.editHoldInfoById(companyDetail.get("member_id"));
-//		}
-//		model.addAttribute("holdInfos", holdInfos);
-//		
-//		// 公司治理信息
-//		Control control = new Control();
-//		if (companyBase != null && !companyBase.getControlInfo().equals("")) {
-//			control = companyInfoService.editControlInfoById(companyBase.getControlInfo());
-//		}
-//		model.addAttribute("controlinfo", control);
-//	}	
 	
 	
 	

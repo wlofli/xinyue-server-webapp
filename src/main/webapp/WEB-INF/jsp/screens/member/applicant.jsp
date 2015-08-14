@@ -31,6 +31,13 @@
 			<sf:input path="email" cssClass="t1" />
 		</p>
 		<p>
+			<span>两年内信用：</span>
+			<sf:select path="twoYearCredit" cssClass="s1">
+				<sf:option value="">请选择</sf:option>
+				<sf:options items="${creditList}" itemValue="key" itemLabel="value" />
+			</sf:select>
+		</p>
+		<p>
 			<span>申贷期限(月)：</span>
 			<sf:input path="limitDate" cssClass="t1" />
 		</p>

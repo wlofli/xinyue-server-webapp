@@ -43,13 +43,13 @@
 </div>
 <script>
 function checkOrder(){
-	var order_status = "${order.status}"
-		if(order_status != "需求填写中" && order_status != "等待新越网审核"){
-			alert("无法修改订单");
-			return false;
-		}else{
-			return true;
-		}
+	var order_status = "${order.status}";
+	if(order_status != "需求填写中" && order_status != "等待新越网审核"){
+		alert("无法修改订单");
+		return false;
+	}else{
+		return true;
+	}
 }
 
 </script>
