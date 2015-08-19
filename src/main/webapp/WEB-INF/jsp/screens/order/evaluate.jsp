@@ -14,8 +14,8 @@
 function save(){
 	var star = $("#stars").text().substring(0,1);
 	if(star >= 1 && star <= 5){
-		$("#leval").val(star);
-// 		alert($("#leval").val());
+		$("#level").val(star);
+// 		alert($("#level").val());
 		$.ajax({
 		   url:"${ctx}/order/save/evaluate",
 		   method:"post",
@@ -52,7 +52,7 @@ function save(){
 <div class="ddxq_nr">
 <sf:form action="${ctx }/order/save/evaluate" commandName="order" method="post" id="form">
 <sf:hidden path="id"/>
-<sf:hidden path="leval"/>
+<sf:hidden path="level"/>
 <div id="star"><span>星级：</span>
 <ul>
 <li><a href="javascript:;">1</a></li>

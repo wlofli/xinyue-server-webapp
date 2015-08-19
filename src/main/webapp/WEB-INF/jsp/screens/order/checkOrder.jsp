@@ -45,8 +45,8 @@ function save(){
 <span>放款时间:<strong><fmt:formatDate value="${order.auditeTime }" pattern="yyyy-MM-dd h:m"/></strong></span><br />
 <span>放款金额:<strong>${order.creditReal }</strong>万元</span><br />
 <c:choose>
-	<c:when test="${order.leval != null }">
-		<span>评价星级:<strong>${order.leval }</strong>颗星</span><br />
+	<c:when test="${order.level != null }">
+		<span>评价星级:<strong>${order.level }</strong>颗星</span><br />
 		<span>评价内容:<strong>${order.evaluateContent }</strong></span><br />
 	</c:when>
 	<c:otherwise>
