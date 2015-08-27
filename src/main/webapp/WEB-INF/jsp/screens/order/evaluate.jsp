@@ -20,7 +20,7 @@ function save(){
 		   url:"${ctx}/order/save/evaluate",
 		   method:"post",
 		   data:$("#form").serialize(),
-		   sync:true,
+		   async:true,
 		   success:function(data){
 			   if(data == "success"){
 				   alert("评价成功");

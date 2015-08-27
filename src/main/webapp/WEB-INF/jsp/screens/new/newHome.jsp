@@ -164,7 +164,7 @@ function turnList(typeid){
 	$.ajax({
 		   url:"${ctx}/new/newlistjson?id=" + typeid,
 		   method:"post",
-		   sync:true,
+		   async:true,
 		   success:function(data){
 		   	var jsonData = eval('('+data+')');
 		   	if(jsonData.result == "fail"){

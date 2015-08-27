@@ -48,6 +48,7 @@ function save(){
 	<c:when test="${order.level != null }">
 		<span>评价星级:<strong>${order.level }</strong>颗星</span><br />
 		<span>评价内容:<strong>${order.evaluateContent }</strong></span><br />
+		<span>评价时间:<strong><fmt:formatDate value="${order.evaluationTime }" pattern="yyyy-MM-dd h:m"/></strong></span><br />
 	</c:when>
 	<c:otherwise>
 		<span class="btn_span"><input type="button" class="btn" onclick="save()" value="确定收款" /></span>

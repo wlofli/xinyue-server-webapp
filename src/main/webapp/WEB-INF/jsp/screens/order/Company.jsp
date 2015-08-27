@@ -127,7 +127,7 @@ function save(n){
 		   url:"${ctx}/order/save/company",
 		   method:"post",
 		   data:$("#companyForm").serialize(),
-		   sync:true,
+		   async:true,
 		   success:function(data){
 			   if(data == "success"){
 				   alert("保存成功");
