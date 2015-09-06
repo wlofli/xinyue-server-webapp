@@ -49,4 +49,201 @@
 		left join m_organization_info o on o.number = p.bank 
 		where c.deleted = 0 and c.id = #{id}
 	</select>
+	
+	
+	<select id="findProductPage" resultType="com.xinyue.manage.model.Product">
+		
+		select p.id id , p.name name , concat_ws('' , a.name , c.name , z.name ) area , concat_ws('-' , p.credit_from , p.credit_to) credit, 
+		t.name productTypeName , i.name orgName from m_product_info p 
+		left join m_product_type t on p.type = t.id and t.deleted = 0 and t.status = 1 
+		left join m_area_province a on a.code  = p.province_id 
+		left join m_area_city c on c.code = p.city_id 
+		left join m_area_zone z on z.code = p.area_id 
+		left join m_organization_info i on i.id = p.bank 
+		where p.deleted = 0 and p.status = 2 
+		<if test="psearch.loanAmount != null and psearch.loanAmount != ''">
+			<choose>
+				<when test="psearch.loanAmount == '1'">
+					and (p.credit_from >=5 and 5 <![CDATA[<= ]]>p.credit_to) or (p.credit_from >=20 and 20 <![CDATA[<= ]]>p.credit_to) 
+				</when>
+				<otherwise>
+					<choose>
+						<when test="psearch.loanAmount == '2'">
+							and (p.credit_from >=21 and 21 <![CDATA[<= ]]>p.credit_to) or (p.credit_from >=50 and 50 <![CDATA[<= ]]>p.credit_to) 
+						</when>
+						<otherwise>
+							<choose>
+								<when test="psearch.loanAmount == '3'">
+									and (p.credit_from >=51 and 51 <![CDATA[<= ]]>p.credit_to) or (p.credit_from >=100 and 100 <![CDATA[<= ]]>p.credit_to) 
+								</when>
+								<otherwise>
+									<choose>
+										<when test="psearch.loanAmount == '4'">
+											and (p.credit_from >=101 and 101 <![CDATA[<= ]]>p.credit_to) or (p.credit_from >=200 and 200 <![CDATA[<= ]]>p.credit_to) 
+										</when>
+										<otherwise>
+											and p.credit_to>200
+										</otherwise>
+									</choose>
+								</otherwise>
+							</choose>
+						</otherwise>
+					</choose>
+				</otherwise>
+			</choose>
+		</if>
+		<if test="psearch.loanPeriod != null and psearch.loanPeriod != ''">
+			<choose>
+				<when test="psearch.loanPeriod == '1'">
+					and 3 between p.period_from and p.period_to 
+				</when>
+				<otherwise>
+					<choose>
+						<when test="psearch.loanPeriod == '2'">
+							and 6 between p.period_from and p.period_to 
+						</when>
+						<otherwise>
+							<choose>
+								<when test="psearch.loanPeriod == '3'">
+									and 12 between p.period_from and p.period_to 
+								</when>
+								<otherwise>
+									<choose>
+										<when test="psearch.loanPeriod == '4'">
+											and 24 between p.period_from and p.period_to 
+										</when>
+										<otherwise>
+											<choose>
+												<when test="psearch.loanPeriod == '5'">
+													and 36 between p.period_from and p.period_to 
+												</when>
+												<otherwise>
+													and 48 between p.period_from and p.period_to 
+												</otherwise>
+											</choose>
+										</otherwise>
+									</choose>
+								</otherwise>
+							</choose>
+						</otherwise>
+					</choose>
+				</otherwise>
+			</choose>
+		</if>
+		<if test="psearch.productType != null and psearch.productType != ''">
+			and t.id =  #{psearch.productType} 
+		</if>
+		<if test="psearch.province != null and psearch.province != ''">
+			and a.code = #{psearch.province}
+		</if>
+		<if test="psearch.city != null and psearch.city != ''">
+			and c.code = #{psearch.city}
+		</if>
+		<if test="psearch.zone != null and psearch.zone != ''">
+			and z.code = #{psearch.zone}
+		</if>
+		<if test="psearch.bank != null and psearch.bank != ''">
+			and i.id = #{psearch.bank}
+		</if>
+		<if test="psearch.productName != null and psearch.productName != ''">
+			and p.name like concat(#{psearch.productName} , '%')
+		</if>
+		limit #{start} , #{pageSize}
+	</select>
+	<select id="getProductTypeCount" resultType="int">
+		select count(*) from m_product_info p 
+		left join m_product_type t on p.type = t.id and t.deleted = 0 and t.status = 1 
+		left join m_area_province a on a.code  = p.province_id 
+		left join m_area_city c on c.code = p.city_id 
+		left join m_area_zone z on z.code = p.area_id 
+		left join m_organization_info i on i.id = p.bank 
+		where p.deleted = 0 and p.status = 2 
+		<if test="psearch.loanAmount != null and psearch.loanAmount != 0">
+			<choose>
+				<when test="psearch.loanAmount == '1'">
+					and (p.credit_from >=5 and 5 <![CDATA[<= ]]>p.credit_to) or (p.credit_from >=20 and 20 <![CDATA[<= ]]>p.credit_to) 
+				</when>
+				<otherwise>
+					<choose>
+						<when test="psearch.loanAmount == '2'">
+							and (p.credit_from >=21 and 21 <![CDATA[<= ]]>p.credit_to) or (p.credit_from >=50 and 50 <![CDATA[<= ]]>p.credit_to) 
+						</when>
+						<otherwise>
+							<choose>
+								<when test="psearch.loanAmount == '3'">
+									and (p.credit_from >=51 and 51 <![CDATA[<= ]]>p.credit_to) or (p.credit_from >=100 and 100 <![CDATA[<= ]]>p.credit_to) 
+								</when>
+								<otherwise>
+									<choose>
+										<when test="psearch.loanAmount == '4'">
+											and (p.credit_from >=101 and 101 <![CDATA[<= ]]>p.credit_to) or (p.credit_from >=200 and 200 <![CDATA[<= ]]>p.credit_to) 
+										</when>
+										<otherwise>
+											and p.credit_to>200
+										</otherwise>
+									</choose>
+								</otherwise>
+							</choose>
+						</otherwise>
+					</choose>
+				</otherwise>
+			</choose>
+		</if>
+		<if test="psearch.loanPeriod != null and psearch.loanPeriod != ''">
+			<choose>
+				<when test="psearch.loanPeriod == '1'">
+					and 3 between p.period_from and p.period_to 
+				</when>
+				<otherwise>
+					<choose>
+						<when test="psearch.loanPeriod == '2'">
+							and 6 between p.period_from and p.period_to 
+						</when>
+						<otherwise>
+							<choose>
+								<when test="psearch.loanPeriod == '3'">
+									and 12 between p.period_from and p.period_to 
+								</when>
+								<otherwise>
+									<choose>
+										<when test="psearch.loanPeriod == '4'">
+											and 24 between p.period_from and p.period_to 
+										</when>
+										<otherwise>
+											<choose>
+												<when test="psearch.loanPeriod == '5'">
+													and 36 between p.period_from and p.period_to 
+												</when>
+												<otherwise>
+													and 48 between p.period_from and p.period_to 
+												</otherwise>
+											</choose>
+										</otherwise>
+									</choose>
+								</otherwise>
+							</choose>
+						</otherwise>
+					</choose>
+				</otherwise>
+			</choose>
+		</if>
+		<if test="psearch.productType != null and psearch.productType != ''">
+			and t.id =  #{psearch.productType} 
+		</if>
+		<if test="psearch.province != null and psearch.province != ''">
+			and a.code = #{psearch.province}
+		</if>
+		<if test="psearch.city != null and psearch.city != ''">
+			and c.code = #{psearch.city}
+		</if>
+		<if test="psearch.zone != null and psearch.zone != ''">
+			and z.code = #{psearch.zone}
+		</if>
+		<if test="psearch.bank != null and psearch.bank != ''">
+			and i.id = #{psearch.bank}
+		</if>
+		<if test="psearch.productName != null and psearch.productName != ''">
+			and p.name like concat(#{psearch.productName} , '%')
+		</if>
+	</select>
 </mapper>

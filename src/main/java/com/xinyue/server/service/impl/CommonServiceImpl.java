@@ -40,7 +40,7 @@ public class CommonServiceImpl implements CommonService {
 	private static String account = CommonFunction.getValue("sms.account");
 	private static String password = CommonFunction.getValue("sms.password");
 
-	private Logger log = Logger.getLogger(RegisterServiceImpl.class);
+	private Logger log = Logger.getLogger(CommonServiceImpl.class);
 
 	private String downloadPath = CommonFunction.getValue("down.path");
 	

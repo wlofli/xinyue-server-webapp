@@ -1,6 +1,5 @@
-package com.xinyue.server.controller.member;
+package com.xinyue.server.controller.web;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -20,11 +19,14 @@ import com.xinyue.manage.beans.SearchNew;
 import com.xinyue.manage.beans.SelectInfo;
 import com.xinyue.manage.model.Advertising;
 import com.xinyue.manage.model.NewInfo;
-import com.xinyue.manage.model.NewType;
+import com.xinyue.manage.model.ProductType;
 import com.xinyue.manage.service.AdvertisingService;
 import com.xinyue.manage.service.NewService;
+import com.xinyue.manage.service.ProductTypeService;
+import com.xinyue.manage.service.SelectService;
 import com.xinyue.manage.util.CommonFunction;
 import com.xinyue.manage.util.GlobalConstant;
+import com.xinyue.server.bean.ProductSearch;
 import com.xinyue.server.model.Page;
 
 /**
@@ -39,6 +41,12 @@ public class NewController {
 	
 	@Resource
 	private AdvertisingService advertisingService;
+	
+	@Resource
+	private ProductTypeService productTypeService;
+	
+	@Resource
+	private SelectService selectService;
 	
 	private static String REAL_PATH = CommonFunction.getValue("upload.path");
 	
@@ -86,10 +94,7 @@ public class NewController {
 		page.setPageSize(GlobalConstant.PAGE_SIZE);
 		model.addAttribute("page", page);
 		
-		List<Advertising> advertisings = getAdvertising();
-		//广告
-		model.addAttribute("advertiseList", advertisings);
-		
+		detailRight(model);
 		
 		
 		
@@ -167,12 +172,42 @@ public class NewController {
 //System.out.println(before.getValue());
 		SelectInfo after  = newService.getRecentNew(newInfo.getNewType(), newInfo.getModifiedTime(), 1);
 //System.out.println(after.getValue());
-		model.addAttribute("newlist", newList);
 		model.addAttribute("before", before);
 		model.addAttribute("after", after);
+		detailRight(model);
 		return "screens/new/newDetail";
 	}
 	
+	
+	
+	/**
+	 * 右边共通
+	 * @param model
+	 */
+	private void detailRight(Model model){
+		//搜索产品
+		List<ProductType> productTypes = productTypeService.findProductTypeList();
+		model.addAttribute("productTypes", productTypes);
+		ProductSearch ps = new ProductSearch();
+		model.addAttribute("psInfo", ps);
+		
+		//额度
+		List<SelectInfo> amounts = selectService.findSelectByType(GlobalConstant.LOAN_AMOUNT);
+		model.addAttribute("amounts", amounts);
+		
+		//贷款期限
+		List<SelectInfo> loanPeriods = selectService.findSelectByType(GlobalConstant.LOAN_PERIOD);
+		model.addAttribute("loanPeriods", loanPeriods);
+		
+		//热门资讯
+		List<NewInfo> newList = newService.getNewInfoListByTime(null, 0, GlobalConstant.PAGE_SIZE);
+		model.addAttribute("newlist", newList);
+		
+		//广告
+		Advertising advertising = advertisingService.findAdByType(3);
+		model.addAttribute("advert", advertising);
+		model.addAttribute("showPath", SHOW_PATH);
+	}
 	
 	
 }

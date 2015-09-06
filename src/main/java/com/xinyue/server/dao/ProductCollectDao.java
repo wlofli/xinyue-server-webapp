@@ -4,7 +4,9 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Param;
 
+import com.xinyue.manage.model.Product;
 import com.xinyue.server.bean.CollectBean;
+import com.xinyue.server.bean.ProductSearch;
 import com.xinyue.server.model.Collect;
 
 /**
@@ -22,4 +24,8 @@ public interface ProductCollectDao {
 	public int delProCollect(@Param("list")List<Integer> list);
 	
 	public Collect showDetail(@Param("id")int id);
+	
+	public List<Product> findProductPage(@Param("psearch")ProductSearch psearch , @Param("start")int start , @Param("pageSize")int pageSize);
+	
+	public int getProductTypeCount(@Param("psearch")ProductSearch psearch);
 }

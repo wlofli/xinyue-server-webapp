@@ -3,7 +3,11 @@ package com.xinyue.server.service;
 import java.util.List;
 
 import com.xinyue.manage.beans.PageData;
+import com.xinyue.manage.beans.SelectInfo;
+import com.xinyue.manage.model.Product;
+import com.xinyue.manage.model.ProductType;
 import com.xinyue.server.bean.CollectBean;
+import com.xinyue.server.bean.ProductSearch;
 import com.xinyue.server.model.Collect;
 
 /**
@@ -19,4 +23,10 @@ public interface ProductCollectService {
 	public boolean delProCollect(List<Integer> id);
 
 	public Collect showDetail(int id);
+	
+	public PageData<Product> findProductPageData(ProductSearch psearch);
+	
+	public List<SelectInfo> getOrgs();
+	
+	public List<ProductType> findByStatus();
 }

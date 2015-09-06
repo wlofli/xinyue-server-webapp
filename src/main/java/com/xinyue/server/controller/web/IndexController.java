@@ -15,16 +15,19 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.alibaba.fastjson.JSONObject;
+import com.xinyue.manage.beans.SearchNew;
 import com.xinyue.manage.beans.SelectInfo;
 import com.xinyue.manage.beans.SubCityInfo;
 import com.xinyue.manage.model.Advertising;
 import com.xinyue.manage.model.FastProduct;
 import com.xinyue.manage.model.Member;
+import com.xinyue.manage.model.NewInfo;
 import com.xinyue.manage.model.Province;
 import com.xinyue.manage.service.AdvertisingService;
 import com.xinyue.manage.service.CityService;
 import com.xinyue.manage.service.FastProductService;
 import com.xinyue.manage.service.MemberService;
+import com.xinyue.manage.service.NewService;
 import com.xinyue.manage.service.OrganizationTypeService;
 import com.xinyue.manage.service.ProductService;
 import com.xinyue.manage.service.SelectService;
@@ -62,6 +65,10 @@ public class IndexController {
 	
 	@Resource
 	CityService cityService;
+	
+	
+	@Resource
+	NewService newService;
 	
 	private Logger log = Logger.getLogger(IndexController.class);
 	
@@ -148,6 +155,13 @@ public class IndexController {
 		//累计服务企业
 		int companyCount = memberService.getCount(null);
 		model.addAttribute("companyCount", companyCount);
+		
+		SearchNew searchNew = new SearchNew();
+		//undone->city
+//		searchNew.setCity();
+		
+		List<NewInfo> newList = newService.getNewInfoListByTime(searchNew, 0, GlobalConstant.PAGE_SIZE);
+		model.addAttribute("newlist", newList);
 		
 		request.getSession().setAttribute(GlobalConstant.INDEX_TYPE, "index");
 		

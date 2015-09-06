@@ -1,6 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<c:set var="ctx" value="${pageContext.request.contextPath}" />
 <div class="header">
 	<div class="h_bar">
 		<div class="h_b_left">
@@ -81,12 +80,12 @@
 		<div class="h_l_right">
 			<ul>
 				<li id="index"><a href="${ctx}/index">首页</a></li>
-				<li><a href="#">贷款产品</a></li>
-				<li><a href="#">融资机构</a></li>
-				<li><a href="#">信贷经理</a></li>
+				<li id="product"><a href="javascript:void(0)" onclick="document.location.href='${ctx}/product/show'">贷款产品</a></li>
+				<li id="org"><a href="javascript:void(0)" onclick="document.location.href='${ctx}/org/show'">融资机构</a></li>
+				<li id="manager"><a href="${ctx}/manager">信贷经理</a></li>
 				<li id="new"><a href="${ctx }/new/homelist">新闻资讯</a></li>
 				<li id="help"><a href="${ctx}/help">帮助中心</a></li>
-				<li><a href="#">问答中心</a></li>
+				<li id="quest"><a href="javascript:void(0)" onclick="document.location.href='${ctx }/quest/show'">问答中心</a></li>
 				<li class="clear"></li>
 			</ul>
 		</div>

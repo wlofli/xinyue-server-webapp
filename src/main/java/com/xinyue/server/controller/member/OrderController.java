@@ -14,12 +14,14 @@ import javax.servlet.http.HttpSession;
 
 import net.sf.json.JSONObject;
 
+import org.apache.log4j.Logger;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -36,14 +38,19 @@ import com.xinyue.manage.model.CompanyBase;
 import com.xinyue.manage.model.Control;
 import com.xinyue.manage.model.Debt;
 import com.xinyue.manage.model.Document;
+import com.xinyue.manage.model.FastProductApplicant;
+import com.xinyue.manage.model.FastProductCompany;
 import com.xinyue.manage.model.Member;
 import com.xinyue.manage.model.Order;
+import com.xinyue.manage.model.Product;
 import com.xinyue.manage.model.RealEstate;
 import com.xinyue.manage.service.CompanyInfoService;
 import com.xinyue.manage.service.MemberService;
 import com.xinyue.manage.service.OrderService;
+import com.xinyue.manage.service.ProductService;
 import com.xinyue.manage.service.SelectService;
 import com.xinyue.manage.util.GlobalConstant;
+import com.xinyue.manage.util.SericalNumber;
 import com.xinyue.server.model.Page;
 import com.xinyue.server.service.CommonService;
 
@@ -67,7 +74,14 @@ public class OrderController {
 	private CommonService commonService;
 	
 	@Resource
+	private ProductService productService;
+	
+	@Resource
 	private SelectService selectService;
+	
+	//add by mzj start
+	private Logger log = Logger.getLogger(OrderController.class);
+	//add by mzj end
 	
 	@InitBinder("debt")
 	public void DebtBind(WebDataBinder binder){
@@ -580,6 +594,33 @@ System.out.println("document_save = " + order.getDocumentSave());
 		return "screens/order/Document";
 	}
 	
+	@ResponseBody
+	@RequestMapping("add")
+	public String addOrder(@RequestParam(required = false)String manageId, String productId, String memberId){
+		String uuid = UUID.randomUUID().toString().replaceAll("-", "");
+		Member member = memberService.editMember(memberId);
+		Order order = new Order();
+		order.setId(uuid);
+		order.setCreatedId(memberId);
+		order.setModifiedId(memberId);
+		order.setMemberId(memberId);
+		order.setCreditManageId(manageId);
+		order.setCode(SericalNumber.getInstance().generaterNextNumber());
+		order.setProductInfo(productId);
+		order.setApplicatPerson(member.getContactName());
+		order.setLinkPhone(member.getContactPhone());
+		Product product = productService.getProductById(productId);
+		order.setBank(product.getBank().getId());
+		try {
+			orderService.addOrder(order);
+		} catch (Exception e) {
+			// TODO: handle exception
+			return GlobalConstant.RET_FAIL;
+		}
+		return uuid;
+	}
+	
+	
 	
 	/**
 	 * add by lzc     date: 2015年7月28日
@@ -642,10 +683,72 @@ System.out.println("document_save = " + order.getDocumentSave());
 		model.addAttribute("auditTypeList", auditTypeList);
 	}
 	
+	/**
+	 * 快速申贷第一步
+	 * add by mzj
+	 * @param tel
+	 * @param request
+	 * @return
+	 */
+	@RequestMapping(value="/fast/step/one",method=RequestMethod.POST)
+	public @ResponseBody String fastApplicantStepOne(String tel,String managerId,HttpServletRequest request) {
+		
+		try {
+			//先清除session内容
+			request.getSession().setAttribute(GlobalConstant.FAST_APPLICANT_STEP_ONE, null);
+			request.getSession().setAttribute(GlobalConstant.FAST_APPLICANT_STEP_TWO, null);
+			
+			request.getSession().setAttribute(GlobalConstant.FAST_APPLICANT_STEP_ONE, tel+"&"+managerId);
+			
+			return "true";
+		} catch (Exception e) {
+			log.error(e.getMessage());
+		}
+		return "false";
+	}
 	
+	/**
+	 * 快速申贷第二步
+	 * add by mzj
+	 * @param applicantFast
+	 * @param request
+	 * @return
+	 */
+	@RequestMapping(value="/fast/step/two",method=RequestMethod.POST)
+	public @ResponseBody String fastApplicantStepTwo(FastProductApplicant applicantFast,HttpServletRequest request) {
+		
+		try {
+			request.getSession().setAttribute(GlobalConstant.FAST_APPLICANT_STEP_TWO, applicantFast);
+			
+			return "true";
+		} catch (Exception e) {
+			log.error(e.getMessage());
+		}
+		return "false";
+	}
 	
-	
-	
-	
-
+	/**
+	 * 快速申贷第三步
+	 * @param companyFast
+	 * @param request
+	 * @return
+	 */
+	@RequestMapping(value="/fast/step/three",method=RequestMethod.POST)
+	public @ResponseBody String fastApplicantStepThree(FastProductCompany companyFast,HttpServletRequest request) {
+		
+		try {
+			String stepOneData = (String) request.getSession().getAttribute(GlobalConstant.FAST_APPLICANT_STEP_ONE);
+			FastProductApplicant applicantFast = (FastProductApplicant) request.getSession().getAttribute(GlobalConstant.FAST_APPLICANT_STEP_TWO);
+			
+			//数据处理
+			boolean result = orderService.addFastOrderTypeTwo(stepOneData,applicantFast,companyFast);
+			
+			if (result) {
+				return "true";
+			}
+		} catch (Exception e) {
+			log.error(e.getMessage());
+		}	
+		return "false";
+	}
 }

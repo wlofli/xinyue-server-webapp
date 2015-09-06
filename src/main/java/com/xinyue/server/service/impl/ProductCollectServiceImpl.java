@@ -7,8 +7,14 @@ import javax.annotation.Resource;
 import org.springframework.stereotype.Service;
 
 import com.xinyue.manage.beans.PageData;
+import com.xinyue.manage.beans.SelectInfo;
+import com.xinyue.manage.dao.OrganizationDao;
+import com.xinyue.manage.dao.ProductTypeDao;
+import com.xinyue.manage.model.Product;
+import com.xinyue.manage.model.ProductType;
 import com.xinyue.manage.util.GlobalConstant;
 import com.xinyue.server.bean.CollectBean;
+import com.xinyue.server.bean.ProductSearch;
 import com.xinyue.server.dao.ProductCollectDao;
 import com.xinyue.server.model.Collect;
 import com.xinyue.server.service.ProductCollectService;
@@ -51,4 +57,27 @@ public class ProductCollectServiceImpl implements ProductCollectService {
 		return pdao.showDetail(id);
 	}
 
+	public PageData<Product> findProductPageData(ProductSearch psearch){
+		int currentPage = GlobalConstant.isNull(psearch.getTopage()) || "0".equals(psearch.getTopage())?1:Integer.valueOf(psearch.getTopage());
+		int total = pdao.getProductTypeCount(psearch);
+		int start = (currentPage -1)*GlobalConstant.PAGE_SIZE;
+		return new PageData<Product>(pdao.findProductPage(psearch , start , GlobalConstant.PAGE_SIZE), total, currentPage);
+	}
+	
+	@Resource
+	private OrganizationDao ogao;
+	@Override
+	public List<SelectInfo> getOrgs() {
+		// TODO Auto-generated method stub
+		return ogao.getOrgs();
+	}
+	
+	@Resource
+	private ProductTypeDao ptdao;
+	@Override
+	public List<ProductType> findByStatus() {
+		// TODO Auto-generated method stub
+		
+		return ptdao.findProductTypeByList();
+	}
 }

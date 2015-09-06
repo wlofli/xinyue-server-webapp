@@ -259,25 +259,22 @@ $(function(){
 		<div class="nr1">
 			<div class="zx_mk">
 				<div class="zx_bt">
-					<span>杭州资讯</span><a href="new_list.html">更多&gt;</a>
+					<span>杭州资讯</span><a href="${ctx }/new/list">更多&gt;</a>
 					<div class="clear"></div>
 				</div>
 				<ul class="zx_nr">
+				<c:forEach items="${newlist }" begin="0" end="0" var="list">
 					<li class="h_zx"><a href="new_xq.html" class="litpic"><img
 							src="${ctx}/images1/zx_img.jpg" width="80px" height="60px" /></a>
 						<p class="zxnr">
-							<a href="new_xq.html" class="title">如何办理无抵押贷款</a><span>杭州很多普通农民如何避免被贷杭州很多普通
-								款？鞥大明宫尅我点… <a href="new_xq.html" class="more">[详情]</a>
+							<a href="${ctx }/new/detail?id=${list.id}" class="title">${list.title }</a><span>${list.showTitle }
+							<a href="${ctx }/new/detail?id=${list.id}" class="more">[详情]</a>
 							</span>
 						</p></li>
-					<li><a href="new_xq.html">如何避免被贷款</a></li>
-					<li><a href="new_xq.html">办理无抵押贷款的主要注意事项</a></li>
-					<li><a href="new_xq.html">办理无抵押贷款&信用贷款的区…</a></li>
-					<li><a href="new_xq.html">如何办理信用贷款，需提交哪些…</a></li>
-					<li><a href="new_xq.html">办理信用贷款需提交哪些证明</a></li>
-					<li><a href="new_xq.html">办理无抵押贷款&信用贷款</a></li>
-					<li><a href="new_xq.html">如何办理房贷、车贷贷款</a></li>
-					<li><a href="new_xq.html">无抵押贷款最高贷款额度解析</a></li>
+				</c:forEach>
+				<c:forEach items="${newlist }" var="list" begin="1">
+					<li><a href="${ctx }/new/detail?id=${list.id}">${list.title }</a></li>
+				</c:forEach>
 				</ul>
 			</div>
 			<div class="anli_mk">

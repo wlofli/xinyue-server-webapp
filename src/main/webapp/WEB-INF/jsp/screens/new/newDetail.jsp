@@ -177,34 +177,9 @@ function createCode(){
 <p><span>下一篇：</span><a href="${ctx }/new/detail?id=${after.key}">${after.value }</a></p>
 </div>
 </div>
-<div class="pro_xq_right">
-<div class="p_r_dk">
-<div class="dk_bt"><span>我要贷款</span></div>
-<div class="dk_nr">
-<p><span>产品类别：</span><select class="lb_s"><option></option></select></p>
-<p><span>贷款金额：</span><select class="lb_s"><option></option></select></p>
-<p><span>贷款期限：</span><select class="lb_s"><option></option></select></p>
-<p><span>贷款用途：</span><select class="lb_s"><option></option></select></p>
-<p class="mar_bot"><input type="button" class="lb_b" value="搜索产品" /></p>
-</div>
-</div>
-<div class="rm_zx">
-<div class="zx_bt"><span>最新资讯</span><a href="${ctx }/new/list">更多&gt;</a><div class="clear"></div></div>
-<div class="zx_lb">
-<ul>
-<c:forEach items="${newlist }" var="list" >
-<Li><a href="${ctx }/new/detail?id=${list.id}">${list.title }</a></Li>
-</c:forEach>
-</ul>
-</div>
-</div>
-<div class="ad_mk1">
-<c:forEach items="${advertise1 }" var="list" begin="0" end="0">
-<a href="${list.url }">
-<img src="${ctx }/${list.thumbnail}" /></a>
-</c:forEach>
-</div>
-</div>
+
+<jsp:include page="../../common/right_detail.jsp"></jsp:include>
+
 <div class="clear"></div>
 </div>
 </div>

@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import com.xinyue.manage.beans.PageData;
 import com.xinyue.manage.model.Member;
 import com.xinyue.manage.util.GlobalConstant;
-import com.xinyue.server.model.Question;
+import com.xinyue.server.bean.QuestionBean;
 import com.xinyue.server.service.QuestionService;
 
 /**
@@ -30,8 +30,9 @@ public class QuestionController {
 	public String show(Model model , HttpServletRequest req){
 		Member member = (Member)req.getSession().getAttribute(GlobalConstant.SESSION_MEMBER_INFO);
 		//PageData<Question> pdata = qbiz.findPage(member.getId(), req.getParameter("topage"));
-		PageData<Question> pdata = qbiz.findPage("00022b625df943ab934299050c5d6f43", req.getParameter("topage"));
+		PageData<QuestionBean> pdata = qbiz.findPage("00022b625df943ab934299050c5d6f43", req.getParameter("topage"));
 		model.addAttribute("questpage", pdata);
 		return "screens/quest/question";
 	}
+	
 }

@@ -1,9 +1,6 @@
-package com.xinyue.server.model;
+package com.xinyue.server.bean;
 
 import java.io.Serializable;
-import java.util.Date;
-
-import org.springframework.format.annotation.DateTimeFormat;
 
 /**
  * 
@@ -11,7 +8,7 @@ import org.springframework.format.annotation.DateTimeFormat;
  * @2015年7月29日
  * @下午6:20:32
  */
-public class Question implements Serializable {
+public class QuestionBean implements Serializable {
 
 	private String id;
 	private String title;
@@ -20,6 +17,28 @@ public class Question implements Serializable {
 	private String sign;
 	private String num;
 	
+	private String orgid;
+	private String topage;
+	private String questype;
+	
+	public String getQuestype() {
+		return questype;
+	}
+	public void setQuestype(String questype) {
+		this.questype = questype;
+	}
+	public String getOrgid() {
+		return orgid;
+	}
+	public void setOrgid(String orgid) {
+		this.orgid = orgid;
+	}
+	public String getTopage() {
+		return topage;
+	}
+	public void setTopage(String topage) {
+		this.topage = topage;
+	}
 	public String getNum() {
 		return num;
 	}

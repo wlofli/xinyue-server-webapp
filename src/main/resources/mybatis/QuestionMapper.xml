@@ -1,12 +1,97 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.xinyue.server.dao.QuestionDao">	
-	<select id="findPage" resultType="com.xinyue.server.model.Question">
-		select m.id id ,  m.title title ,  date_format(m.created_time, '%Y-%m-%d %h-%i-%s') createtime ,  case m.status when 1 then '审核中' when 2 then '审核通过' when 3 then '审核失败' end sign , count(a.id) num
-		from m_question_info m left join m_answer_info a on m.id = a.question_id where m.created_id = #{memberid} limit #{start} , #{pageSize}
+	<select id="findPage" resultType="com.xinyue.server.bean.QuestionBean">
+		select m.id id ,  m.title title ,  date_format(m.created_time, '%Y-%m-%d %h-%i-%s') createtime ,  
+		case m.status when 1 then '审核中' when 2 then '审核通过' when 3 then '审核失败' end sign , count(a.id) num
+		from m_question_info m 
+		left join m_answer_info a on m.id = a.question_id 
+		where m.created_id = #{memberid} limit #{start} , #{pageSize}
 	</select>
 	
 	<select id="getQuestionCount" resultType="int">
-		select count(*)	from m_question_info m left join m_answer_info a on m.id = a.question_id where m.created_id = #{memberid}
+		select count(*)	from m_question_info m 
+		left join m_answer_info a on m.id = a.question_id 
+		where m.created_id = #{memberid}
 	</select>
+	
+	<select id="findPageQuestion" resultType="com.xinyue.manage.model.Question">
+		select  q.id id , q.title ,a.content answerContent, count(distinct a.id) answerNum 
+		from  m_question_info q 
+		left join m_answer_info a on q.id = a.question_id and a.deleted = 0  and a.status = 2 
+		left join m_question_type t on q.quest_type_id = t.id and t.deleted = 0 
+		where q.deleted = 0 and q.status = 2 
+		<if test="name != null and name != ''">
+			and t.name like concat(#{name} , '%')  
+		</if>
+		<if test="title != null and title != ''">
+			and q.title like concat('%', #{title} , '%') 
+		</if> 
+		order by q.created_time desc 
+		limit #{start} , #{pageSize} 
+	</select>
+	<select id="findPopular" resultType="com.xinyue.manage.model.Question">
+		select  q.id id , q.title 
+		from  m_question_info q 
+		left join m_answer_info a on q.id = a.question_id and a.deleted = 0  and a.status = 2 
+		left join m_question_type t on q.quest_type_id = t.id and t.deleted = 0 
+		where q.deleted = 0 and q.status = 2 
+		order by q.created_time desc 
+		limit 0 , 10
+	</select>
+	<select id="getQuestCount" resultType="int">
+		select count(*) from  m_question_info q 
+		left join m_answer_info a on q.id = a.question_id and a.deleted = 0  and a.status = 2 
+		left join m_question_type t on q.quest_type_id = t.id and t.deleted = 0 
+		where q.deleted = 0 and q.status = 2 
+		<if test="name != null and name != ''">
+			and t.name like concat(#{name} , '%')  
+		</if>
+		<if test="title != null and title != ''">
+			and q.title like concat('%', #{title} , '%') 
+		</if> 
+	</select>
+	
+	<select id="findDetailByQuestId" resultType="com.xinyue.manage.beans.ShowAnswer">
+		select q.id id , q.title title , q.content content , q.questioner_type qtype , b.contact_name name , concat('' , p.name , c.name) address , q.created_time qtime , 
+		a.content acontent , a.created_time atime , a.created_id  acreater, t.id typeid , a.recommend , m.contact_name mcreateName, i.real_name ccreateName, a.answer_type atype , o.name oname  
+		from m_question_info q 
+		inner join m_answer_info a on q.id = a.question_id and a.deleted = 0 and a.status = 2 
+		left join m_area_province p on p.code = q.province_id 
+		left join m_area_city c on c.code = q.city_id 
+		left join m_question_type t on t.id = q.quest_type_id and t.deleted = 0 
+		left join m_member_info m on m.id = a.created_id 
+		left join m_member_info b on b.id = q.created_id 
+		left join c_manager_info i on i.id = a.created_id 
+		left join m_organization_info o on o.number = q.org_id 
+		where q.id = #{questid} and q.deleted =0 and q.status = 2 order by recommend desc
+	</select>
+	
+	<select id="findRelevantByTypeId" resultType="com.xinyue.manage.model.Question">
+		select q.id , q.title  from m_question_info q 
+		left join m_question_type t on t.id = q.quest_type_id and t.deleted = 0 
+		where q.deleted = 0 and t.id = #{typeid} limit #{start} , #{pageSize} 
+	</select>
+	
+	<insert id="addAnswer" parameterType="com.xinyue.manage.model.Answer">
+		insert into m_answer_info(created_time , content , modified_time , status ,  question_id , answer_type , created_id , modified_id , deleted)
+		values(now() , #{acontent} , now() , 1 , #{questid} , #{type} , #{createid} , #{createid} , 0)
+	</insert>
+	
+	<select id="getManagerCount" resultType="int">
+		select count(*) from c_manager_info where deleted = 0
+	</select>
+	
+	<insert id="addQuestion" parameterType="com.xinyue.manage.model.Question">
+		insert into m_question_info(title , content , modified_time , created_time , status , city_id , province_id ,
+		questioner_type , created_id , modified_id , deleted , email , telphone , type_id , org_id) 
+		values(#{title}, #{content} , now() , now() , 1 , #{city} , #{province} , #{questionerType} ,
+		 #{createid} , #{createid} , 0 , #{email} , #{telphone} 
+		 <choose>
+		 	<when test="orgid != null and orgid != ''">
+		 		, '2' , #{orgid}
+		 	</when>
+		 	<otherwise>,'1' , ''</otherwise>
+		 </choose>)
+	</insert>
 </mapper>

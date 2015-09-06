@@ -39,9 +39,9 @@
 		</div>
 		<div class="ewm">
 			<ul>
-				<li class="ewm1"><img src="../images/smdl.jpg" /> <span>手机端浏览</span>
+				<li class="ewm1"><img src="${ctx}/images/smdl.jpg" /> <span>手机端浏览</span>
 				</li>
-				<li class="ewm2"><img src="../images/smdl.jpg" /> <span>微信加关注</span>
+				<li class="ewm2"><img src="${ctx}/images/smdl.jpg" /> <span>微信加关注</span>
 				</li>
 			</ul>
 		</div>

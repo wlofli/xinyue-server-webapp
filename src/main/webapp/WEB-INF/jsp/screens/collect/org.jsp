@@ -7,7 +7,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Insert title here</title>
+<title>普通会员-收藏管理-机构收藏</title>
 <c:set var="ctx" value="${pageContext.request.contextPath}" />
 <%@ include file="../../common/common.jsp"%>
 </head>

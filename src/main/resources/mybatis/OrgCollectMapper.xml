@@ -65,4 +65,158 @@
 		left join m_organization_type t on t.otypeid = o.genre 
 		where c.deleted = 0 and c.id = #{id}
 	</select>
+	
+	
+	<select id="findOrgPage" resultType="com.xinyue.manage.model.Organization">
+		select a.id id, a.org_img image, a.establish , a.name name , a.scale, t.name genre ,  count(distinct b.id) orderNum ,  count(distinct p.id) productNum ,
+		 a.site site , a.business_area area , a.good_business business
+		from m_organization_info a 
+		left join m_order_info b on a.id = b.bank 
+		left join m_product_info p on p.bank = a.id 
+		left join m_organization_type t on t.otypeid = a.genre 
+		where a.deleted = 0 
+		<if test="orgCollect.business != null and orgCollect.business != ''">
+			and a.good_business like concat('%' , #{orgCollect.business} , '%')
+		</if>
+		<if test="orgCollect.area != null and orgCollect.area != ''">
+			and a.business_area like concat('%' , #{orgCollect.area} , '%')
+		</if>
+		<if test="orgCollect.typeName != null and orgCollect.typeName != ''">
+			and t.name like concat('%' , #{orgCollect.typeName} , '%')
+		</if>
+		group by a.id 
+		<if test="orgCollect.rank == 1">
+			order by a.created_time asc 
+		</if>
+		<if test="orgCollect.rank == 2">
+			order by productNum asc
+		</if>
+		<if test="orgCollect.rank == 0">
+			order by orderNum asc
+		</if>
+		limit #{start} , #{pageSize}
+	</select>
+	<select id="getOrgCount" resultType="int">
+		select count(*) from m_organization_info a 
+		left join m_organization_type t on t.otypeid = a.genre 
+		where a.deleted = 0 
+		<if test="orgCollect.business != null and orgCollect.business != ''">
+			and a.good_business like concat('%' , #{orgCollect.business} , '%')
+		</if>
+		<if test="orgCollect.area != null and orgCollect.area != ''">
+			and a.business_area like concat('%' , #{orgCollect.area} , '%')
+		</if>
+		<if test="orgCollect.typeName != null and orgCollect.typeName != ''">
+			and t.name like concat('%' , #{orgCollect.typeName} , '%')
+		</if>
+	</select>
+	
+	
+	<select id="findOrgById" resultType="com.xinyue.manage.model.Organization">
+		select 
+		id, shortName ,  org_img image, establish , name ,site , business_area area , good_business business , scale , description 
+		from m_organization_info   
+		where id = #{orgid} 
+	</select>
+	
+	<select id="findProByBank" resultType="com.xinyue.manage.model.Product">
+		select p.id id , p.name name , p.file_name fileName , p.credit creidt , t.name typeName  
+		from m_product_info p 
+		left join m_product_type t on p.type = t.id 
+		where p.bank = #{orgid} order by p.created_time desc
+	</select>
+	
+	<select id="findCaseByPro" resultType="com.xinyue.manage.model.SuccessCase">
+		select 
+		s.loan_amount loanAmount , p.name productName, m.real_name creditManagerName, s.loan_days loanDays, 
+		s.applicant_company applicantCompany, s.description description, s.loan_date loanDate
+		from c_success_case s 
+		left join m_product_info p on p.id = s.product_id 
+		left join c_manager_info m on s.credit_manager_id = m.id 
+		where s.deleted = 0 
+		<choose>
+			<when test="list == null || list.size == 0">
+				and s.product_id = ''
+			</when>
+			<otherwise>
+				and s.product_id = 
+				<foreach collection="list" index="index" item="item"  separator=" or s.product_id = ">
+					#{item.id}
+				</foreach>
+			</otherwise>
+		</choose>
+		 order by s.created_time desc 
+	</select>
+	
+	<select id="findPageProByBank" resultType="com.xinyue.manage.model.Product">
+		select p.id id , p.name name , p.file_name fileName , p.credit creidt , p.bank orgid, t.name typeName  
+		from m_product_info p 
+		left join m_product_type t on p.type = t.id 
+		where p.bank = #{orgid} order by p.created_time desc 
+		limit #{start} , #{pageSize} 
+	</select>
+	<select id="getProByBankCount" resultType="int">
+		select count(*) from m_product_info p 
+		left join m_product_type t on p.type = t.id 
+		where p.bank = #{orgid} 
+	</select>
+	
+	<select id="findPageCaseByPro" resultType="com.xinyue.manage.model.SuccessCase">
+		select 
+		s.loan_amount loanAmount , p.name productName, m.real_name creditManagerName, s.loan_days loanDays, 
+		s.applicant_company applicantCompany, s.description description, s.loan_date loanDate
+		from c_success_case s 
+		left join m_product_info p on p.id = s.product_id 
+		left join c_manager_info m on s.credit_manager_id = m.id 
+		where s.deleted = 0 
+		<choose>
+			<when test="list == null || list.size == 0">
+				and s.product_id = ''
+			</when>
+			<otherwise>
+				and s.product_id = 
+				<foreach collection="list" index="index" item="item" separator=" or s.product_id = ">
+					#{item.id}
+				</foreach>
+			</otherwise>
+		</choose>
+		order by s.created_time desc 
+		limit #{start} , #{pageSize} 
+	</select>
+	<select id="getCaseByProCount" resultType="int">
+		select count(*) from c_success_case s 
+		left join m_product_info p on p.id = s.product_id 
+		left join c_manager_info m on s.credit_manager_id = m.id 
+		where s.deleted = 0 
+		<choose>
+			<when test="list == null || list.size == 0">
+				and s.product_id = ''
+			</when>
+			<otherwise>
+				and s.product_id = 
+				<foreach collection="list" index="index" item="item" separator=" or s.product_id = ">
+					#{item.id}
+				</foreach>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findPageAdvisory" resultType="com.xinyue.manage.model.Question">
+		select  q.id id , q.title ,a.content answerContent, count(distinct q.id) answerNum 
+		from  m_question_info q 
+		left join m_answer_info a on q.id = a.question_id 
+		where a.deleted = 0 and a.status = 2 and q.deleted = 0 and q.status = 2 and q.org_id = #{orgNum} 
+		<if test="title != null and name != ''">
+		and q.title like concat('%', #{title} , '%') 
+		</if>
+		limit #{start} , #{pageSize}
+	</select>
+	<select id="getPageAdvisory" resultType="int">
+		select count(*)	from  m_question_info q 
+		left join m_answer_info a on q.id = a.question_id 
+		where a.deleted = 0 and a.status = 2 and q.deleted = 0 and q.status = 2 and q.org_id = #{orgNum} 
+		<if test="title != null and name != ''">
+		and q.title like concat('%', #{title} , '%') 
+		</if>
+	</select>
 </mapper>
