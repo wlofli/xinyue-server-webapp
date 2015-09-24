@@ -4,11 +4,14 @@ import java.util.List;
 
 import com.xinyue.manage.beans.PageData;
 import com.xinyue.manage.beans.SelectInfo;
+import com.xinyue.manage.model.Collect;
+import com.xinyue.manage.model.CreditManager;
 import com.xinyue.manage.model.Product;
+import com.xinyue.manage.model.ProductFile;
 import com.xinyue.manage.model.ProductType;
+import com.xinyue.manage.util.CommonFunction;
 import com.xinyue.server.bean.CollectBean;
 import com.xinyue.server.bean.ProductSearch;
-import com.xinyue.server.model.Collect;
 
 /**
  * 
@@ -29,4 +32,10 @@ public interface ProductCollectService {
 	public List<SelectInfo> getOrgs();
 	
 	public List<ProductType> findByStatus();
+	
+	public List<ProductFile> findProductFileList(String pid);
+	public Product findProductById(String pid);
+	public List<CreditManager> findCreditByOrgid(String orgid);
+	
+	public final static String SHOW_PATH = CommonFunction.getValue("down.path");
 }

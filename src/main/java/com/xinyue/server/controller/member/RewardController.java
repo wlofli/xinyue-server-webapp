@@ -41,7 +41,8 @@ public class RewardController {
 	public String getRewardList(@ModelAttribute(GlobalConstant.SESSION_MEMBER_INFO) Member member ,HttpSession session, Model model, 
 			@RequestParam(defaultValue= "0")int index, @ModelAttribute("search")SearchReward searchReward ){
 //System.out.println(member.getId());
-		OutLine outline = rewardService.getOutLine(member.getId());
+//		OutLine outline = rewardService.getOutLine(member.getId());
+		OutLine outline = rewardService.getOutLine(member.getId(), GlobalConstant.USER_TYPE_MEMBER);
 		member.setContactPhone(commonMemberService.findTel(member.getId()));
 //System.out.println(outline);
 		List<Reward> reward = rewardService.getRewardList(member.getId(), index * GlobalConstant.PAGE_SIZE, 
@@ -65,7 +66,8 @@ public class RewardController {
 	@RequestMapping("/withdraw/list")
 	public String getWithdrawList(HttpSession session, Model model, @ModelAttribute(GlobalConstant.SESSION_MEMBER_INFO) Member member ,
 			@RequestParam(defaultValue= "0")int index, @ModelAttribute("search")SearchReward searchReward ){
-		OutLine outline = rewardService.getOutLine(member.getId());
+//		OutLine outline = rewardService.getOutLine(member.getId());
+		OutLine outline = rewardService.getOutLine(member.getId(), GlobalConstant.USER_TYPE_MEMBER);
 		member.setContactPhone(commonMemberService.findTel(member.getId()));
 		List<WithdrawMoney> withdraw = rewardService.getRewardWithdrawList(member.getId(), index * GlobalConstant.PAGE_SIZE, 
 				GlobalConstant.PAGE_SIZE, searchReward);
@@ -85,7 +87,8 @@ public class RewardController {
 	
 	@RequestMapping("withdraw")
 	public String withdraw(@ModelAttribute(GlobalConstant.SESSION_MEMBER_INFO) Member member ,Model model, HttpSession session){
-		OutLine outline = rewardService.getOutLine(member.getId());
+//		OutLine outline = rewardService.getOutLine(member.getId());
+		OutLine outline = rewardService.getOutLine(member.getId(), GlobalConstant.USER_TYPE_MEMBER);
 		model.addAttribute("outline", outline);
 		
 		return "screens/reward/withdraw";

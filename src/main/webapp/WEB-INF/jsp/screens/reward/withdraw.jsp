@@ -11,7 +11,7 @@
 <link rel="icon" href="../images/moke.ico" />
 <%@include file="../../common/common.jsp" %>
 <script type="text/javascript">
-var record = ${outline.remainingSum};
+var record = ${outline.awardRemain};
 
 
 function save(){
@@ -30,14 +30,14 @@ function save(){
 
 <body class="h_bj">
 <div class="container">
-<jsp:include page="../../common/head.jsp" />
+<%@include file="../../common/head.jsp" %>
 <div class="hy_i_center">
 <jsp:include page="../member/tree.jsp" />
 <div class="hy_right">
 <div class="hy_top">
 <div class="bt"><strong>推荐奖励提现</strong></div>
 <div class="nr">
-<span class="f_l_s">奖励账户余额：<strong>${outline.remainingSum }</strong>元</span>
+<span class="f_l_s">奖励账户余额：<strong>${outline.awardRemain }</strong>元</span>
 <span class="f_r_s">累计奖励金额：<strong>${outline.rewardTotal }</strong>元</span>
 <span class="f_r_s">累计奖励提现金额：<strong>${outline.withdrawTotal }</strong>元</span></div>
 </div> 

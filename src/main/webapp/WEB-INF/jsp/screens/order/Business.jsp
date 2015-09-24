@@ -36,7 +36,7 @@ function save(n){
 </head>
 <body class="h_bj">
 <div class="container">
-<jsp:include page="../../common/head.jsp" />
+<%@include file="../../common/head.jsp" %>
 <div class="hy_i_center">
 <jsp:include page="../member/tree.jsp" />
 <div class="hy_right">

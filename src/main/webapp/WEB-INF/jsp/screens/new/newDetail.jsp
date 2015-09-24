@@ -17,7 +17,7 @@
 <script type="text/javascript" src="${ctx }/js/jquery.jslides.js"></script>
 <body class="h_bj">
 <div class="container">
-<jsp:include page="../../common/head.jsp" />
+<%@include file="../../common/head.jsp" %>
 </div>
 <!--中间部分-->
 <div class="nr_main">

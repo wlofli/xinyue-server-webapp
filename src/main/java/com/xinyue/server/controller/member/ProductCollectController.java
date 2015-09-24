@@ -12,10 +12,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.xinyue.manage.beans.PageData;
+import com.xinyue.manage.model.Collect;
 import com.xinyue.manage.model.Member;
 import com.xinyue.manage.util.GlobalConstant;
 import com.xinyue.server.bean.CollectBean;
-import com.xinyue.server.model.Collect;
 import com.xinyue.server.service.ProductCollectService;
 
 /**

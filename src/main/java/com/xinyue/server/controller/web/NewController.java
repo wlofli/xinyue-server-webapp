@@ -77,6 +77,7 @@ public class NewController {
 	//前台新闻列表
 	@RequestMapping("list")
 	public String getList(Model model, @RequestParam(required=false)String typeId, @RequestParam(defaultValue="0")int index){
+//System.out.println(index);
 		SearchNew searchNew = new SearchNew();
 		searchNew.setNewType(typeId);
 		List<NewInfo> newstypeList = newService.getNewInfoListByTime(searchNew, index * GlobalConstant.PAGE_SIZE, 

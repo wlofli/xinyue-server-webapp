@@ -610,7 +610,7 @@ System.out.println("document_save = " + order.getDocumentSave());
 		order.setApplicatPerson(member.getContactName());
 		order.setLinkPhone(member.getContactPhone());
 		Product product = productService.getProductById(productId);
-		order.setBank(product.getBank().getId());
+		order.setBank(product.getOrg().getId());
 		try {
 			orderService.addOrder(order);
 		} catch (Exception e) {

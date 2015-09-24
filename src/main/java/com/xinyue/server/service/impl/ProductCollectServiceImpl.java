@@ -8,15 +8,19 @@ import org.springframework.stereotype.Service;
 
 import com.xinyue.manage.beans.PageData;
 import com.xinyue.manage.beans.SelectInfo;
+import com.xinyue.manage.dao.CreditManagerDAO;
 import com.xinyue.manage.dao.OrganizationDao;
+import com.xinyue.manage.dao.ProductDao;
 import com.xinyue.manage.dao.ProductTypeDao;
+import com.xinyue.manage.model.Collect;
+import com.xinyue.manage.model.CreditManager;
 import com.xinyue.manage.model.Product;
+import com.xinyue.manage.model.ProductFile;
 import com.xinyue.manage.model.ProductType;
 import com.xinyue.manage.util.GlobalConstant;
 import com.xinyue.server.bean.CollectBean;
 import com.xinyue.server.bean.ProductSearch;
 import com.xinyue.server.dao.ProductCollectDao;
-import com.xinyue.server.model.Collect;
 import com.xinyue.server.service.ProductCollectService;
 
 /**
@@ -69,7 +73,7 @@ public class ProductCollectServiceImpl implements ProductCollectService {
 	@Override
 	public List<SelectInfo> getOrgs() {
 		// TODO Auto-generated method stub
-		return ogao.getOrgs();
+		return ogao.getOrganizations();
 	}
 	
 	@Resource
@@ -79,5 +83,21 @@ public class ProductCollectServiceImpl implements ProductCollectService {
 		// TODO Auto-generated method stub
 		
 		return ptdao.findProductTypeByList();
+	}
+	
+	@Resource
+	private ProductDao prodao;
+	public List<ProductFile> findProductFileList(String pid){
+		return prodao.findProductFileList(pid);
+	}
+	public Product findProductById(String pid){
+		return prodao.findProductById(pid);
+	}
+	
+	@Resource
+	private CreditManagerDAO cdao;
+	
+	public List<CreditManager> findCreditByOrgid(String orgid){
+		return cdao.findCreditByOrgid(orgid);
 	}
 }

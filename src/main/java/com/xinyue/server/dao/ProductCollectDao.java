@@ -4,10 +4,10 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Param;
 
+import com.xinyue.manage.model.Collect;
 import com.xinyue.manage.model.Product;
 import com.xinyue.server.bean.CollectBean;
 import com.xinyue.server.bean.ProductSearch;
-import com.xinyue.server.model.Collect;
 
 /**
  * 

@@ -46,7 +46,7 @@ marginTop: 0
 
 <body class="h_bj">
 <div class="container">
-<jsp:include page="../../common/head.jsp" />
+<%@include file="../../common/head.jsp" %>
 </div> 
  
 <div class="zx_index">

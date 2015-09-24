@@ -131,7 +131,7 @@ function deleteOrder(id){
 
 <body class="h_bj">
 <div class="container">
-<jsp:include page="../../common/head.jsp" />
+<%@include file="../../common/head.jsp" %>
 <div class="hy_i_center">
 <jsp:include page="tree.jsp"></jsp:include>
 <div class="hy_right">

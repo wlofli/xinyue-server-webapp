@@ -11,15 +11,15 @@
 <%@include file="../../common/common.jsp" %>
 <link rel="stylesheet" type="text/css" href="${ctx }/css/jquery.jslides.css" media="screen" />
 <script src="../js/tab.js"  type="text/javascript"></script>
-<script type="text/javascript" src="../js/jquery-1.8.0.min.js"></script>
-<script type="text/javascript" src="../js/jquery.jslides.js"></script>
+<script type="text/javascript" src="${ctx }/js/jquery-1.8.0.min.js"></script>
+<script type="text/javascript" src="${ctx }/js/jquery.jslides.js"></script>
 
 </head>
 
 
 <body class="h_bj">
 <div class="container">
-<jsp:include page="../../common/head.jsp" />
+<%@include file="../../common/head.jsp" %>
 </div> 
 <!--中间部分-->
 <div class="nr_main">
@@ -50,8 +50,9 @@
 <script type="text/javascript">
 	var typeId = "${typeId}";
 	function changePage(n){
-// alert("in");
+alert(n);
 		window.location.href = "${ctx}/new/list?typeId=" + typeId + "&index= " + n;
+		
 	}
 </script>
 <%@include file="page.jsp" %>

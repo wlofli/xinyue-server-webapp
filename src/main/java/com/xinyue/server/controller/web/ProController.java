@@ -9,6 +9,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.xinyue.manage.beans.SelectInfo;
+import com.xinyue.manage.model.Product;
 import com.xinyue.manage.service.CityService;
 import com.xinyue.manage.util.GlobalConstant;
 import com.xinyue.server.bean.ProductSearch;
@@ -50,7 +51,18 @@ public class ProController {
 	
 	
 	@RequestMapping("/detail")
-	public String detail(){
+	public String detail(String proid , Model model){
+		//申请材料
+		model.addAttribute("fileList", pbiz.findProductFileList(proid));
+		
+		Product pro = pbiz.findProductById(proid);
+		//产品信息
+		model.addAttribute("pro", pro);
+		
+		//信贷经理信息
+		model.addAttribute("credit", pbiz.findCreditByOrgid(pro.getOrgid()));
+		
+		model.addAttribute("showpath", pbiz.SHOW_PATH);
 		
 		return "screens/pro/detail";
 	}
