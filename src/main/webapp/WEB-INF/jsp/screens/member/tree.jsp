@@ -39,26 +39,26 @@ $(function(){
 </li>
 <li><a id="a">基本信息设置</a>
 <ul class="f_nav_ful">
-<li id="basci"><a href="${ctx }/member/list?param=basic">基本信息</a></li>
+<li id="basic"><a href="${ctx }/member/list?param=basic">基本信息</a></li>
 <li id="updatepwd"><a href="${ctx }/member/list?param=updatepwd">修改密码</a></li>
 <li id="tel"><a href="${ctx }/member/list?param=tel">手机验证</a></li>
 </ul>
 </li>
-<li id="authentication"><a href="${ctx}/member/list?param=authentication">实名认证</a></li>
+<li id="authentication"><a id="a" href="${ctx}/member/list?param=authentication">实名认证</a></li>
 <li><a id="a">贷款订单</a>
 <ul class="f_nav_ful">
 <li id="orderlist"><a href="${ctx }/member/list?param=orderlist">贷款订单列表</a></li>
 <li id="graph"><a href="${ctx }/member/list?param=graph">贷款订单图表</a></li>
 </ul>
 </li>
-<li id="companyrecord"><a href="${ctx}/member/list?param=companyrecord">企业档案</a></li>
+<li id="companyrecord"><a id="a" href="${ctx}/member/list?param=companyrecord">企业档案</a></li>
 <li id="down"><a id="a" href="${ctx }/member/list?param=down">下载中心</a></li>
-<li><a id="a">收藏管理</a>
-<ul class="f_nav_ful">
-<li id="product"><a href="${ctx }/member/list?param=product">产品收藏</a></li>
-<li id="org"><a href="${ctx }/member/list?param=org">机构收藏</a></li>
-</ul>
-</li>
+<!-- <li><a id="a">收藏管理</a> -->
+<!-- <ul class="f_nav_ful"> -->
+<%-- <li id="products"><a href="${ctx }/member/list?param=products">产品收藏</a></li> --%>
+<%-- <li id="orgs"><a href="${ctx }/member/list?param=orgs">机构收藏</a></li> --%>
+<!-- </ul> -->
+<!-- </li> -->
 <li><a id="a">分享推荐会员</a>
 <ul class="f_nav_ful">
 <li id="recommend"><a href="${ctx }/member/list?param=recommend">推荐会员</a></li>
@@ -74,7 +74,7 @@ $(function(){
 <li id="appwithdraw"><a href="${ctx }/member/list?param=appwithdraw">申请提现</a></li>
 </ul>
 </li>
-<li id="question"><a href="${ctx }/member/list?param=question">问答管理</a></li>
+<li id="questiontree"><a id="a" href="${ctx }/member/list?param=questiontree">问答管理</a></li>
 
 </ul>
 </div>

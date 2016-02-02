@@ -71,7 +71,8 @@ function sendEmail(node){
 		}
 		$("#recommend_member_link").val(htl);
 		$.ajax({
-			url:'${ctx}/member/recommendctr/emailMember',
+// 			url:'${ctx}/member/recommendctr/emailMember',
+			url:'${ctx}/member/recommendctr/emailHtml',
 			data:$("#recommend_member").serialize(),
 			type:'post',
 			success:function(data){
@@ -126,7 +127,7 @@ function sendEmail(node){
 								<strong>推荐普通会员</strong>
 							</p>
 							<p>
-								<span>A：推荐链接</span><span class="tjhy_s2" id="recommend_member_html">${member.ordinary }${code }</span><a
+								<span>A：推荐链接</span><span class="tjhy_s2" id="recommend_member_html">${member.ordinary }?invitationCode=${code }</span><a
 									class="tj_btn" onclick="javascript:show2(1)">分享</a>
 							</p>
 							<p>
@@ -141,11 +142,12 @@ function sendEmail(node){
 							</p>
 							<p class="tjhyxq b_t_20">
 								<span>推荐普通会员人数：</span> 
-								<a href="javascript:void(0)" class="ckxq_a" onclick="${ctx }/member/list?param=member"><strong>${member.ordinaryNum }</strong> 人</a>
+								<a href="javascript:void(0)" class="ckxq_a" onclick="document.location.href='${ctx }/member/list?param=member'"><strong>${member.ordinaryNum }</strong> 人</a>
 							</p>
+							<%--
 							<p class="tjhyxq"><span>推荐会员奖励：</span>
 								<a href="tjhy_pt_hy.html" class="ckxq_a"><strong>${member.ordinaryScore }</strong> 积分</a> 
-								<a href="tjhy_pt_hy.html" class="ckxq_a"><strong>200 </strong> 元</a></p>
+								<a href="tjhy_pt_hy.html" class="ckxq_a"><strong>200 </strong> 元</a></p> --%>
 						</s:form>
 					</div>
 					<div class="tjhy_tab">
@@ -155,7 +157,7 @@ function sendEmail(node){
 								<strong>推荐信贷经理</strong>
 							</p>
 							<p>
-								<span>A：推荐链接</span><span class="tjhy_s2" id="recommend_credit_html">${credit.credit }${code }</span><a
+								<span>A：推荐链接</span><span class="tjhy_s2" id="recommend_credit_html">${credit.credit }?invitationCode=${code }</span><a
 									class="tj_btn" onclick="javascript:show2(2)">分享</a>
 							</p>
 							<p>
@@ -170,13 +172,14 @@ function sendEmail(node){
 							</p>
 							<p class="tjhyxq b_t_20">
 								<span>推荐信贷经理人数：</span> 
-								<a href="javascript:void(0)" class="ckxq_a" onclick="${ctx }/member/list?param=credit"><strong>${credit.creditNum }</strong> 人</a>
+								<a href="javascript:void(0)" class="ckxq_a" onclick="document.location.href='${ctx }/member/list?param=credit'"><strong>${credit.creditNum }</strong> 人</a>
 							</p>
+							<%--
 							<p class="tjhyxq">
 								<span>推荐信贷经理奖励：</span> 
 								<a href="tjhy_xd_hy.html" class="ckxq_a"><strong>${credit.creditScore } </strong> 积分</a> 
 								<a href="tjhy_xd_hy.html" class="ckxq_a"><strong>20 </strong> 元</a>
-							</p>
+							</p> --%>
 						</s:form>
 					</div>
 					<div class="clear"></div>
@@ -198,7 +201,7 @@ function sendEmail(node){
 						<ul>
 							<li><a href="javascript:void(0)" class="fxd1" onclick="weiboShare()"><i></i><span>新浪微博</span></a></li>
 							<li><a href="javascript:void(0)" class="fxd2" onclick="createCode()"><i></i><span>微信好友</span></a></li>
-							<li><a href="javascript:void(0)" class="fxd3" onclick="createCode()"><i></i><span>朋友圈</span></a></li>
+<%-- 							<li><a href="javascript:void(0)" class="fxd3" onclick="createCode()"><i></i><span>朋友圈</span></a></li> --%>
 							<li><a href="javascript:void(0)" class="fxd4" onclick="qqShare()"><i></i><span>QQ好友</span></a></li>
 							<li><a href="javascript:void(0)" class="fxd5" onclick="qqZoneShare()"><i></i><span>QQ空间</span></a></li>
 							<li><a href="javascript:void(0)" class="fxd6" onclick="qqWeiboShare()"><i></i><span>腾讯微博</span></a></li>
@@ -208,11 +211,30 @@ function sendEmail(node){
 					</div>
 				</div>
 			</div>
+			<div id="login1">
+		        <div class="login1">
+			        <div class="bt"><h1>扫码分享</h1>
+			       	<a href="javascript:hide1()">
+			       	<img  src="${ctx }/images/close.png" /></a><div class="clear"></div></div>
+			        <p style="text-align:center; line-height:50px; font-size:16px; color:#888;">扫码二维码分享到微信或微信朋友圈</p>
+			        <img id="share" src="${ctx }/images1/saoma.jpg" style=" display:block; margin:10px auto;" />
+		        </div>
+		  	</div>  
 			<div id="over"></div>
+			
+			
 			<script type="text/javascript">
 				var tjhy = document.getElementById("login2");
 				var over = document.getElementById("over");
-
+				
+				function show1(){
+					$("#login1").show();
+				}
+				
+				function hide1(){
+					$("#login1").hide();
+				}
+				
 				function show2(node) {
 					$("#recommend_share").val(node);
 					tjhy.style.display = "block";
@@ -235,7 +257,7 @@ function sendEmail(node){
 					
 					if(v == 1){
 						try {
-							 window.clipboardData.setData("Text",$("#recommend_member_html").html());     
+							 window.clipboardData.setData('Text',$("#recommend_member_html").html());     
 							 alert("复制成功!");
 						} catch (e) {
 							// TODO: handle exception
@@ -243,17 +265,24 @@ function sendEmail(node){
 						}
 					}else{
 						try {
-							var rng = document.body.createTextRange();
-							 rng.moveToElementText(document.getElementById("recommend_credit_html"));
-							 rng.scrollIntoView();
-							 rng.select();
-							 rng.execCommand("Copy");
-							 rng.collapse(false);
+							 window.clipboardData.setData('Text',$("#recommend_credit_html").html());     
 							 alert("复制成功!");
 						} catch (e) {
 							// TODO: handle exception
 							alert("您使用的浏览器不支持此复制功能，请使用Ctrl+C或鼠标右键");
 						}
+// 						try {
+// 							var rng = document.body.createTextRange();
+// 							 rng.moveToElementText(document.getElementById("recommend_credit_html"));
+// 							 rng.scrollIntoView();
+// 							 rng.select();
+// 							 rng.execCommand("Copy");
+// 							 rng.collapse(false);
+// 							 alert("复制成功!");
+// 						} catch (e) {
+// 							// TODO: handle exception
+// 							alert("您使用的浏览器不支持此复制功能，请使用Ctrl+C或鼠标右键");
+// 						}
 					}
 				}
 				
@@ -263,16 +292,20 @@ function sendEmail(node){
 					var url = "http://v.t.sina.com.cn/share/share.php";
 					//key
 					var appKey = "2469601826";
-					var htl = $("#recommend_member_html").html();
-					//分享内容
-					var title = encodeURIComponent(htl);
+					
 					if(v==1){
 						//分享网址
+						var htl = $("#recommend_member_html").html();
+						//分享内容
+						var title = encodeURIComponent(htl);
 						var source = encodeURIComponent(htl);
 						
 						window.open(url+"?appkey="+appKey+"&title="+title+"&url="+source,"share","toolbar=0,height=400,width=400,top=100,left=100");
 					}else{
 						//分享网址
+						var htl = $("#recommend_credit_html").html();
+						//分享内容
+						var title = encodeURIComponent(htl);
 						var source = encodeURIComponent(htl);
 						
 						window.open(url+"?appkey="+appKey+"&title="+title+"&url="+source,"share","toolbar=0,height=400,width=400,top=100,left=100");
@@ -402,6 +435,13 @@ function sendEmail(node){
 					}else{
 						param = JSON.stringify($("#recommend_credit_html").html());
 					}
+// 					var platformName = "weixin";
+// 					var platformName = "sinaminiblog";
+// 					var url = "http://api.bshare.cn/share/" + platformName + "?url=www.baidu.com";
+// 					$("#share").attr("src","http://api.bshare.cn/share/" + platformName + "?url=www.baidu.com");
+// 					hide2();
+// 					$("#login1").show();
+				
 					$.ajax({
 						url:'${ctx}/member/recommendctr/createCode',
 						type:'post',
@@ -410,8 +450,9 @@ function sendEmail(node){
 						data:param,
 						success:function(data){
 							if(data != 'fail'){
-								alert(data);
-								alert("分享成功");
+								$("#share").attr("src",data);
+								hide2();
+								$("#login1").show();
 							}else{
 								alert("分享失败");
 							}

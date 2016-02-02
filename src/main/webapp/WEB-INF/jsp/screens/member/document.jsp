@@ -10,7 +10,7 @@
 		<li class=""><a href="${ctx}/member/record/estate">抵押物信息</a></li>
 		<li class=""><a href="${ctx}/member/record/debt">负债信息</a></li>
 		<li class="hit"><a href="${ctx}/member/record/document">上传资料</a></li>
-		<li class=""><a href="${ctx}/member/record/rating">评级信息</a></li>
+<%-- 		<li class=""><a href="${ctx}/member/record/rating">评级信息</a></li> --%>
 	</ul>
 </div>
 <div class="tab" >
@@ -86,17 +86,22 @@ function upLoadFile(index){
 		url:'${ctx}/member/document/file/add?suffix='+type[1]+'&typeId='+typeId+'&fileId='+fileId,
 		secureuri:false,
 		fileElementId:'file_'+index,
-		dataType:'json',
+		dataType:'text',
 		success:function(data){
 			if (data != "fail") {
 				alert("上传成功!");
 				$("#hid_file_"+index).val(data);
-				
+				doUpload(index)
 			}else {
 				alert("上传失败!");
 			}
 		}
 	});
+}
+
+function doUpload(index){
+	$("#div2_doc_"+index).css("display","block");
+	$("#div1_doc_"+index).css("display","none");
 }
 
 function reUpLoad(index){

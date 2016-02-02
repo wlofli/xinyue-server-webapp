@@ -31,7 +31,7 @@
 <div class="pro_xq">
 <div class="pro_xq_left">
 <div class="new_xq_bt"><span>${news.title }</span></div>
-<div class="new_xq_zs"><span><fmt:formatDate value="${news.sendDate }" pattern="yyyy-MM-dd h:m"/>${news.compositionSource }</span></div>
+<div class="new_xq_zs"><span><fmt:formatDate value="${news.sendDate }" pattern="yyyy-MM-dd H:m"/>${news.compositionSource }</span></div>
 <div class="new_xq_nr">
 ${news.newContent }
 
@@ -47,7 +47,7 @@ function weiboShare(){
 	//分享内容
 	var title = encodeURIComponent("新越网新闻");
 	//分享网址
-	var source = encodeURIComponent("http://v.youku.com/v_show/id_XMTI5NjY0NDc5Ng==.html?from=y1.3-ent-grid-196-10080.88558.1-1");
+	var source = encodeURIComponent(window.location.href);
 	
 	window.open(url+"?appkey="+appKey+"&title="+title+"&url="+source,"share","toolbar=0,height=400,width=400,top=100,left=100");
 }
@@ -55,9 +55,9 @@ function weiboShare(){
 function qqShare(){
 	var path = "http://connect.qq.com/widget/shareqq/index.html?";
 	var p = {
-			url:'www.91loan.cn', /*获取URL，可加上来自分享到QQ标识，方便统计*/
+			url:window.location.href, /*获取URL，可加上来自分享到QQ标识，方便统计*/
 			desc:'', /*分享理由(风格应模拟用户对话),支持多分享语随机展现（使用|分隔）*/
-			title:'测试', /*分享标题(可选)*/
+			title:'', /*分享标题(可选)*/
 			summary:'', /*分享摘要(可选)*/
 			pics:'', /*分享图片(可选)*/
 			flash: '', /*视频地址(可选)*/
@@ -76,7 +76,7 @@ function qqShare(){
 function qqZoneShare(){
 	var path = "http://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey?";
 	var p = {
-			url:'http://www.91loan.cn/moke/site/reg',
+			url:window.location.href,
 //			showcount:'0',/*是否显示分享总数,显示：'1'，不显示：'0' */
 			desc:'测试分享理由',/*默认分享理由(可选)*/
 			summary:'测试分享摘要',/*分享摘要(可选)*/
@@ -95,7 +95,7 @@ function qqZoneShare(){
 }
 
 function qqWeiboShare(){
-		var _url = encodeURIComponent("www.91loan.cn");
+		var _url = encodeURIComponent(window.location.href);
 		var _assname = encodeURI("2740293039");//你注册的帐号，不是昵称
 		var _appkey = encodeURI("101204626");//你从腾讯获得的appkey
 		var _pic = encodeURI('');//（例如：var _pic='图片url1|图片url2|图片url3....）
@@ -118,45 +118,12 @@ function qqWeiboShare(){
 }
 function createCode(){
 // 	alert("in");
-		var param = "www.baidu.com";
-		$.ajax({
-			url:'${ctx}/member/recommendctr/createCode?url=' + param,
-			type:'post',
-			dataType:'json',
-			contentType:'application/json',
-			success:function(data){
-				if(data != 'fail'){
-					alert("分享成功");
-				}else{
-					alert("分享失败");
-				}
-			}
-		});
+	
 }
-</script>
 
 
-<script type="text/javascript">
-// (function(){
-// var p = {
-// url:location.href, /*获取URL，可加上来自分享到QQ标识，方便统计*/
-// desc:'', /*分享理由(风格应模拟用户对话),支持多分享语随机展现（使用|分隔）*/
-// title:'', /*分享标题(可选)*/
-// summary:'', /*分享摘要(可选)*/
-// pics:'', /*分享图片(可选)*/
-// flash: '', /*视频地址(可选)*/
-// site:'', /*分享来源(可选) 如：QQ分享*/
-// style:'201',
-// width:32,
-// height:32
-// };
-// var s = [];
-// for(var i in p){
-// s.push(i + '=' + encodeURIComponent(p[i]||''));
-// }
-// document.write(['<a class="qcShareQQDiv" href="http://connect.qq.com/widget/shareqq/index.html?',s.join('&'),'" target="_blank">分享到QQ</a>'].join(''));
-// })();
 </script>
+
 <script src="http://connect.qq.com/widget/loader/loader.js" widget="shareqq" charset="utf-8"></script>
 <a title="分享到QQ空间" href="javascript:void(0)" class="bshare-qzone" onclick="qqZoneShare()"></a>
 <a title="分享到新浪微博" href="javascript:void(0)" class="bshare-sinaminiblog" onclick="weiboShare()"></a>
@@ -184,6 +151,6 @@ function createCode(){
 </div>
 </div>
 <!--中间部分-->
-<jsp:include page="../../common/foot_main.jsp" />
+<%@ include file="../../common/foot_main.jsp"%>
 </body>
 </html>

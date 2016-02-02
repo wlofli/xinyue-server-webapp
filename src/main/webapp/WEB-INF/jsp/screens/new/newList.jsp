@@ -36,7 +36,15 @@
 <li>
 <p>
 <a href="new_xq.html" class="new_lit">
-<img src="${ctx }${showpath}${list.fileDir }${list.fileName }" width="110px" /></a>
+<c:choose>
+	<c:when test="${empty list.fileName }">
+		<img src="${ctx}/images1/cp_icon1.png" width="110px" height="75px" />
+	</c:when>
+	<c:otherwise>
+		<img src="${list.fileDir }${list.fileName }" width="110px" height="75px" />
+	</c:otherwise>
+</c:choose>
+</a>
 <div class="new_xq">
 <p><a href="${ctx }/new/detail?id=${list.id}">${list.title }</a>
 <span><fmt:formatDate value="${list.modifiedTime }" pattern="yyyy-MM-dd"/></span><div class="clear"></div></p>
@@ -65,7 +73,8 @@ alert(n);
 
 </div>
 <!--中间部分-->
-<jsp:include page="../../common/foot_main.jsp" />
+<%@ include file="../../common/foot_main.jsp"%>
+
 
  
 </body>

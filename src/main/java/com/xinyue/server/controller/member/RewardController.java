@@ -26,7 +26,7 @@ import com.xinyue.server.service.CommonMemberService;
  * author lzc
  */
 @Controller
-@RequestMapping("reward")
+@RequestMapping("/member/reward")
 @SessionAttributes(value=GlobalConstant.SESSION_MEMBER_INFO)
 public class RewardController {
 
@@ -40,11 +40,8 @@ public class RewardController {
 	@RequestMapping("/reward/list")
 	public String getRewardList(@ModelAttribute(GlobalConstant.SESSION_MEMBER_INFO) Member member ,HttpSession session, Model model, 
 			@RequestParam(defaultValue= "0")int index, @ModelAttribute("search")SearchReward searchReward ){
-//System.out.println(member.getId());
-//		OutLine outline = rewardService.getOutLine(member.getId());
 		OutLine outline = rewardService.getOutLine(member.getId(), GlobalConstant.USER_TYPE_MEMBER);
 		member.setContactPhone(commonMemberService.findTel(member.getId()));
-//System.out.println(outline);
 		List<Reward> reward = rewardService.getRewardList(member.getId(), index * GlobalConstant.PAGE_SIZE, 
 				GlobalConstant.PAGE_SIZE,searchReward);
 		
@@ -66,7 +63,6 @@ public class RewardController {
 	@RequestMapping("/withdraw/list")
 	public String getWithdrawList(HttpSession session, Model model, @ModelAttribute(GlobalConstant.SESSION_MEMBER_INFO) Member member ,
 			@RequestParam(defaultValue= "0")int index, @ModelAttribute("search")SearchReward searchReward ){
-//		OutLine outline = rewardService.getOutLine(member.getId());
 		OutLine outline = rewardService.getOutLine(member.getId(), GlobalConstant.USER_TYPE_MEMBER);
 		member.setContactPhone(commonMemberService.findTel(member.getId()));
 		List<WithdrawMoney> withdraw = rewardService.getRewardWithdrawList(member.getId(), index * GlobalConstant.PAGE_SIZE, 
@@ -97,7 +93,6 @@ public class RewardController {
 	
 	@RequestMapping("addwithdraw")
 	public String addWithdraw(Model model, HttpSession session, float withdrawPrice){
-//System.out.println("withdrawPrice = " + withdrawPrice);
 		return "screens/reward/withdraw2";
 	}
 	
@@ -129,7 +124,6 @@ public class RewardController {
 		String memberphone = commonMemberService.findTel(member.getId());
 		StringBuffer phone = new StringBuffer(memberphone);
 		phone.replace(3, 7, "***");
-//System.out.println(phone);
 		model.addAttribute("phone", phone);
 		return "screens/reward/bindAlipay2";
 	}

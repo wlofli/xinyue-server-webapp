@@ -27,8 +27,8 @@ function withdraw(){
 </div> 
 <div class="tab">
 <ul class="sd_skzh">
-<li class="skzh1"><a class="skzh1_a" href="${ctx }/reward/addwithdraw2"><i></i><span>提现支付宝</span></a><span class="xytx">已绑定：<strong>188***3223</strong></span></li>
-<li class="skzh2"><a class="skzh2_a" href="${ctx }/reward/addwithdraw2"><i></i><span>提现银行卡</span></a><span class="xytx">已绑定：中信银行 <strong>6222****3232</strong></span></li>
+<li class="skzh1"><a class="skzh1_a" href="${ctx }/member/reward/addwithdraw2"><i></i><span>提现支付宝</span></a><span class="xytx">已绑定：<strong>188***3223</strong></span></li>
+<li class="skzh2"><a class="skzh2_a" href="${ctx }/member/reward/addwithdraw2"><i></i><span>提现银行卡</span></a><span class="xytx">已绑定：中信银行 <strong>6222****3232</strong></span></li>
 </ul> 
 </div>
 

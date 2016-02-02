@@ -5,6 +5,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>新越网_城市分站列表</title>
+
 <%@ include file="../common/common.jsp"%>
 </head>
 <body class="h_bj">
@@ -16,9 +17,9 @@
 			<div class="contentbox">
 				<div class="tab1">
 					<span>热门城市：</span>
-					<a href="#">杭州</a>
-					<a href="#">绍兴</a>
-					<a href="#">嘉兴</a>
+					<a href="javascript:void(0)" onclick="changeCity('杭州')">杭州</a>
+					<a href="javascript:void(0)" onclick="changeCity('绍兴')">绍兴</a>
+					<a href="javascript:void(0)" onclick="changeCity('嘉兴')">嘉兴</a>
 				</div>
 				<div class="tab1">
 					<span>按省份选择：</span>
@@ -45,7 +46,7 @@
 									<span class="left">${list.key}</span>
 									<span>
 										<c:forEach items="${list.value}" var="city" varStatus="vs">
-											<a href="#">${city}</a>
+											<a href="javascript:void(0)" onclick="changeCity('${city}')">${city}</a>
 										</c:forEach>
 									</span>
 								</li>
@@ -63,7 +64,7 @@
 										<span class="left">${hblist.key}</span>
 										<span>
 											<c:forEach items="${hblist.value}" var="citylist">
-												<a href="#">${citylist}</a>
+												<a href="javascript:void(0)" onclick="changeCity('${citylist}')">${citylist}</a>
 											</c:forEach>
 										</span>
 									</dd>
@@ -81,7 +82,7 @@
 										<span class="left">${hblist.key}</span>
 										<span>
 											<c:forEach items="${hblist.value}" var="citylist">
-												<a href="#">${citylist}</a>
+												<a href="javascript:void(0)" onclick="changeCity('${citylist}')">${citylist}</a>
 											</c:forEach>
 										</span>
 										</c:if>
@@ -97,7 +98,7 @@
 										<span class="left">${hblist.key}</span>
 										<span>
 											<c:forEach items="${hblist.value}" var="citylist">
-												<a href="#">${citylist}</a>
+												<a href="javascript:void(0)" onclick="changeCity('${citylist}')">${citylist}</a>
 											</c:forEach>
 										</span>
 									</dd>
@@ -112,7 +113,7 @@
 										<span class="left">${hblist.key}</span>
 										<span>
 											<c:forEach items="${hblist.value}" var="citylist">
-												<a href="#">${citylist}</a>
+												<a href="javascript:void(0)" onclick="changeCity('${citylist}')">${citylist}</a>
 											</c:forEach>
 										</span>
 									</dd>
@@ -127,7 +128,7 @@
 										<span class="left">${hblist.key}</span>
 										<span>
 											<c:forEach items="${hblist.value}" var="citylist">
-												<a href="#">${citylist}</a>
+												<a href="javascript:void(0)" onclick="changeCity('${citylist}')">${citylist}</a>
 											</c:forEach>
 										</span>
 									</dd>
@@ -142,7 +143,7 @@
 										<span class="left">${hblist.key}</span>
 										<span>
 											<c:forEach items="${hblist.value}" var="citylist">
-												<a href="#">${citylist}</a>
+												<a href="javascript:void(0)" onclick="changeCity('${citylist}')">${citylist}</a>
 											</c:forEach>
 										</span>
 									</dd>
@@ -157,7 +158,7 @@
 										<span class="left">${hblist.key}</span>
 										<span>
 											<c:forEach items="${hblist.value}" var="citylist">
-												<a href="#">${citylist}</a>
+												<a href="javascript:void(0)" onclick="changeCity('${citylist}')">${citylist}</a>
 											</c:forEach>
 										</span>
 									</dd>
@@ -215,5 +216,11 @@
 			alert("请选择城市");
 		}
 	}
+	
+	function changeCity(name){
+//	 	alert(encodeURI(encodeURI(name)));
+		window.location.href = '${ctx}/city/select?cityName=' + encodeURI(encodeURI(name));
+	}
+	
 </script>
 </html>

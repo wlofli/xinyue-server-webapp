@@ -65,14 +65,13 @@
 						<span class="zc_bt">手机验证码:</span>
 						<input id="check_c" name="checkCode" value="" class="text1" />
 						<input type="button" class="btn_sjyz" value="获取验证码" id="code_btn" onclick="sendCode()" />
-						<sf:hidden path="invited"/>
 					</div>
 					<div class="zc_tk">
 						<input type="checkbox" class="left" checked="checked" id="server_chk"/>
 						<span>我已阅读并接受<a href="#">《用户服务协议》</a></span>
 					</div>
 					<div class="zc_btn">
-						<input type="button" value="注 册" class="z_btn" onclick="register()"/>
+						<input type="button" id="btn_register" value="注 册" class="z_btn" onclick="register()"/>
 					</div>
 				</sf:form>
 				<div class="smdl">
@@ -85,6 +84,18 @@
 			</div>
 		</div>
 		<%@ include file="../common/foot.jsp"%>
+		
+<div id="login" >
+       <div class="login1"> 
+         <div class="bt"><h1>注册成功</h1><a href="javascript:hide()"><img src="${ctx }/images/close.png" /></a><div class="clear"></div></div>
+       <div class="nr"> 
+       <p style="text-align:center;"><i class="tc_icon1" ><img src="${ctx }/images/f_p_cg.png" style="width:35px; height:35px;" /></i><span class="zccg_ts">恭喜您已成功注册为新越网会员</span></p>
+       <p style="text-align:center;"> 您的新越网专用账号：<a href="${ctx }/member/list?param=main" style="color:#0075a9; font-size:16px;" id="registName"></a> </p>
+       <p style="margin:30px 0 30px 0;"><a href="${ctx}/product/show" class="sd_btn">查看产品</a><a href="${ctx}/product/show" class="sd_btn1">我要申贷</a></p>
+       </div>
+        </div>
+</div>
+<div id="over"></div>
 	</div>
 </body>
 <script type="text/javascript">
@@ -238,7 +249,22 @@ function register(){
 			alert("请确认用户服务协议");
 			return;
 		}
-		$("#registerForm").submit();
+		$.ajax({
+		   url:"${ctx}/register/submit",
+		   type:"post",
+		   data:$("#registerForm").serialize(),
+		   async:false,
+		   success:function(data){
+		    	if(data == "success"){
+		    		$("#registName").html($("#loginName").val());
+		    		$("#btn_register").attr("disabled",true);
+		    		$("#login").show();
+		   		}else{
+				  alert("注册失败"); 
+	  		 	}
+		   }
+		});
+// 		$("#registerForm").submit();
 	}
 }
 </script>

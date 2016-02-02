@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- wenhai.you -->
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<!--  lzc 15-12-7 getProductCount 修改 t.status 从1改为0 -->
 <mapper namespace="com.xinyue.server.dao.ProductCollectDao">
-	<select id="findPage" resultType="com.xinyue.server.model.Collect">
-		select c.id id ,  p.name productName , o.name orgName , p.credit credit , p.interest interest , 
-		p.period period , c.create_time collectTime , c.member_id memberid , c.product_id productid  
+	<select id="findPage" resultType="com.xinyue.manage.model.Collect">
+		select c.id id ,  p.name productName , o.name orgName , p.credit credit , p.interest_from interestFrom , p.interest_to interestTo , 
+		p.period_from periodFrom , p.period_to periodTo , c.create_time collectTime , c.member_id memberid , c.product_id productid  
 		from c_collect_info  c 
 		inner join m_member_info m on m.id = c.member_id 
 		left join m_product_info p on p.id = c.product_id 
@@ -40,7 +41,7 @@
 		</foreach>
 	</update>
 	
-	<select id="showDetail" resultType="com.xinyue.server.model.Collect">
+	<select id="showDetail" resultType="com.xinyue.manage.model.Collect">
 		select c.id id ,  p.name productName , o.name orgName , p.credit credit , p.interest interest , 
 		p.period period , c.create_time collectTime , c.member_id memberid , c.product_id productid  
 		from c_collect_info  c 
@@ -50,39 +51,39 @@
 		where c.deleted = 0 and c.id = #{id}
 	</select>
 	
-	
+	<!-- ywh 前台 产品页面 显示 分页 -->
 	<select id="findProductPage" resultType="com.xinyue.manage.model.Product">
 		
-		select p.id id , p.name name , concat_ws('' , a.name , c.name , z.name ) area , concat_ws('-' , p.credit_from , p.credit_to) credit, 
+		select p.id id , p.name name , concat_ws('' , a.name , c.name , z.name ) area , p.credit, 
 		t.name productTypeName , i.name orgName from m_product_info p 
-		left join m_product_type t on p.type = t.id and t.deleted = 0 and t.status = 1 
+		left join m_product_type t on p.type = t.id and t.deleted = 0 and t.status = 0 
 		left join m_area_province a on a.code  = p.province_id 
 		left join m_area_city c on c.code = p.city_id 
 		left join m_area_zone z on z.code = p.area_id 
-		left join m_organization_info i on i.id = p.bank 
+		left join m_organization_info i on i.id = p.bank and i.deleted = 0 and i.status = 0 
 		where p.deleted = 0 and p.status = 2 
-		<if test="psearch.loanAmount != null and psearch.loanAmount != ''">
+		<if test="psearch.loanAmountIndex != null and psearch.loanAmountIndex != 0">
 			<choose>
-				<when test="psearch.loanAmount == '1'">
-					and (p.credit_from >=5 and 5 <![CDATA[<= ]]>p.credit_to) or (p.credit_from >=20 and 20 <![CDATA[<= ]]>p.credit_to) 
+				<when test="psearch.loanAmountIndex == 1">
+					and p.credit <![CDATA[<=]]> 20
 				</when>
 				<otherwise>
 					<choose>
-						<when test="psearch.loanAmount == '2'">
-							and (p.credit_from >=21 and 21 <![CDATA[<= ]]>p.credit_to) or (p.credit_from >=50 and 50 <![CDATA[<= ]]>p.credit_to) 
+						<when test="psearch.loanAmountIndex == 2">
+							and p.credit<![CDATA[<=]]>50
 						</when>
 						<otherwise>
 							<choose>
-								<when test="psearch.loanAmount == '3'">
-									and (p.credit_from >=51 and 51 <![CDATA[<= ]]>p.credit_to) or (p.credit_from >=100 and 100 <![CDATA[<= ]]>p.credit_to) 
+								<when test="psearch.loanAmountIndex == 3">
+									and p.credit <![CDATA[<=]]> 100
 								</when>
 								<otherwise>
 									<choose>
-										<when test="psearch.loanAmount == '4'">
-											and (p.credit_from >=101 and 101 <![CDATA[<= ]]>p.credit_to) or (p.credit_from >=200 and 200 <![CDATA[<= ]]>p.credit_to) 
+										<when test="psearch.loanAmountIndex == 4">
+											and p.credit<![CDATA[<=]]>200
 										</when>
 										<otherwise>
-											and p.credit_to>200
+											and p.credit>200
 										</otherwise>
 									</choose>
 								</otherwise>
@@ -150,36 +151,40 @@
 		</if>
 		limit #{start} , #{pageSize}
 	</select>
-	<select id="getProductTypeCount" resultType="int">
+	
+	<!-- ywh 前台 产品页面 显示 分页总计录数 -->
+	<select id="getProductCount" resultType="int">
 		select count(*) from m_product_info p 
-		left join m_product_type t on p.type = t.id and t.deleted = 0 and t.status = 1 
+<!-- 		modified by lzc -->
+		left join m_product_type t on p.type = t.id and t.deleted = 0 and t.status =0 
+<!-- 		end -->
 		left join m_area_province a on a.code  = p.province_id 
 		left join m_area_city c on c.code = p.city_id 
 		left join m_area_zone z on z.code = p.area_id 
 		left join m_organization_info i on i.id = p.bank 
 		where p.deleted = 0 and p.status = 2 
-		<if test="psearch.loanAmount != null and psearch.loanAmount != 0">
+		<if test="psearch.loanAmountIndex != null and psearch.loanAmountIndex != 0">
 			<choose>
-				<when test="psearch.loanAmount == '1'">
-					and (p.credit_from >=5 and 5 <![CDATA[<= ]]>p.credit_to) or (p.credit_from >=20 and 20 <![CDATA[<= ]]>p.credit_to) 
+				<when test="psearch.loanAmountIndex == 1">
+					and p.credit <![CDATA[<=]]> 20
 				</when>
 				<otherwise>
 					<choose>
-						<when test="psearch.loanAmount == '2'">
-							and (p.credit_from >=21 and 21 <![CDATA[<= ]]>p.credit_to) or (p.credit_from >=50 and 50 <![CDATA[<= ]]>p.credit_to) 
+						<when test="psearch.loanAmountIndex == 2">
+							and p.credit<![CDATA[<=]]>50
 						</when>
 						<otherwise>
 							<choose>
-								<when test="psearch.loanAmount == '3'">
-									and (p.credit_from >=51 and 51 <![CDATA[<= ]]>p.credit_to) or (p.credit_from >=100 and 100 <![CDATA[<= ]]>p.credit_to) 
+								<when test="psearch.loanAmountIndex == 3">
+									and p.credit <![CDATA[<=]]> 100
 								</when>
 								<otherwise>
 									<choose>
-										<when test="psearch.loanAmount == '4'">
-											and (p.credit_from >=101 and 101 <![CDATA[<= ]]>p.credit_to) or (p.credit_from >=200 and 200 <![CDATA[<= ]]>p.credit_to) 
+										<when test="psearch.loanAmountIndex == 4">
+											and p.credit<![CDATA[<=]]>200
 										</when>
 										<otherwise>
-											and p.credit_to>200
+											and p.credit>200
 										</otherwise>
 									</choose>
 								</otherwise>
@@ -246,4 +251,7 @@
 			and p.name like concat(#{psearch.productName} , '%')
 		</if>
 	</select>
+	
+	
+	
 </mapper>

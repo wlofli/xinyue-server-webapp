@@ -136,7 +136,7 @@ public class CreditManagerController {
 		initFastApplicant(model);
 		
 		// 图片路径
-		model.addAttribute("showPath", SHOW_PATH);
+		model.addAttribute("showPath", SHOW_PATH + "/moko/images/");
 		
 		return "screens/credit/credit_detail";
 	}

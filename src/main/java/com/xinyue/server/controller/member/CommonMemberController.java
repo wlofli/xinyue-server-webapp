@@ -6,6 +6,7 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import org.apache.log4j.Logger;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -16,15 +17,15 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.xinyue.manage.beans.SelectInfo;
 import com.xinyue.manage.model.Member;
 import com.xinyue.manage.service.CityService;
+import com.xinyue.manage.service.CommonService;
 import com.xinyue.manage.service.SelectService;
 import com.xinyue.manage.util.GlobalConstant;
 import com.xinyue.manage.util.SecurityUtils;
 import com.xinyue.server.bean.PwdInfo;
 import com.xinyue.server.service.CommonMemberService;
-import com.xinyue.server.service.CommonService;
 
 /**
- * 
+ *  *  CommonService 2015-10-20 ywh 移走
  * @author wenhai.you
  * @2015年7月16日
  * @下午4:26:04
@@ -45,11 +46,12 @@ public class CommonMemberController {
 	@Resource
 	private CityService csbiz;
 	
+	private Logger log = Logger.getLogger(getClass());
+	
 	@RequestMapping("/show")
 	public String show(Model model , HttpServletRequest req){
 		Member m = (Member)req.getSession().getAttribute(GlobalConstant.SESSION_MEMBER_INFO);
 		Member member = cbiz.getBasicMember(m.getId());
-		System.out.println(member);
 		model.addAttribute("member", member);
 		List<SelectInfo> province = sbiz.findProvince();
 		model.addAttribute("province", province);
@@ -104,9 +106,13 @@ public class CommonMemberController {
 	@ResponseBody
 	public String tel(@RequestBody String tel , HttpServletRequest req){
 		String code = SecurityUtils.randomStr(4);
-		boolean result = cmbiz.sendCode(tel , code);
+//		boolean result = cmbiz.sendCode(tel , code);
+//		//测试用
+		boolean result = true;
 		if(result){
 			req.getSession().setAttribute(GlobalConstant.SESSION_COMMON_CODE, code);
+			
+			log.info("<<<短信验证码发送成功-->" + result + ">>>手机号码为:"+tel+"验证码"+code);
 			return "success";
 		}
 		return "fail";

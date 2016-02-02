@@ -1,6 +1,10 @@
 package com.xinyue.server.model;
 
 import java.io.Serializable;
+import java.util.List;
+
+import com.xinyue.manage.model.ProductType;
+import com.xinyue.manage.model.SubStation;
 
 /**
  * 
@@ -10,7 +14,7 @@ import java.io.Serializable;
  */
 public class OrgCollect implements Serializable {
 
-	private int id;
+	private String id;
 	private String orgName;
 	private String creditCount;
 	private String proCount;
@@ -21,18 +25,56 @@ public class OrgCollect implements Serializable {
 	private String orgScale;
 	private String businessArea;
 	private String business;
+	//前台显示
+	private String image;
+	private String ordercount;
 	
+	
+	
+	//add by lzc
+	private List<SubStation> businessAreas;
+	private List<ProductType> businessType;
+	
+	public List<SubStation> getBusinessAreas() {
+		return businessAreas;
+	}
+	public void setBusinessAreas(List<SubStation> businessAreas) {
+		this.businessAreas = businessAreas;
+	}
+	public List<ProductType> getBusinessType() {
+		return businessType;
+	}
+	public void setBusinessType(List<ProductType> businessType) {
+		this.businessType = businessType;
+	}
+	
+	
+	//end by lzc
+	
+	
+	public String getId() {
+		return id;
+	}
+	public void setId(String id) {
+		this.id = id;
+	}
+	public String getOrdercount() {
+		return ordercount;
+	}
+	public void setOrdercount(String ordercount) {
+		this.ordercount = ordercount;
+	}
+	public String getImage() {
+		return image;
+	}
+	public void setImage(String image) {
+		this.image = image;
+	}
 	public String getOrgName() {
 		return orgName;
 	}
 	public void setOrgName(String orgName) {
 		this.orgName = orgName;
-	}
-	public int getId() {
-		return id;
-	}
-	public void setId(int id) {
-		this.id = id;
 	}
 	public String getCreditCount() {
 		return creditCount;

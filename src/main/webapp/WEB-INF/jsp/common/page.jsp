@@ -4,13 +4,28 @@
 <c:if test="${page.totalNum >= 0}">
   <c:choose>
   	<c:when test="${page.pageNo == 0 }">
-  		 <div class="hy_dd_page"><span>共${page.totalNum }条记录</span><a href="javascript:changep(${page.pageNo - 1 })" class="dd_page_n">上一页</a><span>第${page.pageNo + 1}/${page.totalPage }页</span><a href="javascript:changep(${page.pageNo + 1})" class="dd_page_h">下一页</a></div>
+  		 <div class="hy_dd_page"><span>共${page.totalNum }条记录</span>
+  		 <a href="javascript:changep(${page.pageNo - 1 })" class="dd_page_n">上一页</a>
+  		 <span>第${page.pageNo + 1}/${page.totalPage }页</span>
+  		 <c:if test="${page.pageNo == page.totalPage - 1 }">
+  		 	<a href="javascript:changep(${page.pageNo + 1})" class="dd_page_n">下一页</a>
+  		 </c:if>
+  		 <c:if test="${page.pageNo != page.totalPage - 1 }">
+  		 	 <a href="javascript:changep(${page.pageNo + 1})" class="dd_page_h">下一页</a>
+  		 </c:if>
+  		</div>
   	</c:when>
 	<c:when test="${page.pageNo == page.totalPage - 1 }">
-		 <div class="hy_dd_page"><span>共${page.totalNum }条记录</span><a href="javascript:changep(${page.pageNo - 1 })" class="dd_page_h">上一页</a><span>第${page.pageNo + 1}/${page.totalPage }页</span><a href="javascript:changep(${page.pageNo + 1})" class="dd_page_n">下一页</a></div>
+		 <div class="hy_dd_page"><span>共${page.totalNum }条记录</span>
+		 <a href="javascript:changep(${page.pageNo - 1 })" class="dd_page_h">上一页</a>
+		 <span>第${page.pageNo + 1}/${page.totalPage }页</span>
+		 <a href="javascript:changep(${page.pageNo + 1})" class="dd_page_n">下一页</a></div>
 	</c:when>
 	<c:otherwise>
-		 <div class="hy_dd_page"><span>共${page.totalNum }条记录</span><a href="javascript:changep(${page.pageNo - 1 })" class="dd_page_h">上一页</a><span>第${page.pageNo + 1}/${page.totalPage }页</span><a href="javascript:changep(${page.pageNo + 1})" class="dd_page_h">下一页</a></div>
+		 <div class="hy_dd_page"><span>共${page.totalNum }条记录</span>
+		 <a href="javascript:changep(${page.pageNo - 1 })" class="dd_page_h">上一页</a>
+		 <span>第${page.pageNo + 1}/${page.totalPage }页</span>
+		 <a href="javascript:changep(${page.pageNo + 1})" class="dd_page_h">下一页</a></div>
 	</c:otherwise>
   </c:choose>
 </c:if>

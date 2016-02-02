@@ -5,11 +5,11 @@ import javax.annotation.Resource;
 import org.springframework.stereotype.Service;
 
 import com.xinyue.manage.beans.PageData;
+import com.xinyue.manage.beans.RecommendCredit;
+import com.xinyue.manage.beans.RecommendMember;
 import com.xinyue.manage.util.CommonFunction;
 import com.xinyue.manage.util.GlobalConstant;
-import com.xinyue.server.bean.RecommendCredit;
 import com.xinyue.server.bean.RecommendInfo;
-import com.xinyue.server.bean.RecommendMember;
 import com.xinyue.server.dao.RecommendDao;
 import com.xinyue.server.model.Presenter;
 import com.xinyue.server.service.RecommendService;
@@ -19,6 +19,10 @@ import com.xinyue.server.service.RecommendService;
  * @author wenhai.you
  * @2015年7月24日
  * @下午1:14:42
+ */
+/**
+ * lzc 15-11-27 createCode()修改路径moko/images/code ->/code
+ *
  */
 @Service
 public class RecommendServiceImpl implements RecommendService {
@@ -57,7 +61,9 @@ public class RecommendServiceImpl implements RecommendService {
 	public String createCode(String url){
 		try {
 			String date = CommonFunction.createCode(url, CommonFunction.getValue("upload.path")+"code/");
-			return new StringBuffer(CommonFunction.getValue("down.path")).append("moko/images/code/").append(date).append("_qrCode.jpg").toString();
+			//modified by lzc 
+			return new StringBuffer(CommonFunction.getValue("down.path")).append("code/").append(date).append("_qrCode.jpg").toString();
+			//end
 		} catch (Exception e) {
 			// TODO: handle exception
 			return "";

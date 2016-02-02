@@ -10,7 +10,7 @@
 		<li class=""><a href="${ctx}/member/record/estate">抵押物信息</a></li>
 		<li class="hit"><a href="${ctx}/member/record/debt">负债信息</a></li>
 		<li class=""><a href="${ctx}/member/record/document">上传资料</a></li>
-		<li class=""><a href="${ctx}/member/record/rating">评级信息</a></li>
+<%-- 		<li class=""><a href="${ctx}/member/record/rating">评级信息</a></li> --%>
 	</ul>
 </div>
 <div class="tab">
@@ -20,18 +20,18 @@
 		</p>
 		<p>
 			<span>公司资产负债率(%)：</span>
-			<sf:input path="rate" class="t1"/>
+			<sf:input path="rate" class="t1 required number"/>
 		</p>
 		<p>
 			<span>抵押物情况：</span>
-			<sf:select path="collateral" class="t1">
+			<sf:select path="collateral" class="t1 required">
 				<sf:option value="">请选择</sf:option>
 				<sf:options items="${collateralTypeList}" itemValue="key" itemLabel="value"/>
 			</sf:select>
 		</p>
 		<p>
 			<span>第一还款来源年收入(万元)：</span>
-			<sf:input path="repayIncome" class="t1"/>
+			<sf:input path="repayIncome" class="t1 required number"/>
 		</p>
 		<p>
 			<span>是否有上下游企业：</span>
@@ -40,15 +40,15 @@
 		</p>
 		<p>
 			<span>企业净资产（万元）：</span>
-			<sf:input path="netAsset" class="t1"/>
+			<sf:input path="netAsset" class="t1 reuqired number"/>
 		</p>
 		<p>
 			<span>企业净资产流动比(%)：</span>
-			<sf:input path="floatRate" class="t1"/>
+			<sf:input path="floatRate" class="t1 required number"/>
 		</p>
 		<p>
 			<span>企业主（或实际控制人）资产（万元）：</span>
-			<sf:input path="factAsset" class="t1"/>
+			<sf:input path="factAsset" class="t1 required number"/>
 		</p>
 		<sf:hidden path="id"/>
 	</sf:form>
@@ -79,8 +79,10 @@ $(function () {
 });
 
 function saveDebt(type){
-	$("#debtForm").attr("action","${ctx}/member/debt/save?type="+type);
-	$("#debtForm").submit();
+	if($("#debtForm").valid()){
+		$("#debtForm").attr("action","${ctx}/member/debt/save?type="+type);
+		$("#debtForm").submit();
+	}
 }
 
 </script>

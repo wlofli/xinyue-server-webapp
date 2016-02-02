@@ -76,72 +76,7 @@
 			</div>
 			<div class="pro_xq_right">
 
-				<div class="wd_fl">
-					<div class="wd_bt">
-						<span>问答分类</span>
-					</div>
-					<s:form commandName="qbean" method="post" action="${ctx }/quest/show" id="quest_ask_form">
-						<s:hidden path="questype" id="quest_questype"/>
-					</s:form>
-					<div class="wd_lb">
-						<dl class="wd_fl1">
-							<dt>
-								<span>按贷款知识分类</span>
-							</dt>
-							<dd>
-								<a href="javascript:void(0)" onclick="show(this)">常用知识</a>
-							</dd>
-							<dd>
-								<a href="javascript:void(0)" onclick="show(this)">贷款流程</a>
-							</dd>
-							<dd>
-								<a href="javascript:void(0)" onclick="show(this)">资质咨询</a>
-							</dd>
-							<dd>
-								<a href="javascript:void(0)" onclick="show(this)">利息咨询</a>
-							</dd>
-							<div class="clear"></div>
-						</dl>
-						<dl class="wd_fl2">
-							<dt>
-								<span>按产品类型分类</span>
-							</dt>
-							<dd>
-								<a href="javascript:void(0)" onclick="show(this)">抵押贷款</a>
-							</dd>
-							<dd>
-								<a href="javascript:void(0)" onclick="show(this)">无抵押贷款</a>
-							</dd>
-							<dd>
-								<a href="javascript:void(0)" onclick="show(this)">按揭贷款</a>
-							</dd>
-							<div class="clear"></div>
-						</dl>
-						<dl class="wd_fl3">
-							<dt>
-								<span>按贷款类型分类</span>
-							</dt>
-							<dd>
-								<a href="javascript:void(0)" onclick="show(this)">消费贷款</a>
-							</dd>
-							<dd>
-								<a href="javascript:void(0)" onclick="show(this)">经营贷款</a>
-							</dd>
-							<dd>
-								<a href="javascript:void(0)" onclick="show(this)">买车贷款</a>
-							</dd>
-							<dd>
-								<a href="javascript:void(0)" onclick="show(this)">买房贷款</a>
-							</dd>
-							<div class="clear"></div>
-						</dl>
-					</div>
-
-				</div>
-
-				<div class="ad_mk1">
-					<a href="javascript:void(0)"> <img src="${ctx }/images1/ad1.jpg" /></a>
-				</div>
+				<jsp:include page="questcommon.jsp"></jsp:include>
 
 			</div>
 			<div class="clear"></div>
@@ -151,14 +86,6 @@
 	<!--中间部分-->
 	<%@ include file="../../common/foot_main.jsp"%>
 	<script type="text/javascript">
-		function show(){
-			if(arguments.length == 0){
-				$("#quest_ask_form").submit();
-			}else{
-				$("#quest_questype").val($(arguments[0]).html());
-				$("#quest_ask_form").submit();
-			}
-		}
 		
 		function changeSelect(val){
 			var selected = $("#ask_province option:selected").val();
@@ -236,6 +163,7 @@
 					success:function(data){
 						if(data == 'success'){
 							alert("提问成功");
+							window.location.href="${ctx}/quest/show";
 						}else{
 							alert("提问失败");
 						}

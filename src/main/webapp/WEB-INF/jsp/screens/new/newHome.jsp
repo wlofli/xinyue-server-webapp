@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<%@ taglib prefix="sf" uri="http://www.springframework.org/tags/form"%>
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -74,7 +75,7 @@ marginTop: 0
 	<div id="D1pic1" class="fPic">
 		<c:forEach items="${top }" var="list" >
 		<div class="fcon">
-			<a href="${ctx }/new/detail?id=${list.id}"><img src="${ctx }${showpath}${list.fileDir }${list.fileName }" /></a>
+			<a href="${ctx }/new/detail?id=${list.id}"><img src="${list.fileDir }${list.fileName }" /></a>
 			<span class="shadow"><a href="${ctx }/new/detail?id=${list.id}">${list.title }</a></span>
 		</div>
 		</c:forEach>
@@ -123,7 +124,8 @@ Qfast(false, 'widgets', function () {
 <ul class="menu1">
 	<c:forEach items="${firstnewlist }" var="list" >
 	<li>
-		<a href="${ctx }/new/detail?id=${list.id}" class="litpic1"><img src="${ctx }${showpath}${list.fileDir}${list.fileName}" width="115px" /></a>
+		<a href="${ctx }/new/detail?id=${list.id}" class="litpic1">
+		<img src="${list.fileDir}${list.fileName}" width="115px"  height="86.25px"/></a>
 		<div class="xq">
 		<a href="${ctx }/new/detail?id=${list.id}" class="bt">${list.title }</a>
 		<p>
@@ -139,10 +141,32 @@ Qfast(false, 'widgets', function () {
 <div class="sc_dk">
 <div class="sc_dk_bt"><span>我要贷款</span></div>
 <div class="sc_dk_nr">
-<p><span>产品类别：</span><select class="dk_s" ></select></p>
-<p><span>贷款金额：</span><select class="dk_s" ></select></p>
-<p><span>贷款期限：</span><select class="dk_s" ></select></p>
-<p style="margin-top:25px; margin-bottom:7px;"><input type="button" class="dk_sc"  value="搜索贷款"/></p>
+<sf:form action="${ctx }/product/show" commandName="psInfo" method="post" id="loanForm">
+<p><span>产品类别：</span>
+	<sf:select path="productType" cssClass="dk_s">
+		<sf:option value="">不限</sf:option>
+		<sf:options items="${productTypes}" itemValue="id" itemLabel="name"/>
+	</sf:select>
+</p>
+<p><span>贷款金额：</span>
+	<sf:select path="loanAmountIndex" cssClass="dk_s">
+		<sf:option value="0">不限</sf:option>
+		<sf:options items="${amounts}" itemValue="key" itemLabel="value"/>
+	</sf:select></p>
+<p><span>贷款期限：</span>
+	<sf:select path="loanPeriod" cssClass="dk_s">
+		<sf:option value="">不限</sf:option>
+		<sf:options items="${loanPeriods}" itemValue="key" itemLabel="value"/>
+	</sf:select>
+</p>
+<p style="margin-top:25px; margin-bottom:7px;">
+	<input type="button" class="dk_sc"  value="搜索贷款" onclick="find()"/></p>
+</sf:form>
+<script type="text/javascript">
+	function find(){
+		$("#loanForm").submit();
+	}
+</script>
 </div>
  
 </div>
@@ -171,24 +195,37 @@ function turnList(typeid){
 		   		alert("该新闻没没有内容");
 		   		return;
 		   	}else{
+		   		var len = jsonData.newlist.length;
 		   		var new_one = "<div class='zxxq_top'><ul class='zxxq_lit_ul'>";
-		   		for( i = 0; i <= 0; i++){
-					new_one += "<li class='h1_li'><a href='${ctx }/new/detail?id=" + jsonData.newlist[i].id + "'><img src='${ctx}/images1/cp_icon1.png' width='368' height='200' />";
+		   		for( i = 0; i <= 0, i < len; i++){
+					new_one += "<li class='h1_li'><a href='${ctx }/new/detail?id=" + jsonData.newlist[i].id +"'>";
+					//图片处理
+					if(jsonData.newlist[i].fileName != ''){
+						new_one += "<img src='"+ jsonData.newlist[i].fileDir + jsonData.newlist[i].fileName + "' width='368' height='200'";
+					}else{
+						new_one += "<img src='${ctx}/images1/cp_icon1.png' width='368' height='200' />";
+					}
 					new_one += "<span>" + jsonData.newlist[i].title + "</span></a></li>";
 		   		}
-		   		for( i = 1; i <= 2; i++){
+		   		for( i = 1; i <= 2, i < len; i++){
 		   			new_one += "<li class='h" + (i + 1) + "_li'><a href='${ctx }/new/detail?id=" + jsonData.newlist[i].id + "'>";
-		   			new_one += "<img src='${ctx}/images1/cp_icon1.png' width='178' /><span>" + jsonData.newlist[i].title + "</span></a></li>";
+		   			//图片处理
+					if(jsonData.newlist[i].fileName != ''){
+						new_one += "<img src='"+ jsonData.newlist[i].fileDir + jsonData.newlist[i].fileName + "' width='178'";
+					}else{
+						new_one += "<img src='${ctx}/images1/cp_icon1.png' width='178' />";
+					}
+		   			new_one += "<span>" + jsonData.newlist[i].title + "</span></a></li>";
 		   		}
 		   		new_one += "</ul><ul class='zxxq_wz_ul'>";
-		   		for( i = 3; i <= 8; i++){
+		   		for( i = 3; i <= 8, i < len; i++){
 		   			if(i == 3){
 		   				new_one += "<li class='wz_ul_h'><a href='${ctx }/new/detail?id=" + jsonData.newlist[i].id + "'>" + jsonData.newlist[i].title + "</a></li>";
 		   			}else{
 		   				new_one += "<li><a href='${ctx }/new/detail?id=" + jsonData.newlist[i].id + "'>" + jsonData.newlist[i].title + "</a></li>";
 		   			}
 		   		}
-		   		for( i = 9; i<= 13; i++){
+		   		for( i = 9; i<= 13, i < len; i++){
 		   			if(i == 9){
 		   				new_one += "<li class='wz_ul_h mar_top'><a href='${ctx }/new/detail?id=" + jsonData.newlist[i].id + "'>" + jsonData.newlist[i].title + "</a></li>";
 		   			}else{
@@ -197,22 +234,34 @@ function turnList(typeid){
 		   		}
 		   		new_one += "</ul><div class='clear'></div></div><div class='zxxq_bottom'><ul class='zxxq_bot_left'>";
 		   		new_one += "<li class='b_h_li'>";
-		   		for( i = 14; i<= 14; i++){
-		   			new_one += "<a class='b_h_li_lit' href='new_xq.html'><img src='${ctx}/images1/zx_img.jpg' width='80' height='70' /></a>";
-		   			new_one += "<div class='xq'><a href='${ctx }/new/detail?id=" + jsonData.newlist[i].id + "'>" + jsonData.newlist[i].title + "</a><span>" + jsonData.newlist[i].showTitle + "</span></div>";
+		   		for( i = 14; i<= 14, i < len; i++){
+		   			new_one += "<a class='b_h_li_lit' href='new_xq.html'>";
+		   			//图片处理
+					if(jsonData.newlist[i].fileName != ''){
+						new_one += "<img src='"+ jsonData.newlist[i].fileDir + jsonData.newlist[i].fileName + "' width='80' height='70'";
+					}else{
+						new_one += "<img src='${ctx}/images1/cp_icon1.png' width='80' height='70' />";
+					}
+		   			new_one += "</a><div class='xq'><a href='${ctx }/new/detail?id=" + jsonData.newlist[i].id + "'>" + jsonData.newlist[i].title + "</a><span>" + jsonData.newlist[i].showTitle + "</span></div>";
 		   		}
 		   		new_one += "</li>";
-		   		for( i = 15; i<= 20; i++){
+		   		for( i = 15; i<= 20, i < len; i++){
 		   			new_one += "<li><a href='${ctx }/new/detail?id=" + jsonData.newlist[i].id + "'>" + jsonData.newlist[i].title + "</a></li>";
 		   		}
 		   		new_one += "</ul>";
 		   		new_one += "<ul class='zxxq_bot_left'>";
-		   		for( i = 21; i<=21; i++){
-		   			new_one += "<li class='b_h_li'><a class='b_h_li_lit' href='new_xq.html'><img src='${ctx}/images1/zx_img.jpg' width='80' height='70' /></a>";
-		   			new_one += "<div class='xq'><a href='${ctx }/new/detail?id=" + jsonData.newlist[i].id + "'>" + jsonData.newlist[i].title + "</a><span>" + jsonData.newlist[i].showTitle + "</span></div>";
+		   		for( i = 21; i<=21, i < len; i++){
+		   			new_one += "<li class='b_h_li'><a class='b_h_li_lit' href='new_xq.html'>";
+		   			//图片处理
+					if(jsonData.newlist[i].fileName != ''){
+						new_one += "<img src='"+ jsonData.newlist[i].fileDir + jsonData.newlist[i].fileName + "' width='80' height='70'";
+					}else{
+						new_one += "<img src='${ctx}/images1/cp_icon1.png' width='80' height='70' />";
+					}
+		   			new_one += "</a><div class='xq'><a href='${ctx }/new/detail?id=" + jsonData.newlist[i].id + "'>" + jsonData.newlist[i].title + "</a><span>" + jsonData.newlist[i].showTitle + "</span></div>";
 		   			new_one += "</li>";
 		   		}
-		   		for( i = 22; i<= 27; i++){
+		   		for( i = 22; i<= 27, i < len; i++){
 		   			new_one += "<li><a href='${ctx }/new/detail?id=" + jsonData.newlist[i].id + "'>" + jsonData.newlist[i].title + "</a></li>";
 		   		}
 		   		new_one += "</ul><div class='clear'></div></div>";
@@ -249,13 +298,28 @@ function turnList(typeid){
 <ul class="zxxq_lit_ul">
 <c:forEach items="${secondnewlist }" varStatus="vs" var="list" begin="0" end="0" >
 <li class="h${vs.count }_li"><a href="${ctx }/new/detail?id=${list.id}">
-	<img src="${ctx}${showpath}${list.fileDir}${list.fileName}" width="368" height="200" />
+	<c:choose>
+		<c:when test="${empty list.fileName }">
+			<img src="${ctx}/images1/cp_icon1.png" width="368" height="200" />
+		</c:when>
+		<c:otherwise>
+			<img src="${list.fileDir}${list.fileName}" width="368" height="200" />
+		</c:otherwise>
+	</c:choose>
+	
 	<span>${list.title }</span>
 </a></li>
 </c:forEach>
 <c:forEach items="${secondnewlist }" varStatus="vs" var="list" begin="1" end="2" >
 <li class="h${vs.count + 1 }_li"><a href="${ctx }/new/detail?id=${list.id}">
-	<img src="${ctx}${showpath}${list.fileDir}${list.fileName}" width="178" />
+	<c:choose>
+		<c:when test="${empty list.fileName }">
+			<img src="${ctx}/images1/cp_icon1.png" width="178" />
+		</c:when>
+		<c:otherwise>
+			<img src="${list.fileDir}${list.fileName}" width="178" />
+		</c:otherwise>
+	</c:choose>
 	<span>${list.title }</span>
 </a></li>
 </c:forEach>
@@ -275,7 +339,14 @@ function turnList(typeid){
 <li class="b_h_li">
 <c:forEach  items="${secondnewlist }"  var="list" begin="14" end="14" varStatus="vs">
 <a class="b_h_li_lit" href="new_xq.html">
-<img src="${ctx}${showpath}${list.fileDir}${list.fileName}" width="80" height="70" />
+<c:choose>
+	<c:when test="${empty list.fileName }">
+		<img src="${ctx}/images1/cp_icon1.png" width="80" height="70" />
+	</c:when>
+	<c:otherwise>
+		<img src="${list.fileDir}${list.fileName}" width="80" height="70" />
+	</c:otherwise>
+</c:choose>
 </a>
 <div class="xq">
 <a href="${ctx }/new/detail?id=${list.id}">${list.title }</a>
@@ -291,7 +362,15 @@ function turnList(typeid){
 <c:forEach  items="${secondnewlist }"  var="list" begin="21" end="21" varStatus="vs">
 <li class="b_h_li">
 <a class="b_h_li_lit" href="new_xq.html">
-<img src="${ctx}${showpath}${list.fileDir}${list.fileName}" width="80" height="70" /></a>
+<c:choose>
+	<c:when test="${empty list.fileName }">
+		<img src="${ctx}/images1/cp_icon1.png" width="80" height="70" />
+	</c:when>
+	<c:otherwise>
+		<img src="${list.fileDir}${list.fileName}" width="80" height="70" />
+	</c:otherwise>
+</c:choose>
+</a>
 <div class="xq">
 <a href="${ctx }/new/detail?id=${list.id}">${list.title }</a>
 <span>${list.showTitle }</span>
@@ -311,7 +390,7 @@ function turnList(typeid){
 <div class="zx_bottom_right">
 <div class="ad_new1">
 <c:forEach items="${advertise2 }" var="list" begin="0" end="0">
-<a href="${list.url }"><img src="${ctx}${showpath}${list.thumbnail}" /></a>
+<a href="${list.url }"><img src="${showpath}${list.thumbnail}" width="390px" height="153px"/></a>
 </c:forEach>
 </div> 
 <div class="dkjsq" style="border:1px #aaa solid; margin-top:10px;">
@@ -364,7 +443,7 @@ function turnList(typeid){
 
 <div class="ad_new2">
 <c:forEach items="${advertise1 }" var="list" begin="0" end="0">
-<a href="${list.url }"><img src="${ctx}${showpath}${list.thumbnail}" height="300" /></a>
+<a href="${list.url }"><img src="${showpath}${list.thumbnail}" height="300" /></a>
 </c:forEach>
 </div> 
 </div>
@@ -372,7 +451,7 @@ function turnList(typeid){
 </div>
 </div>
 </div>
-<jsp:include page="../../common/foot_main.jsp" />
+<%@ include file="../../common/foot_main.jsp"%>
 <!--弹出框内容--> 
 
    <div id="tck">

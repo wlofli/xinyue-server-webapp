@@ -29,16 +29,20 @@ import com.xinyue.manage.model.Document;
 import com.xinyue.manage.model.Member;
 import com.xinyue.manage.model.Rating;
 import com.xinyue.manage.model.RealEstate;
+import com.xinyue.manage.service.CommonService;
 import com.xinyue.manage.service.CompanyInfoService;
 import com.xinyue.manage.service.SelectService;
 import com.xinyue.manage.util.GlobalConstant;
-import com.xinyue.server.service.CommonService;
 
-/**
+/** *  CommonService 2015-10-20 ywh 移走
  * 企业档案
  * @author MK)茅
  * @version v1.0
  * @date 创建时间：2015年7月21日
+ */
+/**
+ * 15-11-26 redirectParameter() lzc 
+ *
  */
 @Controller
 @RequestMapping("/member")
@@ -89,10 +93,16 @@ public class CompanyRecordController {
 		HashMap<String, String> companyDetail = companyInfoService.getDetailIdByMemberId(member.getId());
 		
 		Applicant applicant = new Applicant();
+		//modified by lzc
 		if (companyDetail != null && companyDetail.containsKey("applicant_id") && !companyDetail.get("applicant_id").equals("")) {
-			applicant = companyInfoService.getApplicantInfoById(companyDetail.get("applicant_id"));
+			applicant = companyInfoService.getApplicantInfoByIdUnvisual(companyDetail.get("applicant_id"));
 		}
-		model.addAttribute("applicationInfo", applicant);
+		
+		if(applicant != null ){
+			selectService.addAreaToModel(model, applicant.getGuaranteeProvince(), applicant.getGuaranteeCity(), applicant.getGuaranteeZone());
+		}
+		//end
+		model.addAttribute("applicantInfo", applicant);
 		model.addAttribute("recordType", "applicant");
 		
 		return "screens/member/member_record";
@@ -570,9 +580,13 @@ public class CompanyRecordController {
 		
 		// 公司治理信息
 		Control control = new Control();
-		if (companyBase != null && !companyBase.getControlInfo().equals("")) {
-			control = companyInfoService.editControlInfoById(companyBase.getControlInfo());
+		//modified by lzc companyBase.getControlInfo()->
+		if (companyDetail.containsKey("control_id") && !companyDetail.get("control_id").equals("")) {
+			System.out.println(companyDetail.get("control_id").toString());
+			control = companyInfoService.editControlInfoById(companyDetail.get("control_id"));
+			
 		}
+		//end
 		model.addAttribute("controlinfo", control);
 	}
 	
@@ -582,7 +596,10 @@ public class CompanyRecordController {
 			model.addAttribute("type", "p");
 			break;
 		case "s":
-			model.addAttribute("type", "p");
+			//modified by lzc 2015-11-26 p,改为n
+			model.addAttribute("type", "n");
+//			model.addAttribute("type", "p");
+			//end
 			break;
 		case "n":
 			model.addAttribute("type", "n");

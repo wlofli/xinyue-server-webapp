@@ -9,15 +9,19 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.xinyue.manage.beans.PageData;
+import com.xinyue.manage.service.CommonService;
 import com.xinyue.server.model.FileInfo;
 import com.xinyue.server.service.CommonMemberService;
-import com.xinyue.server.service.CommonService;
 
 /**
- * 
+ *  *  CommonService 2015-10-20 ywh 移走
  * @author wenhai.you
  * @2015年7月20日
  * @上午11:14:17
+ */
+/**
+ * 15-11-27 lzc show()修改
+ *
  */
 @Controller
 @RequestMapping("/member/docctr")
@@ -39,9 +43,9 @@ public class DocController {
 	
 	@RequestMapping("/show")
 	public String show(Model model , HttpServletRequest req){
-		PageData<FileInfo> finfo = mbiz.showDoc(req.getParameter("topage"));
+//		PageData<FileInfo> finfo = mbiz.showDoc(req.getParameter("topage"));
 	
-		model.addAttribute("finfo", finfo);
+//		model.addAttribute("finfo", finfo);
 		return "/screens/member/down";
 	}
 }

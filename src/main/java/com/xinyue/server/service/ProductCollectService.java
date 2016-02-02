@@ -6,6 +6,7 @@ import com.xinyue.manage.beans.PageData;
 import com.xinyue.manage.beans.SelectInfo;
 import com.xinyue.manage.model.Collect;
 import com.xinyue.manage.model.CreditManager;
+import com.xinyue.manage.model.CreditManagerInfo;
 import com.xinyue.manage.model.Product;
 import com.xinyue.manage.model.ProductFile;
 import com.xinyue.manage.model.ProductType;
@@ -27,7 +28,7 @@ public interface ProductCollectService {
 
 	public Collect showDetail(int id);
 	
-	public PageData<Product> findProductPageData(ProductSearch psearch);
+	
 	
 	public List<SelectInfo> getOrgs();
 	
@@ -35,7 +36,23 @@ public interface ProductCollectService {
 	
 	public List<ProductFile> findProductFileList(String pid);
 	public Product findProductById(String pid);
-	public List<CreditManager> findCreditByOrgid(String orgid);
 	
-	public final static String SHOW_PATH = CommonFunction.getValue("down.path");
+	
+	//2015-09-24
+	//显示图片
+	public final static String SHOW_PATH = CommonFunction.getValue("down.path")+"moko/images/";
+	
+	/**
+	 * ywh前台贷款产品模块
+	 * @param psearch
+	 * @return
+	 */
+	public PageData<Product> findProductPageData(ProductSearch psearch);
+	
+	/**
+	 * ywh 前台产品详情显示信贷经理
+	 * @param orgid
+	 * @return
+	 */
+	public List<CreditManagerInfo> findCreditByOrgid(String orgid);
 }

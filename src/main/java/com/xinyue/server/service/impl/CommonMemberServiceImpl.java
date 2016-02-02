@@ -8,6 +8,7 @@ import org.apache.log4j.Logger;
 import org.springframework.stereotype.Service;
 
 import com.xinyue.manage.beans.PageData;
+import com.xinyue.manage.dao.MemberDao;
 import com.xinyue.manage.model.Member;
 import com.xinyue.manage.util.GlobalConstant;
 import com.xinyue.manage.util.SecurityUtils;
@@ -49,12 +50,14 @@ public class CommonMemberServiceImpl implements CommonMemberService {
 		
 	}
 	
+	
+	//modified by lzc 添加md5小写比较
 	@Override
 	public boolean inspectPwd(String id , String password) {
 		// TODO Auto-generated method stub
 		try {
 			String pwd = mdao.inspectPwd(id);
-			if(SecurityUtils.makeMD5(password).equals(pwd)){
+			if(SecurityUtils.makeMD5(password).toLowerCase().equals(pwd.toLowerCase())){
 				return true;
 			}
 			return false;
@@ -104,5 +107,13 @@ public class CommonMemberServiceImpl implements CommonMemberService {
 		int currentPage = GlobalConstant.isNull(topage) || "0".equals(topage)?1:Integer.valueOf(topage);
 		int start = (currentPage - 1)*GlobalConstant.PAGE_SIZE;
 		return new PageData<FileInfo>(mdao.showDoc(start , GlobalConstant.PAGE_SIZE) ,mdao.getDoc() ,  currentPage);
+	}
+	
+	@Resource
+	private MemberDao amdao;
+	@Override
+	public Member getMemberByPhone(String contactPhone) {
+		// TODO Auto-generated method stub
+		return amdao.getMemberByPhone(contactPhone);
 	}
 }

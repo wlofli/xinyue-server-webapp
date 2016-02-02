@@ -13,22 +13,26 @@
 <%@include file="../../common/common.jsp" %>
 <script type="text/javascript">
 function save(n){
-// 	alert("in");
 	if(!checkOrder()){
 		return;
 	}
-	$.ajax({
-		url:"${ctx}/order/save/business",
-		data:$("#businessForm").serialize(),
-		type:'post',
-		success:function(data){
-			if(data == "success"){
-				alert("success");
-			}else{
-				alert("fail")
+	if($("#businessForm").valid()){
+		$.ajax({
+			url:"${ctx}/member/order/save/business",
+			data:$("#businessForm").serialize(),
+			type:'post',
+			success:function(data){
+				if(data == "success"){
+					alert("保存成功");
+					if(n == 1){
+						 window.location.href = "${ctx }/member/order/detail/debt?id=${order.id}";
+					 }
+				}else{
+					alert("保存失败")
+				}
 			}
-		}
-	});
+		});
+	}
 	
 }
 
@@ -42,7 +46,7 @@ function save(n){
 <div class="hy_right">
 <jsp:include page="detailHead.jsp" />
 <div class="tab">
-<sf:form action="${ctx }/order/detail/business" commandName="businessInfos" method="post" id="businessForm">
+<sf:form action="${ctx }/member/order/detail/business" commandName="businessInfos" method="post" id="businessForm">
 <input type="hidden" name="orderId" value="${order.id }">
 <c:forEach begin="0" end="2" varStatus="vs">
 <p class="qiye_bt"><strong>${businessInfos.years[vs.index]}</strong></p>

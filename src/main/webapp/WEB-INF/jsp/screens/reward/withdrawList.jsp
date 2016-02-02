@@ -17,7 +17,7 @@ function getList(){
 
 
 function changePage(n){
-	$("#searchForm").attr("action","${ctx }/reward/withdraw/list?index="+n);
+	$("#searchForm").attr("action","${ctx }/member/reward/withdraw/list?index="+n);
 	getList();
 }
 </script>
@@ -42,7 +42,7 @@ function changePage(n){
 <li class="hit"><a href="${ctx }/member/list?param=withdraw">提现记录</a></li>  
 </ul>
 </div>
-<sf:form action="${ctx }/reward/reward/list" commandName="search" method="post" id="searchForm">
+<sf:form action="${ctx }/member/reward/reward/list" commandName="search" method="post" id="searchForm">
 <div class="ssk"><span>开始日期：</span>
 <sf:input path="startTime" class="t1"  onclick="WdatePicker({dateFmt:'yyyy-MM-dd'})" />
 <span>结束日期：</span>

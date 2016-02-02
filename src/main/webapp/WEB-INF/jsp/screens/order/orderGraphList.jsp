@@ -15,8 +15,24 @@ function changeStatus(){
 	$("#searchForm").submit();
 }
 function changePage(n){
-	$("#searchForm").attr("action","${ctx }/order/graph?index=" + n);
+	$("#searchForm").attr("action","${ctx }/member/order/graph?index=" + n);
 	changeStatus();
+}
+
+function deleteOrder(id){
+	$.ajax({
+		url:"${ctx}/member/order/delete?list=" + id,
+		type:'post',
+		async:false,
+		success:function(data){
+			if(data == 'success'){
+				alert('取消成功');
+				changeStatus();
+			}else{
+				alert('取消失败');
+			}
+		}
+	});
 }
 </script>
 </head>
@@ -28,7 +44,7 @@ function changePage(n){
 <div class="hy_right">
 <div class="ddxq_top">
 <Ul class="sdlc_ul">
-<li class="bt"><img src="../images/sdlc_bt.png" /></li>
+<li class="bt"><img src="${ctx }/images/sdlc_bt.png" /></li>
 <li class="lc_num1"><i></i><p><strong>1</strong><span>填写信息<br />提交申请</span></p></li>
 <li class="lc_num2"><i></i><p><strong>2</strong><span>贷款顾问<br />辅导申请</span></p></li>
 <li class="lc_num3"><i></i><p><strong>3</strong><span>资料审核<br />确认放款</span></p></li>
@@ -41,7 +57,7 @@ function changePage(n){
 <li class="hit"><a href="${ctx }/member/list?param=graph">贷款订单图表</a></li>  
 </ul>
 </div>
-<sf:form action="${ctx }/order/graph?index=0" commandName="order" method="post" id="searchForm">
+<sf:form action="${ctx }/member/order/graph?index=0" commandName="order" method="post" id="searchForm">
 <div class="ssk"> 
 <span>订单提交时间：</span>
 
@@ -60,9 +76,12 @@ function changePage(n){
 
 <div class="hy_dd_nr">
 <c:forEach items="${list }" var="list" varStatus="vs">
-<div class="hy_dd_nr1"><span>订单号：<a href="#undone->不知道去哪里">${list.code }</a>&nbsp;&nbsp;&nbsp;&nbsp;订单提交日期：<strong><fmt:formatDate value="${list.createdTime }" pattern="yyyy-MM-dd h:m"/></strong></span> </div>
+<div class="hy_dd_nr1"><span>订单号：<a href="${ctx }/member/order/detail/applicant?id=${list.id}">${list.code }</a>
+&nbsp;&nbsp;&nbsp;&nbsp;订单提交日期：<strong>
+<fmt:formatDate value="${list.createdTime }" pattern="yyyy-MM-dd H:m"/>
+</strong></span> </div>
 <div class="hy_dd_nr2">
-<img src="../images/cp_tx.png" class="cp_tx" />
+<img src="${ctx }/images/cp_tx.png" class="cp_tx" />
 <div class="float_l_hy1">
 <span>产品名称：<strong>${list.productName }</strong></span>
 <span>所属机构：<strong>${list.bank }</strong></span>
@@ -72,13 +91,16 @@ function changePage(n){
 <p>
 <c:choose>
 	<c:when test="${list.status == '需求填写中' || list.status == '等待新越网审核' }">
-		<a class="float_y_hy_a" href="${ctx }/order/detail/document?id=${list.id}">附件补充</a>
-		<a class="float_y_hy_a" href="${ctx }/order/detail/applicant?id=${list.id}">完善资料</a>
-		<a class="float_y_hy_a" href="${ctx }/order/detail/applicant?id=${list.id}">查看详情</a>
+		<a class="float_y_hy_a" href="${ctx }/member/order/detail/document?id=${list.id}">附件补充</a>
+		<a class="float_y_hy_a" href="${ctx }/member/order/detail/applicant?id=${list.id}">完善资料</a>
+		<a class="float_y_hy_a" href="${ctx }/member/order/detail/applicant?id=${list.id}">查看详情</a>
 		<a class="float_y_hy_a" href="javascript:deleteOrder('${list.id }')">取消订单</a>
 	</c:when>
+	<c:when test="${list.status == '放款成功' }">
+		<a class="float_y_hy_a" href="${ctx }/member/order/detail?id=${list.id}">确认收款</a>
+	</c:when>
 	<c:otherwise>
-		<a class="float_y_hy_a" href="${ctx }/order/detail/applicant?id=${list.id}">查看详情</a>
+		<a class="float_y_hy_a" href="${ctx }/member/order/detail/applicant?id=${list.id}">查看详情</a>
 	</c:otherwise>
 </c:choose>
 </p>

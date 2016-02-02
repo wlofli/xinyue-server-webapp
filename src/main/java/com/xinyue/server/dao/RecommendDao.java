@@ -4,8 +4,8 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Param;
 
-import com.xinyue.server.bean.RecommendCredit;
-import com.xinyue.server.bean.RecommendMember;
+import com.xinyue.manage.beans.RecommendCredit;
+import com.xinyue.manage.beans.RecommendMember;
 import com.xinyue.server.model.Presenter;
 
 /**

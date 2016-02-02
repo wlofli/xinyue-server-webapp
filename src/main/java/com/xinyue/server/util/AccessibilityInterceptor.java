@@ -50,7 +50,8 @@ public class AccessibilityInterceptor extends HandlerInterceptorAdapter implemen
 		
 		if (member == null) {
 			log.log(Level.INFO, "用户未登陆或者登陆过期");
-			response.sendRedirect("/errors/redirect.html");
+			
+			response.sendRedirect(request.getContextPath() + "/redirect");
 			return false;
 		}
 		

@@ -5,7 +5,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>新越网</title>
+<title>新越网－最专业的O2O融资服务平台</title>
 <%@ include file="../common/common.jsp"%>
 <script type="text/javascript">
 $(function(){
@@ -14,6 +14,35 @@ $(function(){
 		alert(message);
 	}
 });
+
+$(function() {
+	var $this = $("#anli");
+	var scrollTimer;
+	$this.hover(function() {
+	clearInterval(scrollTimer);
+	}, function() {
+	scrollTimer = setInterval(function() {
+	scrollNews($this);
+	}, 2000);
+	}).trigger("mouseleave");
+	
+	function scrollNews(obj) {
+		var $self = obj.find("ul");
+		var lineHeight = $self.find("li:first").height();
+		$self.animate({
+		"marginTop": -lineHeight + "px"
+		}, 600, function() {
+			$self.css({
+			marginTop: 0
+			}).find("li:first").appendTo($self);
+		})
+	}
+	}) 
+	
+	function showquest(){
+	 $("#quest_form").submit();
+	}
+	
 </script>
 </head>
 <body class="h_bj">
@@ -25,66 +54,72 @@ $(function(){
 		<div class="bt">
 			<h1>推荐企业贷款产品</h1>
 			<span>共有<strong>${productCount}</strong>个产品
-			</span><a href="${ctx}/product/list">了解更多&gt;</a>
+			</span><a href="${ctx}/product/show">了解更多&gt;</a>
 			<div class="clear"></div>
 		</div>
 		<div class="nr">
 			<div class="cp_sx">
-				<ul>
+				<ul id="menu">
 					<li><span>产品类型：</span></li>
-					<li><a href="#">信用贷款</a></li>
-					<li><a href="#">抵押贷款</a></li>
-					<li><a href="#">担保贷款</a></li>
-					<li><a href="#">质押贷款</a></li>
-					<li><a href="#">票据贷款</a></li>
-					<li><a href="#">其他贷款</a></li>
+					<c:forEach items="${product.data }" var="list" varStatus="vs">
+						<li <c:if test="${vs.index ==0 }">class="hit"</c:if>><a href="javascript:tab_item(${vs.index })">${list.name }</a></li>
+					</c:forEach>
 				</ul>
 			</div>
-			<div class="cp_lb">
-				<ul>
-					<li><a href="pro_xq.html" class="img"><img
-							src="${ctx}/images1/cp_icon1.png" /></a>
-						<p>
-							产品名称：<a href="pro_xq.html">税贷通</a><br /> 贷款额度：20-300万元<br />
-							产品类别：信用类
-						</p>
-						<p class="txt_c">
-							<a href="pro_xq.html" class="cp_xq_btn">查看详情</a><a href="#"
-								class="cp_sq_btn">立即申请</a>
-						</p></li>
-					<li><a href="pro_xq.html" class="img"><img
-							src="${ctx}/images1/cp_icon1.png" /></a>
-						<p>
-							产品名称：<a href="pro_xq.html">税贷通</a><br /> 贷款额度：20-300万元<br />
-							产品类别：信用类
-						</p>
-						<p class="txt_c">
-							<a href="pro_xq.html" class="cp_xq_btn">查看详情</a><a href="#"
-								class="cp_sq_btn">立即申请</a>
-						</p></li>
-					<li><a href="pro_xq.html" class="img"><img
-							src="${ctx}/images1/cp_icon1.png" /></a>
-						<p>
-							产品名称：<a href="pro_xq.html">税贷通</a><br /> 贷款额度：20-300万元<br />
-							产品类别：信用类
-						</p>
-						<p class="txt_c">
-							<a href="pro_xq.html" class="cp_xq_btn">查看详情</a><a href="#"
-								class="cp_sq_btn">立即申请</a>
-						</p></li>
-					<li class="bj_none"><a href="pro_xq.html" class="img"><img
-							src="${ctx}/images1/cp_icon1.png" /></a>
-						<p>
-							产品名称：<a href="pro_xq.html">税贷通</a><br /> 贷款额度：20-300万元<br />
-							产品类别：信用类
-						</p>
-						<p class="txt_c">
-							<a href="pro_xq.html" class="cp_xq_btn">查看详情</a><a href="#"
-								class="cp_sq_btn">立即申请</a>
-						</p></li>
-				</ul>
+			<div class="cp_lb" >
+			
+			<c:forEach items="${product.data }" var="list" varStatus="vs">
+			<ul id="tab${vs.index }" <c:if test="${vs.index == 0 }">style="display:block;"</c:if> >
+					<c:forEach items="${list.products }" var="pro" varStatus="vs2">
+						<li>
+							<c:choose>
+								<c:when test="${!empty pro.logo }">
+									<a href="${proShowPath }${pro.logo}" class="img"><img src="${proShowPath }${pro.logo}" /></a>
+								</c:when>
+								<c:otherwise>
+									<a href="${ctx}/images1/cp_icon1.png" class="img"><img src="${ctx}/images1/cp_icon1.png" /></a>
+								</c:otherwise>
+							</c:choose>
+							
+							<p>产品名称：<a href="${ctx }/product/detail?proid=${pro.id}">${pro.name }</a><br /> 贷款额度：0-${pro.credit }万元<br />
+								产品类别：${pro.type.name }	</p>
+							<p class="txt_c">
+								<a href="${ctx }/product/detail?proid=${pro.id}" class="cp_xq_btn">查看详情</a>
+								<c:if test="${phone }" var="flag">
+									<a href="javascript:void(0)" onclick="zxtck('${pro.id }')" class="cp_sq_btn">立即申请</a>
+								</c:if>
+								<c:if test="${not flag }">
+									<a href="javascript:void(0)" onclick="qzxtck('${pro.id }')" class="cp_sq_btn">立即申请</a>
+								</c:if>
+							
+							</p>
+						</li>
+					</c:forEach>
+			</ul>
+			</c:forEach>
+			
 			</div>
 			<div class="clear"></div>
+<script type="text/javascript">
+function zxtck(){
+	if(confirm("确认要生成订单?")){
+		$.ajax({
+			url:'${ctx}/product/addOrder',
+			data:{'productId':arguments[0]},
+			type:'post',
+			success:function(data){
+				if(data != 'fail'){
+					alert("订单添加成功");
+					document.location.href = '${ctx}/member/order/detail/applicant?id='+data;
+				}else{
+					alert("添加失败");
+				}
+			}
+		});
+		
+	}
+}
+</script>
 		</div>
 	</div>
 
@@ -97,154 +132,142 @@ $(function(){
 		<div class="nr">
 			<ul>
 				<Li>
-					<div class="xdjl_left">
+					<c:forEach items="${creditList }" var="list" begin="0" end="1" varStatus="vs">
+						<div <c:choose>
+							<c:when test="${vs.count % 2 != 0 }">class="xdjl_left"</c:when>
+							<c:otherwise>class="xdjl_right"</c:otherwise>
+						</c:choose>>
 						<div class="img_left">
-							<img src="${ctx}/images1/xdjl_tx.png" /> <img
-								src="${ctx}/images/4kx.jpg" width="92px" />
+							<img src="${ctx}/images1/xdjl_tx.png" />
+							<img src="${ctx}/images/${list.starLevel}" width="92px" />
 						</div>
 						<div class="xdjl_xq">
 							<p class="xdjl_name">
-								<strong>申屠晶晶</strong><img src="${ctx}/images1/sm_tb.jpg" /><img
-									src="${ctx}/images1/jgrz_tb1.jpg" />
+								<strong>${list.personName }</strong>
+								<c:choose>
+									<c:when test="${list.realNameStatus == true }">
+										<img src="${ctx}/images1/sm_tb.jpg" />
+									</c:when>
+									<c:otherwise>
+										<img src="${ctx}/images1/sm_tb1.jpg" />
+										
+									</c:otherwise>
+								</c:choose>
+								<c:choose>
+									<c:when test="${list.organizationAuthStatus }">
+										<img src="${ctx}/images1/jgrz_tb1.jpg" />
+									</c:when>
+									<c:otherwise>
+										<img src="${ctx}/images1/jgrz_tb.jpg" />
+									</c:otherwise>
+								</c:choose>
 							</p>
 							<p class="xdjl_bz">
-								共有<strong>90</strong>人向该顾问咨询
-							</p>
-							<p class="xdjl_ssgs">所属公司：杭州XXX网络科技有限公司</p>
-							<p class="xdjl_scyw">服务地区：杭州大市</p>
-							<p class="xdjl_scyw">擅长业务：房产抵押、汽车抵押、信用贷款、设…</p>
+								共有<strong>${list.applyCount }</strong>人向该顾问咨询
+							</p> 
+							<p class="xdjl_ssgs">所属公司：${list.organization }</p>
+							<p class="xdjl_scyw">服务地区：${list.serverZone }</p>
+							<p class="xdjl_scyw">擅长业务：${list.goodBusiness }</p>
 							<p class="cz_btn">
-								<a href="javascript:zxtck()" class="xdjl_btn">向他咨询</a><a
-									href="jg_xq.html" class="xdjl_btn">进入机构</a>
+								<a href="javascript:zxtck('${list.creditManagerId }')" class="xdjl_btn">向他咨询</a>
+								<a href="${ctx }/org/detail?orgid=${list.organizationId}" class="xdjl_btn">进入机构</a>
 							</p>
 						</div>
 						<div class="clear"></div>
 					</div>
-					<div class="xdjl_right">
-
-						<div class="img_left">
-							<img src="${ctx}/images1/xdjl_tx.png" /> <img
-								src="${ctx}/images/4kx.jpg" width="92px" />
-						</div>
-						<div class="xdjl_xq">
-							<p class="xdjl_name">
-								<strong>申屠晶晶</strong><img src="${ctx}/images1/sm_tb.jpg" /><img
-									src="${ctx}/images1/jgrz_tb1.jpg" />
-							</p>
-							<p class="xdjl_bz">
-								共有<strong>90</strong>人向该顾问咨询
-							</p>
-							<p class="xdjl_ssgs">所属公司：杭州XXX网络科技有限公司</p>
-							<p class="xdjl_scyw">服务地区：杭州大市</p>
-							<p class="xdjl_scyw">擅长业务：房产抵押、汽车抵押、信用贷款、设…</p>
-							<p class="cz_btn">
-								<a href="javascript:zxtck()" class="xdjl_btn">向他咨询</a><a
-									href="jg_xq.html" class="xdjl_btn">进入机构</a>
-							</p>
-						</div>
-						<div class="clear"></div>
-					</div>
-					<div class="clear"></div>
+					</c:forEach>
 				</Li>
 				<Li>
-					<div class="xdjl_left">
+					<c:forEach items="${creditList }" var="list" begin="2" end="3" varStatus="vs">
+						<div <c:choose>
+							<c:when test="${vs.count % 2 != 0 }">class="xdjl_left"</c:when>
+							<c:otherwise>class="xdjl_right"</c:otherwise>
+						</c:choose>>
 						<div class="img_left">
-							<img src="${ctx}/images1/xdjl_tx.png" /> <img
-								src="${ctx}/images/4kx.jpg" width="92px" />
+							<img src="${ctx}/images1/xdjl_tx.png" />
+							<img src="${ctx}/images/${list.starLevel}" width="92px" />
 						</div>
 						<div class="xdjl_xq">
 							<p class="xdjl_name">
-								<strong>申屠晶晶</strong><img src="${ctx}/images1/sm_tb1.jpg" /><img
-									src="${ctx}/images1/jgrz_tb1.jpg" />
+								<strong>${list.personName }</strong>
+								<c:choose>
+									<c:when test="${list.realNameStatus == true }">
+										<img src="${ctx}/images1/sm_tb.jpg" />
+									</c:when>
+									<c:otherwise>
+										<img src="${ctx}/images1/sm_tb1.jpg" />
+										
+									</c:otherwise>
+								</c:choose>
+								<c:choose>
+									<c:when test="${list.organizationAuthStatus }">
+										<img src="${ctx}/images1/jgrz_tb1.jpg" />
+									</c:when>
+									<c:otherwise>
+										<img src="${ctx}/images1/jgrz_tb.jpg" />
+									</c:otherwise>
+								</c:choose>
 							</p>
 							<p class="xdjl_bz">
-								共有<strong>90</strong>人向该顾问咨询
-							</p>
-							<p class="xdjl_ssgs">所属公司：杭州XXX网络科技有限公司</p>
-							<p class="xdjl_scyw">服务地区：杭州大市</p>
-							<p class="xdjl_scyw">擅长业务：房产抵押、汽车抵押、信用贷款、设…</p>
+								共有<strong>${list.applyCount }</strong>人向该顾问咨询
+							</p> 
+							<p class="xdjl_ssgs">所属公司：${list.organization }</p>
+							<p class="xdjl_scyw">服务地区：${list.serverZone }</p>
+							<p class="xdjl_scyw">擅长业务：${list.goodBusiness }</p>
 							<p class="cz_btn">
-								<a href="javascript:zxtck()" class="xdjl_btn">向他咨询</a><a
-									href="jg_xq.html" class="xdjl_btn">进入机构</a>
+								<a href="javascript:zxtck('${list.creditManagerId }')" class="xdjl_btn">向他咨询</a>
+								<a href="${ctx }/org/detail?orgid=${list.organizationId}" class="xdjl_btn">进入机构</a>
 							</p>
 						</div>
 						<div class="clear"></div>
 					</div>
-					<div class="xdjl_right">
-
-						<div class="img_left">
-							<img src="${ctx}/images1/xdjl_tx.png" /> <img
-								src="${ctx}/images/4kx.jpg" width="92px" />
-						</div>
-						<div class="xdjl_xq">
-							<p class="xdjl_name">
-								<strong>申屠晶晶</strong><img src="${ctx}/images1/sm_tb.jpg" /><img
-									src="${ctx}/images1/jgrz_tb.jpg" />
-							</p>
-							<p class="xdjl_bz">
-								共有<strong>90</strong>人向该顾问咨询
-							</p>
-							<p class="xdjl_ssgs">所属公司：杭州XXX网络科技有限公司</p>
-							<p class="xdjl_scyw">服务地区：杭州大市</p>
-							<p class="xdjl_scyw">擅长业务：房产抵押、汽车抵押、信用贷款、设…</p>
-							<p class="cz_btn">
-								<a href="javascript:zxtck()" class="xdjl_btn">向他咨询</a><a
-									href="jg_xq.html" class="xdjl_btn">进入机构</a>
-							</p>
-						</div>
-						<div class="clear"></div>
-					</div>
-					<div class="clear"></div>
+					</c:forEach>
 				</Li>
 				<Li class="bor_none">
-					<div class="xdjl_left">
+					<c:forEach items="${creditList }" var="list" begin="4" end="5" varStatus="vs">
+						<div <c:choose>
+							<c:when test="${vs.count % 2 != 0 }">class="xdjl_left"</c:when>
+							<c:otherwise>class="xdjl_right"</c:otherwise>
+						</c:choose>>
 						<div class="img_left">
-							<img src="${ctx}/images1/xdjl_tx.png" /> <img
-								src="${ctx}/images/4kx.jpg" width="92px" />
+							<img src="${ctx}/images1/xdjl_tx.png" />
+							<img src="${ctx}/images/${list.starLevel}" width="92px" />
 						</div>
 						<div class="xdjl_xq">
 							<p class="xdjl_name">
-								<strong>申屠晶晶</strong><img src="${ctx}/images1/sm_tb.jpg" /><img
-									src="${ctx}/images1/jgrz_tb1.jpg" />
+								<strong>${list.personName }</strong>
+								<c:choose>
+									<c:when test="${list.realNameStatus == true }">
+										<img src="${ctx}/images1/sm_tb.jpg" />
+									</c:when>
+									<c:otherwise>
+										<img src="${ctx}/images1/sm_tb1.jpg" />
+										
+									</c:otherwise>
+								</c:choose>
+								<c:choose>
+									<c:when test="${list.organizationAuthStatus }">
+										<img src="${ctx}/images1/jgrz_tb1.jpg" />
+									</c:when>
+									<c:otherwise>
+										<img src="${ctx}/images1/jgrz_tb.jpg" />
+									</c:otherwise>
+								</c:choose>
 							</p>
 							<p class="xdjl_bz">
-								共有<strong>90</strong>人向该顾问咨询
-							</p>
-							<p class="xdjl_ssgs">所属公司：杭州XXX网络科技有限公司</p>
-							<p class="xdjl_scyw">服务地区：杭州大市</p>
-							<p class="xdjl_scyw">擅长业务：房产抵押、汽车抵押、信用贷款、设…</p>
+								共有<strong>${list.applyCount }</strong>人向该顾问咨询
+							</p> 
+							<p class="xdjl_ssgs">所属公司：${list.organization }</p>
+							<p class="xdjl_scyw">服务地区：${list.serverZone }</p>
+							<p class="xdjl_scyw">擅长业务：${list.goodBusiness }</p>
 							<p class="cz_btn">
-								<a href="javascript:zxtck()" class="xdjl_btn">向他咨询</a><a
-									href="jg_xq.html" class="xdjl_btn">进入机构</a>
+								<a href="javascript:zxtck('${list.creditManagerId }')" class="xdjl_btn">向他咨询</a>
+								<a href="${ctx }/org/detail?orgid=${list.organizationId}" class="xdjl_btn">进入机构</a>
 							</p>
 						</div>
 						<div class="clear"></div>
 					</div>
-					<div class="xdjl_right">
-
-						<div class="img_left">
-							<img src="${ctx}/images1/xdjl_tx.png" /> <img
-								src="${ctx}/images/4kx.jpg" width="92px" />
-						</div>
-						<div class="xdjl_xq">
-							<p class="xdjl_name">
-								<strong>申屠晶晶</strong><img src="${ctx}/images1/sm_tb.jpg" /><img
-									src="${ctx}/images1/jgrz_tb1.jpg" />
-							</p>
-							<p class="xdjl_bz">
-								共有<strong>90</strong>人向该顾问咨询
-							</p>
-							<p class="xdjl_ssgs">所属公司：杭州XXX网络科技有限公司</p>
-							<p class="xdjl_scyw">服务地区：杭州大市</p>
-							<p class="xdjl_scyw">擅长业务：房产抵押、汽车抵押、信用贷款、设…</p>
-							<p class="cz_btn">
-								<a href="javascript:zxtck()" class="xdjl_btn">向他咨询</a><a
-									href="jg_xq.html" class="xdjl_btn">进入机构</a>
-							</p>
-						</div>
-						<div class="clear"></div>
-					</div>
-					<div class="clear"></div>
+					</c:forEach>
 				</Li>
 			</ul>
 
@@ -264,8 +287,17 @@ $(function(){
 				</div>
 				<ul class="zx_nr">
 				<c:forEach items="${newlist }" begin="0" end="0" var="list">
-					<li class="h_zx"><a href="new_xq.html" class="litpic"><img
-							src="${ctx}/images1/zx_img.jpg" width="80px" height="60px" /></a>
+					<li class="h_zx"><a href="${list.fileDir}${list.fileName}" class="litpic">
+					<c:choose>
+						<c:when test="${empty list.fileName }">
+							<img src="${ctx}/images1/zx_img.jpg" width="80px" height="60px" />
+						</c:when>
+						<c:when test="${!empty list.fileName}">
+							<img src="${list.fileDir}${list.fileName}" width="80px" height="60px" />
+						</c:when>
+					</c:choose>
+					
+					</a>
 						<p class="zxnr">
 							<a href="${ctx }/new/detail?id=${list.id}" class="title">${list.title }</a><span>${list.showTitle }
 							<a href="${ctx }/new/detail?id=${list.id}" class="more">[详情]</a>
@@ -283,30 +315,9 @@ $(function(){
 				</div>
 				<div id="anli">
 					<ul class="zx_nr">
-						<li><span>杭州摩科商用设备有限公司</span><strong>￥5000000</strong></li>
-						<li><span>杭州xx网络科技有限公司</span><strong>￥5000000</strong></li>
-						<li><span>杭州xx科技有限公司</span><strong>￥500000</strong></li>
-						<li><span>杭州摩科商用设备有限公司</span><strong>￥5000000</strong></li>
-						<li><span>杭州xx网络科技有限公司</span><strong>￥5000000</strong></li>
-						<li><span>杭州xx科技有限公司</span><strong>￥500000</strong></li>
-						<li><span>杭州摩科商用设备有限公司</span><strong>￥5000000</strong></li>
-						<li><span>杭州xx网络科技有限公司</span><strong>￥5000000</strong></li>
-						<li><span>杭州xx科技有限公司</span><strong>￥500000</strong></li>
-						<li><span>杭州摩科商用设备有限公司</span><strong>￥5000000</strong></li>
-						<li><span>杭州xx网络科技有限公司</span><strong>￥5000000</strong></li>
-						<li><span>杭州xx科技有限公司</span><strong>￥500000</strong></li>
-						<li><span>杭州摩科商用设备有限公司</span><strong>￥5000000</strong></li>
-						<li><span>杭州xx网络科技有限公司</span><strong>￥5000000</strong></li>
-						<li><span>杭州xx科技有限公司</span><strong>￥500000</strong></li>
-						<li><span>杭州摩科商用设备有限公司</span><strong>￥5000000</strong></li>
-						<li><span>杭州xx网络科技有限公司</span><strong>￥5000000</strong></li>
-						<li><span>杭州xx科技有限公司</span><strong>￥500000</strong></li>
-						<li><span>杭州摩科商用设备有限公司</span><strong>￥5000000</strong></li>
-						<li><span>杭州xx网络科技有限公司</span><strong>￥5000000</strong></li>
-						<li><span>杭州xx科技有限公司</span><strong>￥500000</strong></li>
-						<li><span>杭州摩科商用设备有限公司</span><strong>￥5000000</strong></li>
-						<li><span>杭州xx网络科技有限公司</span><strong>￥5000000</strong></li>
-						<li><span>杭州xx科技有限公司</span><strong>￥500000</strong></li>
+					<c:forEach items="${successCase }" var="list" varStatus="vs">
+						<li><span>${list.applicantCompany }</span><strong>￥${list.loanAmount }</strong></li>
+					</c:forEach>
 					</ul>
 				</div>
 			</div>
@@ -334,65 +345,41 @@ $(function(){
 		<div class="gl_wd_nr">
 			<div class="zx_mk gl_mk">
 				<div class="zx_bt gl_bt">
-					<span>贷款攻略</span><a href="gonglve_list.html">更多&gt;</a>
+					<span>贷款攻略</span><a href="${ctx }/new/list">更多&gt;</a>
 				</div>
 				<div class="zx_nr">
 					<ul>
-						<li><a href="gonglve_xq.html">如何避免被贷款</a></li>
-						<li><a href="gonglve_xq.html">办理无抵押贷款的主要注意事项</a></li>
-						<li><a href="gonglve_xq.html">办理无抵押贷款&信用贷款的区…</a></li>
-						<li><a href="gonglve_xq.html">如何办理信用贷款，需提交哪些…</a></li>
-						<li><a href="gonglve_xq.html">办理信用贷款需提交哪些证明</a></li>
-						<li><a href="gonglve_xq.html">办理无抵押贷款&信用贷款</a></li>
-						<li><a href="gonglve_xq.html">如何办理房贷、车贷贷款</a></li>
-						<li><a href="gonglve_xq.html">无抵押贷款最高贷款额度解析</a></li>
-						<li><a href="gonglve_xq.html">如何办理信用贷款，需提交哪些…</a></li>
-						<li><a href="gonglve_xq.html">办理信用贷款需提交哪些证明</a></li>
-						<li><a href="gonglve_xq.html">办理无抵押贷款&信用贷款</a></li>
+						<c:forEach items="${loan }" var="list" varStatus="vs">
+							<li><a href="${ctx }/new/detail?id=${list.id}">${list.title }</a></li>
+						</c:forEach>
 					</ul>
 				</div>
 			</div>
 			<div class="wd_mk">
 				<div class="wd_bt">
-					<span>热门问答</span><a href="wenda_list.html">更多&gt;</a>
+					<span>热门问答</span><a href="javascript:void(0)" onclick="document.location.href='${ctx}/quest/show'">更多&gt;</a>
 				</div>
 				<div class="wd_nr">
 					<div class="wd_form">
-						<textarea class="txt_wd1"></textarea>
-						<input type="button" class="tw_btn" /><input type="button"
-							class="wtda_btn" />
+					<form  method="post" action="${ctx }/quest/show" id="quest_form">
+						<textarea name="title" class="txt_wd1"></textarea>					
+						<input type="button" class="tw_btn" onclick="showquest()" />
+						<input type="button"		class="wtda_btn" onclick="document.location.href='${ctx}/quest/ask'"/>
 						<div class="clear"></div>
+					</form>
 					</div>
 					<ul class="wd_nr">
-						<li>
+						<c:forEach items="${question }" var="list" varStatus="vs" begin="0" end="2"> 
+							<li>
 							<p class="wt_bt">
-								<i>问</i><a href="wenda_xq.html"
-									title="我们企业打算要申请贷款，想要通过担保公司申请贷款，这样安全吗？">[汽车抵押/质押]
-									我们企业打算要申请贷款，想要通过担保公司申请贷款，这样安全吗？</a>
+								<i>问</i><a href="javascript:void(0)" onclick="document.location.href='${ctx}/quest/detail?questid=${list.id }'"
+									title="我们企业打算要申请贷款，想要通过担保公司申请贷款，这样安全吗？">${list.title }</a>
 							</p>
 							<p class="wt_nr">
-								<i>答</i><span>担保公司的贷款利率比银行的利率要高，分为抵押贷款和信誉贷款。抵押贷款的利率一般全款房是月息…</span>
+								<i>答</i><span>${list.answerContent }</span>
 							</p>
-						</li>
-						<li>
-							<p class="wt_bt">
-								<i>问</i><a href="wenda_xq.html" title="你好，抵押汽车贷款可以押手续不押汽车吗？">[汽车抵押/质押]
-									你好，抵押汽车贷款可以押手续不押汽车吗？</a>
-							</p>
-							<p class="wt_nr">
-								<i>答</i><span>担保公司贷款的话，他们自主放款的话，利率会很高。假如您的资质好，可以通过担保公司找银行借…</span>
-							</p>
-						</li>
-						<li>
-							<p class="wt_bt">
-								<i>问</i><a href="wenda_xq.html"
-									title="买期房首付后就能办理住房公积金贷款吗？还是要等房屋结顶后办理按揭时才能申请贷款呢？需要什么材料？">[汽车抵押/质押]
-									买期房首付后就能办理住房公积金贷款吗？还是要等房屋结顶后办理按揭时才能申请贷…</a>
-							</p>
-							<p class="wt_nr">
-								<i>答</i><span>房屋结顶且与公积金中心签订了贷款协议后方能办理公积金贷款，请提供夫妻双方身份证、结婚证、户口…</span>
-							</p>
-						</li>
+							</li>
+						</c:forEach>
 					</ul>
 				</div>
 			</div>
@@ -403,7 +390,7 @@ $(function(){
 	<div class="container3">
 		<div class="bt">
 			<h1>推荐机构店铺</h1>
-			<a href="jg_list.html">更多&gt;</a>
+			<a href="javascript:void(0)" onclick="document.location.href='${ctx}/org/show'">更多&gt;</a>
 			<div class="clear"></div>
 		</div>
 		<div class="nr1" style="border: none;">
@@ -415,31 +402,17 @@ $(function(){
 					<div class="ScrCont">
 						<div id="List1_1">
 							<!-- piclist begin -->
-							<a class="pl" href="jg_xq.html"><img
-								src="${ctx}/images1/jg_icon.jpg" width="180" height="119" /><span>机构名称：<strong>中国招商银行</strong><br />贷款产品：12个<br />累计受理：12笔<br />成功放款：320万
-							</span></a> <a class="pl" href="jg_xq.html"><img
-								src="${ctx}/images1/jg_icon.jpg" width="180" height="119" /><span>机构名称：<strong>中国招商银行</strong><br />贷款产品：12个<br />累计受理：12笔<br />成功放款：320万
-							</span></a> <a class="pl" href="jg_xq.html"><img
-								src="${ctx}/images1/jg_icon.jpg" width="180" height="119" /><span>机构名称：<strong>中国招商银行</strong><br />贷款产品：12个<br />累计受理：12笔<br />成功放款：320万
-							</span></a> <a class="pl" href="jg_xq.html"><img
-								src="${ctx}/images1/jg_icon.jpg" width="180" height="119" /><span>机构名称：<strong>中国招商银行</strong><br />贷款产品：12个<br />累计受理：12笔<br />成功放款：320万
-							</span></a> <a class="pl" href="jg_xq.html"><img
-								src="${ctx}/images1/jg_icon.jpg" width="180" height="119" /><span>机构名称：<strong>中国招商银行</strong><br />贷款产品：12个<br />累计受理：12笔<br />成功放款：320万
-							</span></a> <a class="pl" href="jg_xq.html"><img
-								src="${ctx}/images1/jg_icon.jpg" width="180" height="119" /><span>机构名称：<strong>中国招商银行</strong><br />贷款产品：12个<br />累计受理：12笔<br />成功放款：320万
-							</span></a> <a class="pl" href="jg_xq.html"><img
-								src="${ctx}/images1/jg_icon.jpg" width="180" height="119" /><span>机构名称：<strong>中国招商银行</strong><br />贷款产品：12个<br />累计受理：12笔<br />成功放款：320万
-							</span></a> <a class="pl" href="jg_xq.html"><img
-								src="${ctx}/images1/jg_icon.jpg" width="180" height="119" /><span>机构名称：<strong>中国招商银行</strong><br />贷款产品：12个<br />累计受理：12笔<br />成功放款：320万
-							</span></a> <a class="pl" href="jg_xq.html"><img
-								src="${ctx}/images1/jg_icon.jpg" width="180" height="119" /><span>机构名称：<strong>中国招商银行</strong><br />贷款产品：12个<br />累计受理：12笔<br />成功放款：320万
-							</span></a> <a class="pl" href="jg_xq.html"><img
-								src="${ctx}/images1/jg_icon.jpg" width="180" height="119" /><span>机构名称：<strong>中国招商银行</strong><br />贷款产品：12个<br />累计受理：12笔<br />成功放款：320万
-							</span></a> <a class="pl" href="jg_xq.html"><img
-								src="${ctx}/images1/jg_icon.jpg" width="180" height="119" /><span>机构名称：<strong>中国招商银行</strong><br />贷款产品：12个<br />累计受理：12笔<br />成功放款：320万
-							</span></a> <a class="pl" href="jg_xq.html"><img
-								src="${ctx}/images1/jg_icon.jpg" width="180" height="119" /><span>机构名称：<strong>中国招商银行</strong><br />贷款产品：12个<br />累计受理：12笔<br />成功放款：320万
-							</span></a>
+							<c:forEach items="${orglist}" var="orgone">
+								<a class="pl" href="javascript;void(0)" onclick="document.location.href='${ctx}/org/detail?orgid=${orgone.id }'">
+									<c:if test="${!empty orgone.image }">
+										<img src="${showPath }org/${orgone.image}" width="180" height="119" />
+									</c:if>
+									<c:if test="${empty orgone.image }">
+										<img src="${ctx }/images1/jg_icon.jpg" width="180" height="119"/>
+									</c:if>
+									<span>机构名称：<strong>${orgone.orgName }</strong><br />贷款产品：${orgone.proCount }个<br />累计受理：${orgone.ordercount }笔<br />成功放款：${orgone.creditCount }万</span>
+								</a>
+							</c:forEach>
 							<!-- piclist end -->
 						</div>
 						<div id="List2_1"></div>
@@ -455,42 +428,25 @@ $(function(){
 		<div class="nr2">
 			<div class="bt">
 				<h1>合作机构</h1>
-				<a href="#">更多&gt;</a>
+				<a href="javascript:void(0)" onclick="document.location.href='${ctx}/org/show'">更多&gt;</a>
 				<div class="clear"></div>
 			</div>
 			<ul class="hzjg_lb">
-				<li><a href="#" title="招商证券"><img src="${ctx}/images1/hzjg.jpg"
-						alt="招商证券" /></a></li>
-				<li><a href="#" title="招商证券"><img src="${ctx}/images1/hzjg.jpg"
-						alt="招商证券" /></a></li>
-				<li><a href="#" title="招商证券"><img src="${ctx}/images1/hzjg.jpg"
-						alt="招商证券" /></a></li>
-				<li><a href="#" title="招商证券"><img src="${ctx}/images1/hzjg.jpg"
-						alt="招商证券" /></a></li>
-				<li><a href="#" title="招商证券"><img src="${ctx}/images1/hzjg.jpg"
-						alt="招商证券" /></a></li>
-				<li><a href="#" title="招商证券"><img src="${ctx}/images1/hzjg.jpg"
-						alt="招商证券" /></a></li>
-				<li><a href="#" title="招商证券"><img src="${ctx}/images1/hzjg.jpg"
-						alt="招商证券" /></a></li>
-				<li><a href="#" title="招商证券"><img src="${ctx}/images1/hzjg.jpg"
-						alt="招商证券" /></a></li>
-				<li><a href="#" title="招商证券"><img src="${ctx}/images1/hzjg.jpg"
-						alt="招商证券" /></a></li>
-				<li><a href="#" title="招商证券"><img src="${ctx}/images1/hzjg.jpg"
-						alt="招商证券" /></a></li>
-				<li><a href="#" title="招商证券"><img src="${ctx}/images1/hzjg.jpg"
-						alt="招商证券" /></a></li>
-				<li><a href="#" title="招商证券"><img src="${ctx}/images1/hzjg.jpg"
-						alt="招商证券" /></a></li>
-				<li><a href="#" title="招商证券"><img src="${ctx}/images1/hzjg.jpg"
-						alt="招商证券" /></a></li>
-				<li><a href="#" title="招商证券"><img src="${ctx}/images1/hzjg.jpg"
-						alt="招商证券" /></a></li>
+				<c:forEach items="${orglist}" var="orgtwo">
+					<li><a href="javascript:void(0)" onclick="document.location.href='${ctx}/org/detail?orgid=${orgtwo.id }'" title="招商证券">
+						<c:if test="${!empty orgtwo.image }">
+							<img src="${showPath }org/${orgtwo.image}" alt="招商证券" width="180" height="119"/>
+						</c:if>
+						<c:if test="${ empty orgtwo.image }">
+							<img src="${ctx }/images1/hzjg.jpg" alt="招商证券" width="180" height="119"/>
+						</c:if>
+						</a></li>
+				</c:forEach>
 			</ul>
 		</div>
 		<div class="clear"></div>
 	</div>
 	<%@ include file="../common/foot_main.jsp"%>
+	<jsp:include page="../common/order_fast_2.jsp"></jsp:include>
 </body>
 </html>

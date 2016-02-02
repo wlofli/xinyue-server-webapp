@@ -32,6 +32,10 @@ import com.xinyue.server.model.Page;
 /**
  * author lzc
  */
+/**
+ * @author lzc @date 2015年12月9日
+ *
+ */
 @Controller
 @RequestMapping("new")
 public class NewController {
@@ -77,7 +81,6 @@ public class NewController {
 	//前台新闻列表
 	@RequestMapping("list")
 	public String getList(Model model, @RequestParam(required=false)String typeId, @RequestParam(defaultValue="0")int index){
-//System.out.println(index);
 		SearchNew searchNew = new SearchNew();
 		searchNew.setNewType(typeId);
 		List<NewInfo> newstypeList = newService.getNewInfoListByTime(searchNew, index * GlobalConstant.PAGE_SIZE, 
@@ -112,7 +115,9 @@ public class NewController {
 		model.addAttribute("newtype",newTypeList);
 		
 		SearchNew searchNew = new SearchNew();
-		searchNew.setNewType(newTypeList.get(0).getKey());
+		if(newTypeList.size() > 0){
+			searchNew.setNewType(newTypeList.get(0).getKey());
+		}
 		//设置所在城市 
 		//undone ->需要获取ip所在城市再设置城市
 //		searchNew.setCity(city);
@@ -124,7 +129,9 @@ public class NewController {
 		model.addAttribute("newlist", newList);
 		
 		//第二个type
-		searchNew.setNewType(newTypeList.get(1).getKey());
+		if(newList.size() > 1){
+			searchNew.setNewType(newTypeList.get(1).getKey());
+		}
 		//第一个新闻列表
 		List<NewInfo> secondList = newService.getNewInfoListByTime(searchNew, 0, GlobalConstant.PAGE_SIZE_NEWLIST);
 		model.addAttribute("secondnewlist", secondList);
@@ -139,6 +146,24 @@ public class NewController {
 		//轮播图的四个新闻
 		List<NewInfo> topNewList = newService.getNewINfoTop(GlobalConstant.PAGE_SIZE_SHOW_PICTURE);
 		model.addAttribute("top", topNewList);
+		
+//		add by lzc 添加贷款产品搜索
+		//贷款产品
+		//搜索产品
+		List<ProductType> productTypes = productTypeService.findProductTypeList();
+		model.addAttribute("productTypes", productTypes);
+		ProductSearch ps = new ProductSearch();
+		model.addAttribute("psInfo", ps);
+		
+		//额度
+		List<SelectInfo> amounts = selectService.findSelectByType(GlobalConstant.LOAN_AMOUNT);
+		model.addAttribute("amounts", amounts);
+		
+		//贷款期限
+		List<SelectInfo> loanPeriods = selectService.findSelectByType(GlobalConstant.LOAN_PERIOD);
+		model.addAttribute("loanPeriods", loanPeriods);
+//		end
+		
 		
 		
 		return "screens/new/newHome";
@@ -158,7 +183,6 @@ public class NewController {
 		}else {
 			jsonObject.accumulate(GlobalConstant.RET_JSON_RESULT, GlobalConstant.RET_FAIL);
 		}
-//System.out.println(jsonObject.get(GlobalConstant.RET_JSON_RESULT));
 		return jsonObject.toString(); 
 	}
 	
@@ -168,11 +192,8 @@ public class NewController {
 	public String getNewDetail(Model model,String id,@ModelAttribute("newlist")List<NewInfo> newList ){
 		NewInfo newInfo = newService.getNewInfo(id);
 		model.addAttribute("news", newInfo);
-//System.out.println(newInfo.get());
 		SelectInfo before = newService.getRecentNew(newInfo.getNewType(), newInfo.getModifiedTime(), 0);
-//System.out.println(before.getValue());
 		SelectInfo after  = newService.getRecentNew(newInfo.getNewType(), newInfo.getModifiedTime(), 1);
-//System.out.println(after.getValue());
 		model.addAttribute("before", before);
 		model.addAttribute("after", after);
 		detailRight(model);

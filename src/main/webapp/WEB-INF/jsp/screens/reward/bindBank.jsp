@@ -30,7 +30,7 @@ function save(){
 
 <div class="tab">
 <div class="bdyhk1"></div>
-<form action="${ctx }/reward/bindbank" method="post" id="form">
+<form action="${ctx }/member/reward/bindbank" method="post" id="form">
 <p class="wdt_905"><span>银行卡号码：</span><input type="text" class="t1" /><span class="zs1">您已设置真实姓名为："刘**"，银行卡开户名必须与此一致才能顺利汇款<!--<a href="jbxx_hy.html" target="_blank" class="jbxx">查看详情</a>--></span></p>
 <p class="wdt_905"><span>绑定银行：</span><img src="../images/zfb1.png" /><span class="yts">如果银行不对，请检查卡号或更换银行卡</span> </p>
 <p class="wdt_905"><input type="button" value="确认绑定" onclick="save()"  class="b1" /></p>

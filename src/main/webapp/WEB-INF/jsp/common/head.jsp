@@ -7,15 +7,15 @@
 			<span>（工作日：9:00-17:30）</span>
 			<span>
 				<a href="#" class="fx_xl" onmouseover="show('xlfx')" onmouseout="hid('xlfx')"></a>
-				<img src="${ctx}/images/fx_xl.png" id="xlfx" style="z-index:999;"/>
+				<img src="${ctx}/images/weixin.jpg" id="xlfx" style="z-index:999;" width="100" height="90"/>
 			</span>
 			<span>
 				<a href="#" class="fx_wx" onmouseover="show('wxfx')" onmouseout="hid('wxfx')"></a>
-				<img src="${ctx}/images/fx_wx.png" id="wxfx" style="z-index:999;"/>
+				<img src="${ctx}/images/weibo.jpg" id="wxfx" style="z-index:999;" width="100" height="90"/>
 			</span>
 			<span>
-				<a href="#" class="fx_qq" onmouseover="show('qqfx')" onmouseout="hid('qqfx')"></a>
-				<img src="${ctx}/images/fx_qq.png" id="qqfx" style="z-index:999;"/>
+				<a href="http://wpa.qq.com/msgrd?v=3&uin=2740293039&site=qq&menu=yes" target="_blank" class="fx_qq" onmouseover="show('qqfx')" onmouseout="hid('qqfx')"></a>
+				<img src="http://wpa.qq.com/pa?p=2:2740293039:51" id="qqfx" style="z-index:999;"/>
 			</span>
 		</div>
 		<div class="h_b_right">
@@ -25,8 +25,8 @@
 						<li onmouseover="show('xdjl')" onmouseout="hid('xdjl')">
 							<a href="#" class="xl">信贷经理</a>
 							<ul id="xdjl" class="fnav">
-								<li><a href="${ctx}/html_xindai/zhuce.html">入驻平台</a></li>
-								<li><a href="${ctx}/html_xindai/login.html">登录平台</a></li>
+								<li><a href="/credit-manager-web/register/credit/page">入驻平台</a></li>
+								<li><a href="/credit-manager-web/login/credit/page">登录平台</a></li>
 							</ul>
 						</li>
 						<li onmouseover="show('pthy')" onmouseout="hid('pthy')">
@@ -41,8 +41,8 @@
 				</c:when>
 				<c:otherwise>
 					<ul class="dlz">
-						<li><span>您好，</span><a href="${ctx}/member/home">${sessionScope.session_member_info.loginName}</a><span>|</span></li>
-						<li><a href="dkdd_hy.html">我的贷款订单</a><span>|</span></li>
+						<li><span>您好，</span><a href="${ctx}/member/list?param=main">${sessionScope.session_member_info.loginName}</a><span>|</span></li>
+						<li><a href="${ctx }/member/order/list">我的贷款订单</a><span>|</span></li>
 						<li><a href="${ctx}/login/member">退出</a></li>
 					</ul>
 				</c:otherwise>
@@ -70,7 +70,7 @@
 							<div>
 								<span>热门城市</span><a href="${ctx}/city/list">更多></a>
 							</div>
-							<a href="${ctx}/city/select?cityName=encodeURIComponent('杭州')" target="_self">杭州</a>
+							<a href="javascript:void(0)" onclick="changeCity('杭州')" target="_self">杭州</a>
 						</div>
 					</li>
 					<li style="clear: both; width: 0; height: 0;"></li>
@@ -85,7 +85,7 @@
 				<li id="manager"><a href="${ctx}/manager">信贷经理</a></li>
 				<li id="new"><a href="${ctx }/new/homelist">新闻资讯</a></li>
 				<li id="help"><a href="${ctx}/help">帮助中心</a></li>
-				<li id="quest"><a href="javascript:void(0)" onclick="document.location.href='${ctx }/quest/show'">问答中心</a></li>
+				<li id="question"><a href="javascript:void(0)" onclick="document.location.href='${ctx }/quest/show'">问答中心</a></li>
 				<li class="clear"></li>
 			</ul>
 		</div>
@@ -101,4 +101,11 @@ $(function (){
 	
 	$("#"+indexType).addClass("hit");
 });
+	
+function changeCity(name){
+// 	alert(encodeURI(encodeURI(name)));
+	window.location.href = '${ctx}/city/select?cityName=' + encodeURI(encodeURI(name));
+}
+
+
 </script>

@@ -3,23 +3,27 @@ package com.xinyue.server.controller.member;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.xinyue.manage.beans.EmailBean;
+import com.xinyue.manage.beans.Recommend;
+import com.xinyue.manage.beans.RecommendCredit;
+import com.xinyue.manage.beans.RecommendMember;
 import com.xinyue.manage.model.Member;
+import com.xinyue.manage.service.CommonService;
+import com.xinyue.manage.service.MemberService;
 import com.xinyue.manage.util.GlobalConstant;
-import com.xinyue.server.bean.EmailBean;
-import com.xinyue.server.bean.RecommendCredit;
+import com.xinyue.manage.util.MailSender;
 import com.xinyue.server.bean.RecommendInfo;
-import com.xinyue.server.bean.RecommendMember;
-import com.xinyue.server.service.CommonService;
 import com.xinyue.server.service.RecommendService;
 
 /**
- * 
+ *  *  CommonService 2015-10-20 ywh 移走
  * @author wenhai.you
  * @2015年7月24日
  * @下午1:16:37
@@ -30,6 +34,9 @@ public class RecommendController {
 
 	@Resource
 	private RecommendService rbiz;
+	
+	@Autowired
+	private MemberService mbiz;
 	
 	@Resource
 	private CommonService cbiz;
@@ -42,6 +49,21 @@ public class RecommendController {
 		model.addAttribute("credit", rbiz.getRecommendCredit(code));
 		model.addAttribute("code", code);
 		return "screens/member/recommend";
+	}
+	
+	
+	
+	@RequestMapping("emailHtml")
+	@ResponseBody
+	public String emailHtml(RecommendMember member, HttpServletRequest request){
+		boolean re = new EmailBean().sendHtmlMail(member.getOrdinaryEmail(), "邀请注册", member.getOrdinaryLink(), request);
+		if(re){
+			
+			return GlobalConstant.RET_SUCCESS;
+		}else {
+			return GlobalConstant.RET_FAIL;
+		}
+		
 	}
 	
 
@@ -95,19 +117,19 @@ public class RecommendController {
 	}
 	
 	@RequestMapping("/findMember")
-	public String findMember(Model model , HttpServletRequest req , RecommendInfo reinfo){
+	public String findMember(Model model , HttpServletRequest req , Recommend reinfo){
 		Member member = (Member)req.getSession().getAttribute(GlobalConstant.SESSION_MEMBER_INFO);
-		reinfo.setMemberid("00022b625df943ab934299050c5d6f43");
-		model.addAttribute("pageMember", rbiz.findRecommendMember(reinfo));
+		reinfo.setMemberid(member.getId());
+		model.addAttribute("pageMember", mbiz.findRecommendMember(reinfo));
 		model.addAttribute("reinfo", reinfo);
 		return "screens/member/recmember";
 	}
 	
 	@RequestMapping("/findCredit")
-	public String findCredit(Model model , HttpServletRequest req , RecommendInfo reinfo){
+	public String findCredit(Model model , HttpServletRequest req , Recommend reinfo){
 		Member member = (Member)req.getSession().getAttribute(GlobalConstant.SESSION_MEMBER_INFO);
-		reinfo.setMemberid(member.getMemberid());
-		model.addAttribute("pageCredit", rbiz.findRecommendCredit(reinfo));
+		reinfo.setMemberid(member.getId());
+		model.addAttribute("pageCredit", mbiz.findRecommendCredit(reinfo));
 		model.addAttribute("reinfo", reinfo);
 		return "screens/member/reccredit";
 	}

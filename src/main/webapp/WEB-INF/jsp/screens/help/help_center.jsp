@@ -48,7 +48,14 @@
 					</div>
 				</div>
 				<div class="ad_mk1">
-					<a href="#"><img src="${ctx}/images1/ad1.jpg" /></a>
+					<c:choose>
+						<c:when test="${empty advert.thumbnail }">
+							<a href="#"><img src="${ctx}/images1/ad1.jpg" /></a>
+						</c:when>
+						<c:otherwise>
+							<a href="${advert.url}"><img src="${showPath}${advert.directory}${advert.thumbnail}" height="422" width="400"/></a>
+						</c:otherwise>
+					</c:choose>
 				</div>
 			</div>
 			<div class="clear"></div>

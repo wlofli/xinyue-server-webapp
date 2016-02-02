@@ -19,12 +19,12 @@
 			<div class="hy_right">
 				<div class="hy_right_bt">
 					<ul class="menu1" id="menu">
-						<li class=""><a href="javascript:void(0)" onclick="${ctx }/member/list?param=member">普通会员推荐</a></li>
-						<li class="hit"><a href="javascript:void(0)" onclick="${ctx }/member/list?param=credit">信贷经理推荐</a></li>
+						<li class=""><a href="javascript:void(0)" onclick="document.location.href='${ctx }/member/list?param=member'">普通会员推荐</a></li>
+						<li class="hit"><a href="javascript:void(0)" onclick="document.location.href='${ctx }/member/list?param=credit'">信贷经理推荐</a></li>
 					</ul>
 				</div>
 				<s:form commandName="reinfo" method="post" action="${ctx }/member/recommendctr/findCredit" id="credit_recommmend_form">
-					<s:hidden path="topage" id="credit_recommmend_topage"/>
+					<s:hidden path="credittopage" id="credit_recommmend_topage"/>
 					<s:hidden path="memberid"/>
 					<div class="tab">
 						<table class="sczl_table">
@@ -35,27 +35,32 @@
 									<td colspan="2">推荐会员手机号</td>
 									<td colspan="2">推荐会员类型</td>
 									<td colspan="2">
-										<s:select path="rank" class="s3" onchange="show()">
+										<s:select path="rank" class="s3" onchange="changePage(0 , 0)">
 											<s:option value="0">注册时间</s:option>
 											<s:option value="1">降序排列</s:option>
 											<s:option value="2">升序排列</s:option>
 										</s:select>
 									</td>
+									<%--
 									<td colspan="1">收益积分</td>
 									<td colspan="2">收益金额(元)</td>
+									 --%>
 								</tr>
 							</thead>
 							<tbody class="h_z">
-								<c:forEach items="${pageCredit.data }" varStatus="vs" var="credit"></c:forEach>
-								<tr>
-									<td colspan="1"><c:out value="${vs.count + (pageCredit.currentPage-1)*pageMember.pageSize}" /></td>
-									<td colspan="2">${credit.presenteeName }</td>
-									<td colspan="2">${credit.presenteeTel }</td>
-									<td colspan="2">${credit.memberType }</td>
-									<td colspan="2">${credit.presenteeRegTime }</td>
-									<td colspan="1">${credit.presenterScore }</td>
-									<td colspan="2">${credit.presenterMoney }</td>
-								</tr>
+								<c:forEach items="${pageCredit.data }" varStatus="vs" var="credit">
+									<tr>
+										<td colspan="1"><c:out value="${vs.count + (pageCredit.currentPage-1)*pageCredit.pageSize}" /></td>
+										<td colspan="2">${credit.name }</td>
+										<td colspan="2">${credit.telPhone }</td>
+										<td colspan="2">信贷经理</td>
+										<td colspan="2">${credit.registerTime }</td>
+										<%--
+										<td colspan="1">${credit.presenterScore }</td>
+										<td colspan="2">${credit.presenterMoney }</td>
+										 --%>
+									</tr>
+								</c:forEach>
 							</tbody>
 	
 						</table>
@@ -69,12 +74,9 @@
 <script type="text/javascript">
 	function changePage(url , topage){
 		$("#credit_recommmend_topage").val(topage);
-		show();
-	}
-	
-	function show(){
 		$("#credit_recommmend_form").submit();
 	}
+	
 </script>
 </body>
 </html>

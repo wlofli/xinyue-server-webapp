@@ -3,7 +3,7 @@ package com.xinyue.server.bean;
 public class ProductSearch {
 
 	private String productType; //ywh 产品类型id
-	private String loanAmount; //ywh  贷款金额
+	private String loanAmount; //
 	private String loanPeriod; // ywh  贷款期限
 	private String province;
 	private String city;
@@ -12,19 +12,27 @@ public class ProductSearch {
 	private String productName;
 	
 	
-	//youwh
+	//youwh start
 	private int productTypeIndex;
-	private int loanAmountIndex;
+	private int loanAmountIndex;//前台 贷款额度 搜寻
 	private String topage;
 	private String zoneid;
 	private String cityid;
-	//youwh
+	private String recommend;//首页推荐使用 用来排序
+	
+	//youwh over
 	
 	/**
 	 * @return the productType
 	 */
 	public String getProductType() {
 		return productType;
+	}
+	public String getRecommend() {
+		return recommend;
+	}
+	public void setRecommend(String recommend) {
+		this.recommend = recommend;
 	}
 	public String getZoneid() {
 		return zoneid;
@@ -146,4 +154,15 @@ public class ProductSearch {
 	public void setProductName(String productName) {
 		this.productName = productName;
 	}
+	@Override
+	public String toString() {
+		return "ProductSearch [productType=" + productType + ", loanAmount="
+				+ loanAmount + ", loanPeriod=" + loanPeriod + ", province="
+				+ province + ", city=" + city + ", zone=" + zone + ", bank="
+				+ bank + ", productName=" + productName + ", productTypeIndex="
+				+ productTypeIndex + ", loanAmountIndex=" + loanAmountIndex
+				+ ", topage=" + topage + ", zoneid=" + zoneid + ", cityid="
+				+ cityid + ", recommend=" + recommend + "]";
+	}
+	
 }

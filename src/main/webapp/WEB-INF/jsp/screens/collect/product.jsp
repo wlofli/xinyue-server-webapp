@@ -19,8 +19,8 @@
 			<div class="hy_right">
 				<div class="hy_right_bt">
 					<ul class="menu1">
-						<li class="hit"><a href="javascript:void(0)" onclick="document.location.href='${ctx }/member/list?param=product'">产品收藏</a></li>
-						<li class=""><a href="javascript:void(0)" onclick="document.location.href='${ctx }/member/list?param=org'">机构收藏</a></li>
+						<li class="hit"><a href="javascript:void(0)" onclick="document.location.href='${ctx }/member/list?param=products'">产品收藏</a></li>
+						<li class=""><a href="javascript:void(0)" onclick="document.location.href='${ctx }/member/list?param=orgs'">机构收藏</a></li>
 					</ul>
 				</div>
 				<div class="tab">

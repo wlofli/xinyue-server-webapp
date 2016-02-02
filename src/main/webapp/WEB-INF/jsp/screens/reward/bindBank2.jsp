@@ -28,7 +28,7 @@ function save(){
 
 <div class="tab">
 <div class="bdyhk2"></div>
-<form action="${ctx }/reward/bindbank2" method="post" id="form">
+<form action="${ctx }/member/reward/bindbank2" method="post" id="form">
 <p class="wdt_905"><span>已绑定手机：</span><span class="ytxx_hy">188***6965</span></p>
 <p class="wdt_905"><span>验证码：</span><input type="text" name="auth" class="t2" />
 <input type="button" class="b2" value="获取验证码" /> <a href="#" class="jbxx">收不到短信/语音验证码?</a> </p>

@@ -27,7 +27,7 @@
 <div class="tab">
 <div class="bdyhk3"></div>
 <p class="t_a_c">您已经成功绑定了<strong>中信银行卡号：622****3232</strong></p>
-<p class="t_a_c"><a href="index_hy.html"  class="b_sy">返回首页</a></p>
+<p class="t_a_c"><a href="${ctx }/member/list?param=main"  class="b_sy">返回首页</a></p>
 </div>
 
 </div>

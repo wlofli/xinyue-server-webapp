@@ -67,7 +67,7 @@ public class LoginController {
 			
 			request.getSession().setAttribute(GlobalConstant.SESSION_MEMBER_INFO, member);
 			
-			return "screens/member/member_index";
+			return "forward:/member/home/index";
 			
 		}else {
 			model.addAttribute("message", "用户名或者密码不正确！");
@@ -87,14 +87,14 @@ public class LoginController {
 	 */
 	@RequestMapping(value="/login/check/code",method=RequestMethod.POST)
 	public @ResponseBody boolean checkCode(String checkCode,HttpServletRequest request) {
-return true;		
-//		String sessionCode = request.getSession().getAttribute("randcode").toString();
-//		
-//		if (checkCode.toLowerCase().equals(sessionCode.toLowerCase())) {
-//			return true;
-//		}else {
-//			return false;
-//		}
+		
+		String sessionCode = request.getSession().getAttribute("randcode").toString();
+		
+		if (checkCode.toLowerCase().equals(sessionCode.toLowerCase())) {
+			return true;
+		}else {
+			return false;
+		}
 		
 	}
 	

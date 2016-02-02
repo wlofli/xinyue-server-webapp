@@ -9,6 +9,26 @@
 <link rel="icon" href="../images/moke.ico" />
 <%@include file="../../common/common.jsp" %>
 </head>
+<script type="text/javascript">
+function chkOrder(n){
+	$.ajax({
+		   url:"${ctx}/member/order/save?orderId=" + n,
+		   type:"post",
+		   async:true,
+		   success:function(data){
+		   var json = eval('('+data+')');
+		    if(json.result == "success"){
+		    	alert("提交成功");
+		    	window.location.href = "${ctx}/member/order/list"
+		    }else{
+					alert(json.message);			   
+			}
+		   }
+	});
+}
+
+</script>
+
 <body class="h_bj">
 <div class="container">
 <%@include file="../../common/head.jsp" %>
@@ -30,18 +50,25 @@
 <tbody>
 <c:forEach items="${documents}" var="document" varStatus="vs">
 			<tr>
-				<td colspan="1">${(vs.index+1)+((pageData.currentPage-1)*10)}</td>
+				<td colspan="1">
+				<c:choose>
+					<c:when test="${pagaData.currentPage == 0 }">${vs.count }</c:when>
+					<c:otherwise>${(vs.index+1)+((pageData.currentPage-1)*10)}</c:otherwise>
+				</c:choose>
+				</td>
 				<td colspan="4">
 					${document.documentName}
 					<input type="hidden" value="${document.documentType}" id="hid_type_${vs.index+1}"/>
 				</td>
 				<td colspan="3" >
-						<div style="display:<c:if test="${empty document.documentId}">block</c:if><c:if test="${!empty document.documentId}">none</c:if>; width:100%; height:100%" id="div1_doc_${vs.index+1}">
+						<div style="display:<c:if test="${empty document.documentId}">block</c:if>
+							<c:if test="${!empty document.documentId}">none</c:if>; width:100%; height:100%" id="div1_doc_${vs.index+1}">
 							<a href="#" class="zlsc_btn">选择文件</a>
 							<input type="file" class="hidden" id="file_${vs.index+1}" name="document${vs.index+1}"/>
 							<a href="javascript:void(0);" class="zlsc1_btn" onclick="upLoadFile(${vs.index+1})">上传文件</a>
 						</div>
-					<div style="display:<c:if test="${empty document.documentId}">none</c:if><c:if test="${!empty document.documentId}">block</c:if>; width:100%; height:100%" id="div2_doc_${vs.index+1}">
+					<div style="display:<c:if test="${empty document.documentId}">none</c:if>
+						<c:if test="${!empty document.documentId}">block</c:if>; width:100%; height:100%" id="div2_doc_${vs.index+1}">
 						<span class="zlysc">已上传</span>
 						<a href="#" class="zlsc1_btn" onclick="reUpLoad(${vs.index+1})">重新上传</a>
 					</div>
@@ -53,7 +80,7 @@
 </c:forEach>
 </tbody>
 </table>
-<p:page url="${ctx}/order/detail/document/changepage" pageData="${pageData}" />
+<p:page url="${ctx}/member/order/detail/document/changepage" pageData="${pageData}" />
 <script type="text/javascript" src="${ctx}/js/ajaxfileupload.js"></script>
 <script type="text/javascript">
 
@@ -76,26 +103,24 @@ function upLoadFile(index){
 	if (fileVal != "") {
 		type = fileVal.split(".");
 	}
-// alert("orderId");
 	$.ajaxFileUpload({
-		url:'${ctx}/order/save/file/add?suffix='+type[1]+'&typeId='+typeId+'&fileId='+fileId+'&orderId='+orderId,
+		url:'${ctx}/member/order/save/file/add?suffix='+type[1]+'&typeId='+typeId+'&fileId='+fileId+'&orderId='+orderId,
 		secureuri:false,
+		dataType:'text',
 		fileElementId:'file_'+index,
-		dataType:'json',
 		success:function(data){
-			alert(data);
 			if (data != "fail") {
 				alert("上传成功!");
 				$("#hid_file_"+index).val(data);
-// 				doUpload(index);
+				doUpload(index);
 			}else {
 				alert("上传失败!");
 			}
 		}
 	});
 
-}
 
+}
 function doUpload(index){
 	$("#div2_doc_"+index).css("display","block");
 	$("#div1_doc_"+index).css("display","none");
@@ -106,7 +131,11 @@ $("#div2_doc_"+index).css("display","none");
 $("#div1_doc_"+index).css("display","block");
 }
 </script>
-<p><input type="button" value="上一步" class="b1" /><input type="button" value="提交" class="b4" /></p>
+<p><input type="button" value="上一步" class="b1" />
+<c:if test="${order.status == '需求填写中' }">
+<input type="button" value="提交" onclick="chkOrder('${order.id}')" class="b4" />
+</c:if>
+</p>
 </div>
 </div>
 </div>

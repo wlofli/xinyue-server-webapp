@@ -14,14 +14,12 @@ import javax.servlet.http.HttpSession;
 
 import net.sf.json.JSONObject;
 
-import org.apache.log4j.Logger;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -38,12 +36,11 @@ import com.xinyue.manage.model.CompanyBase;
 import com.xinyue.manage.model.Control;
 import com.xinyue.manage.model.Debt;
 import com.xinyue.manage.model.Document;
-import com.xinyue.manage.model.FastProductApplicant;
-import com.xinyue.manage.model.FastProductCompany;
 import com.xinyue.manage.model.Member;
 import com.xinyue.manage.model.Order;
 import com.xinyue.manage.model.Product;
 import com.xinyue.manage.model.RealEstate;
+import com.xinyue.manage.service.CommonService;
 import com.xinyue.manage.service.CompanyInfoService;
 import com.xinyue.manage.service.MemberService;
 import com.xinyue.manage.service.OrderService;
@@ -52,14 +49,13 @@ import com.xinyue.manage.service.SelectService;
 import com.xinyue.manage.util.GlobalConstant;
 import com.xinyue.manage.util.SericalNumber;
 import com.xinyue.server.model.Page;
-import com.xinyue.server.service.CommonService;
 
-/**
+/** *  CommonService 2015-10-20 ywh 移走
  * author lzc
  * 2015年7月16日下午2:37:33
  */
 @Controller
-@RequestMapping("/order")
+@RequestMapping("/member/order")
 public class OrderController {
 	@Resource 
 	private OrderService orderService;
@@ -79,9 +75,6 @@ public class OrderController {
 	@Resource
 	private SelectService selectService;
 	
-	//add by mzj start
-	private Logger log = Logger.getLogger(OrderController.class);
-	//add by mzj end
 	
 	@InitBinder("debt")
 	public void DebtBind(WebDataBinder binder){
@@ -111,9 +104,7 @@ public class OrderController {
 	
 
 	@RequestMapping("list")
-	public String getList(Model	model , int index, @ModelAttribute("order")SearchOrder searchOrder,HttpSession session){
-//System.out.println("list");
-//System.out.println(index);
+	public String getList(Model	model ,@RequestParam(defaultValue="0") int index, @ModelAttribute("order")SearchOrder searchOrder,HttpSession session){
 		Member member = (Member)session.getAttribute(GlobalConstant.SESSION_MEMBER_INFO);
 		
 		List<Order> orderList = orderService.getListByMemberId(member.getId(), searchOrder, GlobalConstant.PAGE_SIZE , index);
@@ -134,8 +125,6 @@ public class OrderController {
 	
 	@RequestMapping("graph")
 	public String getGraphList(Model model , int index, @ModelAttribute("order")SearchOrder searchOrder,HttpSession session){
-System.out.println("graph");
-//System.out.println(index);
 		Member member = (Member)session.getAttribute(GlobalConstant.SESSION_MEMBER_INFO);
 		List<Order> orderList = orderService.getListByMemberId(member.getId(), searchOrder, GlobalConstant.PAGE_SIZE , index);
 		model.addAttribute("search", orderService.getStatus(GlobalConstant.ORDER_INIT));
@@ -163,8 +152,6 @@ System.out.println("graph");
 		}else {
 			jsonObject.accumulate("result", GlobalConstant.RET_FAIL);
 		}
-System.out.println("getorder");
-System.out.println(jsonObject.get("order"));
 		return jsonObject.toString();
 	}
 	
@@ -212,15 +199,12 @@ System.out.println(jsonObject.get("order"));
 	
 	@RequestMapping("detail/applicant")
 	public String getApplicant(Model model, String id,
-			//undone ->status
-			@RequestParam(required=false)String status, 
 			HttpServletRequest request){
 		Order order  = orderService.getOrderInfo(id);
 		Member member = (Member) request.getSession().getAttribute(GlobalConstant.SESSION_MEMBER_INFO);
 		model.addAttribute("order", order);
 		//第一页申请人信息
 		Applicant applicant = new Applicant();
-System.out.println("applicantsave  = " + order.getApplicantSave());
 		// 可接受最高利率下拉表内容
 		List<SelectInfo> maxRateList = selectService
 				.findSelectByType(GlobalConstant.COMPANY_MAX_RATE_TYPE);
@@ -253,11 +237,15 @@ System.out.println("applicantsave  = " + order.getApplicantSave());
 			HashMap<String, String> companyDetail = 
 					companyInfoService.getDetailIdByMemberId(member.getId());
 			if (companyDetail != null && companyDetail.containsKey("applicant_id") && !companyDetail.get("applicant_id").equals("")) {
-				applicant = companyInfoService.getApplicantInfoById(companyDetail.get("applicant_id"));
+				applicant = companyInfoService.getApplicantInfoByIdUnvisual(companyDetail.get("applicant_id"));
 			}
 		}else {
-			applicant = companyInfoService.getApplicantInfoById(order.getApplicantInfo());
+			applicant = companyInfoService.getApplicantInfoByIdUnvisual(order.getApplicantInfo());
 		}
+		if(applicant != null ){
+			selectService.addAreaToModel(model, applicant.getGuaranteeProvince(), applicant.getGuaranteeCity(), applicant.getGuaranteeZone());
+		}
+		
 		model.addAttribute("applicationInfo", applicant);
 		model.addAttribute("recordType", "applicant");
 		
@@ -268,7 +256,6 @@ System.out.println("applicantsave  = " + order.getApplicantSave());
 	@ResponseBody
 	public String addOrUpdateApplicant(Applicant applicant,
 			@RequestParam(value="orderId") String orderId, HttpServletRequest request){
-//System.out.println(orderId);
 		Order order  = orderService.getOrderInfo(orderId);
 		Member member = (Member) request.getSession().getAttribute(GlobalConstant.SESSION_MEMBER_INFO);
 		try {
@@ -278,8 +265,6 @@ System.out.println("applicantsave  = " + order.getApplicantSave());
 				orderService.addOrUpdateApplicant(applicant, orderId, member.getId(),0);
 				
 			}else {
-//				applicant.setId(order.getApplicantInfo());
-System.out.println(applicant.getId());
 				orderService.addOrUpdateApplicant(applicant, orderId, member.getId(),1);
 			}
 			return GlobalConstant.RET_SUCCESS;
@@ -297,7 +282,6 @@ System.out.println(applicant.getId());
 		Order order  = orderService.getOrderInfo(id);
 		model.addAttribute("order", order);
 		getPulldown(model);
-System.out.println("companysave = " + order.getCompanySave());	
 		//第二页企业基本信息
 		Member member = (Member) request.getSession().getAttribute(GlobalConstant.SESSION_MEMBER_INFO);
 		// 企业相关信息id获取
@@ -318,18 +302,19 @@ System.out.println("companysave = " + order.getCompanySave());
 			if (companyDetail.containsKey("member_id") && !companyDetail.get("member_id").equals("")) {
 				holdInfos = companyInfoService.editHoldInfoById(companyDetail.get("member_id"));
 			}
-			if (companyBase != null && !companyBase.getControlInfo().equals("")) {
-				control = companyInfoService.editControlInfoById(companyBase.getControlInfo());
+			//modified by lzc
+			if (companyDetail.containsKey("control_id") && !companyDetail.get("control_id").equals("")) {
+				control = companyInfoService.editControlInfoById(companyDetail.get("control_id"));
 			}
+			//end
 		}else {
 			 companyBase  = companyInfoService.editCompanyBaseInfoById(order.getLicenseInfo());
 			 holdInfos = companyInfoService.getHoldInfoByOrderId(order.getId());
 			 control = companyInfoService.editControlInfoById(order.getControlInfo());
-System.out.println(holdInfos.getIds()[0]);
-System.out.println(holdInfos.getIds()[1]);
 		}
-		
-//System.out.println("holdInfos= "+ holdInfos);
+		if(companyBase != null){
+			selectService.addAreaToModel(model, companyBase.getCompanyProvince(), companyBase.getCompanyCity(), companyBase.getCompanyZone());
+		}
 		model.addAttribute("hold", holdInfos);
 		model.addAttribute("companyInfo", companyBase);
 		model.addAttribute("control", control);
@@ -345,19 +330,7 @@ System.out.println(holdInfos.getIds()[1]);
 	public String addOrUpdateCompany(@RequestParam(value="orderId") String orderId, 
 			@ModelAttribute("companyInfo")CompanyBase companyBase, @ModelAttribute("hold")HoldInfos hold, 
 			@ModelAttribute("control")Control control, HttpServletRequest request){
-//System.out.println(orderId);
 			Order order = orderService.getOrderInfo(orderId);
-//System.out.println(companyBase.getLegalPerson());
-//System.out.println(companyBase.getPaperNumber());
-//System.out.println("================================");
-//System.out.println("companysave = " + order.getCompanySave());
-//System.out.println(hold);
-//System.out.println(hold.getMarriages()[0]);
-//System.out.println(hold.getEducations()[0]);
-//System.out.println("===================================");
-//System.out.println(control.getIndustry());
-//System.out.println(control.getPeopleNumber());
-//System.out.println("companyinspection = " + companyBase);
 			Member member = (Member) request.getSession().getAttribute(GlobalConstant.SESSION_MEMBER_INFO);	
 		try {
 			if(order.getCompanySave() == 0){
@@ -372,7 +345,6 @@ System.out.println(holdInfos.getIds()[1]);
 				companyBase.setId(companyId);
 				companyBase.setControlInfo(controlId);
 				control.setId(controlId);
-System.out.println(1);
 				orderService.addOrUpdateCompany(companyBase, hold, control, orderId, member.getId(), 0);
 			}else {
 				orderService.addOrUpdateCompany(companyBase, hold, control, orderId, member.getId(), 1);
@@ -394,7 +366,6 @@ System.out.println(1);
 		Member member = (Member) request.getSession().getAttribute(GlobalConstant.SESSION_MEMBER_INFO);
 		//企业相关信息id获取
 		HashMap<String, String> companyDetail = companyInfoService.getDetailIdByMemberId(member.getId());
-System.out.println("businesssave = " + order.getBusinessSave());
 		BusinessInfos businessInfos = new BusinessInfos();
 		if(order.getBusinessSave() == 0){
 			if (companyDetail != null && companyDetail.containsKey("member_id") && !companyDetail.get("member_id").equals("")) {
@@ -419,7 +390,6 @@ System.out.println("businesssave = " + order.getBusinessSave());
 
 		Order order  = orderService.getOrderInfo(orderId);
 		Member member = (Member) request.getSession().getAttribute(GlobalConstant.SESSION_MEMBER_INFO);
-System.out.println("debtsave = " + order.getBusinessSave());
 		try {
 			if(order.getBusinessSave() == 0){
 				String[]  idList = new String[3];
@@ -427,11 +397,6 @@ System.out.println("debtsave = " + order.getBusinessSave());
 					String id = UUID.randomUUID().toString().replaceAll("-", "");
 					idList[j] = id;
 				}
-
-//System.out.println(businessInfos.getIds().length);
-//for (int i = 0; i < idList.length; i++) {
-//System.out.println(idList[i]);	
-//}
 				businessInfos.setIds(idList);
 				orderService.addOrUpdateBusiness(businessInfos, orderId, member.getId(), 0);
 			}else {
@@ -451,9 +416,6 @@ System.out.println("debtsave = " + order.getBusinessSave());
 		
 		Member member = (Member) request.getSession().getAttribute(GlobalConstant.SESSION_MEMBER_INFO);
 //第四页抵押与负债
-System.out.println("debtsave = " + order.getDebtSave());
-//System.out.println("orderid = " + order.getId());
-//System.out.println("debtinfo = " + order.getDebtInfo());
 		RealEstate realEstate = new RealEstate();//抵押物
 		Debt debt = new Debt();//负债
 		//抵质押物情况
@@ -473,8 +435,6 @@ System.out.println("debtsave = " + order.getDebtSave());
 		}else {
 			realEstate = companyInfoService.getRealEstateInfoById(order.getRealEstate());
 			debt = companyInfoService.editDebtInfoById(order.getDebtInfo());
-//System.out.println(debt);
-//System.out.println(realEstate);
 		}
 
 		model.addAttribute("realEstate", realEstate);
@@ -489,11 +449,8 @@ System.out.println("debtsave = " + order.getDebtSave());
 	@RequestMapping("save/debt")
 	@ResponseBody
 	public String addOrUpdateDebt(Debt debt, RealEstate realEstate,@RequestParam(value="orderId") String orderId, HttpServletRequest request){
-System.out.println("save/debt");
 		Order order  = orderService.getOrderInfo(orderId);
 		Member member = (Member) request.getSession().getAttribute(GlobalConstant.SESSION_MEMBER_INFO);
-System.out.println(order.getDebtSave());
-
 		try {
 			if(order.getDebtSave() == 0){
 				String uuid = UUID.randomUUID().toString().replaceAll("-", "");
@@ -502,8 +459,6 @@ System.out.println(order.getDebtSave());
 				realEstate.setId(uuid2);
 				orderService.addOrUpdateDebt(debt, realEstate, orderId, member.getId(), 0);
 			}else{
-//				debt.setId(order.getDebtInfo());
-//				realEstate.setId(order.getRealEstate());
 				orderService.addOrUpdateDebt(debt, realEstate, orderId, member.getId(), 1);
 			}
 		} catch (Exception e) {
@@ -517,7 +472,6 @@ System.out.println(order.getDebtSave());
 	public String getDocument(Model model, String id, HttpServletRequest request){
 		Order order  = orderService.getOrderInfo(id);
 		model.addAttribute("order", order);
-//System.out.println("document_save = " + order.getDocumentSave());
 		Member member = (Member) request.getSession().getAttribute(GlobalConstant.SESSION_MEMBER_INFO);
 		//第五页上传资料信息
 		int total = 0;
@@ -529,18 +483,13 @@ System.out.println(order.getDebtSave());
 				orderService.addDocumentList(documents, id, member.getId());
 			} catch (Exception e) {
 				// TODO: handle exception
-				System.out.println("error!!!");
 				e.printStackTrace();
 			}
 		}else {
 			documents = orderService.getDocumentList(id,0);
-//for(Document document : documents){
-//	System.out.println(document.getDocumentId());
-//}
 			total = orderService.getDocumentCount(id);
 		}
-//System.out.println(total);
-		PageData<Document> pageData = new PageData<>(documents, total, 1);
+		PageData<Document> pageData = new PageData<Document>(documents, total, 1);
 		model.addAttribute("documents", documents);
 		model.addAttribute("pageData", pageData);
 		model.addAttribute("recordType", "document");
@@ -551,13 +500,11 @@ System.out.println(order.getDebtSave());
 	@ResponseBody
 	public String upLoadDoc(String suffix,String fileId,String typeId, 
 			@RequestParam(value="orderId") String orderId, HttpServletRequest request){
-System.out.println("fileId = " + fileId);
 		SimpleDateFormat df = new SimpleDateFormat("YYYY_MM_dd");
 		//路径
 		String filePath = "record/document/"+df.format(new Date())+"/";
 		//保存文件
 		String result = commonService.saveFile(request,suffix,filePath);
-System.out.println("result = " + result);
 		String documentId = UUID.randomUUID().toString().replaceAll("-", "");
 		if(fileId.equals("")){
 			fileId = null;
@@ -570,12 +517,10 @@ System.out.println("result = " + result);
 				orderService.addOrUpdateDocument(jsonData.get(0).get("name").toString(),member.getId(),
 						typeId, documentId, orderId, fileId);
 			}
-//				companyInfoService.updateDocument(jsonData.get(0).get("name").toString(),fileId,typeId,member.getId());
 		} catch (Exception e) {
 		// TODO: handle exception
 		return GlobalConstant.RET_FAIL;
 		}
-System.out.println("return = " + documentId);
 		return documentId;
 	}
 	
@@ -583,16 +528,44 @@ System.out.println("return = " + documentId);
 	public String changePage(HttpServletRequest request,Model model,int topage,String id) {
 		Order order  = orderService.getOrderInfo(id);
 		model.addAttribute("order", order);
-System.out.println("document_save = " + order.getDocumentSave());
 		//第五页上传资料信息
 		List<Document>	documents = orderService.getDocumentList(id,(topage-1)*10);
 		int	total = orderService.getDocumentCount(id);
-		PageData<Document> pageData = new PageData<>(documents, total, topage);
+		PageData<Document> pageData = new PageData<Document>(documents, total, topage);
 		model.addAttribute("documents", documents);
 		model.addAttribute("pageData", pageData);
 		model.addAttribute("recordType", "document");
 		return "screens/order/Document";
 	}
+	
+	
+	
+	
+	@RequestMapping("save")
+	@ResponseBody
+	public String saveOrder(String orderId, HttpServletRequest request){
+		
+		JSONObject json = new JSONObject();
+		Member member = (Member) request.getSession().getAttribute(GlobalConstant.SESSION_MEMBER_INFO);
+		Order order = orderService.getOrderInfo(orderId);
+		String message = new String();
+		try {
+			message = orderService.saveOrderStatus(order, member.getId());
+		} catch (Exception e) {
+			// TODO: handle exception
+			message = "提交失败,请联稍后重试";
+		}
+		if(message.equals(GlobalConstant.RET_SUCCESS)){
+			json.accumulate(GlobalConstant.RET_JSON_RESULT, GlobalConstant.RET_SUCCESS);
+		}else {
+			json.accumulate(GlobalConstant.RET_JSON_RESULT, GlobalConstant.RET_FAIL);
+			json.accumulate(GlobalConstant.RET_MESSAGE, message);
+		}
+		return json.toString();
+	}
+	
+	
+	
 	
 	@ResponseBody
 	@RequestMapping("add")
@@ -604,7 +577,7 @@ System.out.println("document_save = " + order.getDocumentSave());
 		order.setCreatedId(memberId);
 		order.setModifiedId(memberId);
 		order.setMemberId(memberId);
-		order.setCreditManageId(manageId);
+		order.setCreditManagerId(manageId);
 		order.setCode(SericalNumber.getInstance().generaterNextNumber());
 		order.setProductInfo(productId);
 		order.setApplicatPerson(member.getContactName());
@@ -683,72 +656,5 @@ System.out.println("document_save = " + order.getDocumentSave());
 		model.addAttribute("auditTypeList", auditTypeList);
 	}
 	
-	/**
-	 * 快速申贷第一步
-	 * add by mzj
-	 * @param tel
-	 * @param request
-	 * @return
-	 */
-	@RequestMapping(value="/fast/step/one",method=RequestMethod.POST)
-	public @ResponseBody String fastApplicantStepOne(String tel,String managerId,HttpServletRequest request) {
-		
-		try {
-			//先清除session内容
-			request.getSession().setAttribute(GlobalConstant.FAST_APPLICANT_STEP_ONE, null);
-			request.getSession().setAttribute(GlobalConstant.FAST_APPLICANT_STEP_TWO, null);
-			
-			request.getSession().setAttribute(GlobalConstant.FAST_APPLICANT_STEP_ONE, tel+"&"+managerId);
-			
-			return "true";
-		} catch (Exception e) {
-			log.error(e.getMessage());
-		}
-		return "false";
-	}
 	
-	/**
-	 * 快速申贷第二步
-	 * add by mzj
-	 * @param applicantFast
-	 * @param request
-	 * @return
-	 */
-	@RequestMapping(value="/fast/step/two",method=RequestMethod.POST)
-	public @ResponseBody String fastApplicantStepTwo(FastProductApplicant applicantFast,HttpServletRequest request) {
-		
-		try {
-			request.getSession().setAttribute(GlobalConstant.FAST_APPLICANT_STEP_TWO, applicantFast);
-			
-			return "true";
-		} catch (Exception e) {
-			log.error(e.getMessage());
-		}
-		return "false";
-	}
-	
-	/**
-	 * 快速申贷第三步
-	 * @param companyFast
-	 * @param request
-	 * @return
-	 */
-	@RequestMapping(value="/fast/step/three",method=RequestMethod.POST)
-	public @ResponseBody String fastApplicantStepThree(FastProductCompany companyFast,HttpServletRequest request) {
-		
-		try {
-			String stepOneData = (String) request.getSession().getAttribute(GlobalConstant.FAST_APPLICANT_STEP_ONE);
-			FastProductApplicant applicantFast = (FastProductApplicant) request.getSession().getAttribute(GlobalConstant.FAST_APPLICANT_STEP_TWO);
-			
-			//数据处理
-			boolean result = orderService.addFastOrderTypeTwo(stepOneData,applicantFast,companyFast);
-			
-			if (result) {
-				return "true";
-			}
-		} catch (Exception e) {
-			log.error(e.getMessage());
-		}	
-		return "false";
-	}
 }

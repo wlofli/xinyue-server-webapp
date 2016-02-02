@@ -15,11 +15,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.xinyue.manage.beans.SelectInfo;
 import com.xinyue.manage.service.CityService;
+import com.xinyue.manage.service.CommonService;
 import com.xinyue.manage.util.GlobalConstant;
 import com.xinyue.manage.util.SecurityUtils;
-import com.xinyue.server.service.CommonService;
 
-/**
+/** *  CommonService 2015-10-20 ywh 移走
  * 共通方法
  * @author MK)茅
  * @version v1.0
@@ -41,7 +41,9 @@ public class CommonController {
 		
 		String code = SecurityUtils.randomStr(4);
 		
-		boolean result = commonService.sendCode(phone,code);
+//		boolean result = commonService.sendCode(phone,code);
+		//测试用
+		boolean result = true;
 		
 		if (result) {
 			log.info("验证码发送成功---手机号："+phone+"；验证码："+code);
@@ -71,10 +73,8 @@ public class CommonController {
 	
 	@RequestMapping(value="/common/check/code",method=RequestMethod.POST)
 	public @ResponseBody boolean checkCode(String checkCode,HttpServletRequest request) {
-		
 		try {
 			String sessionCode = request.getSession().getAttribute(GlobalConstant.SESSION_CHECK_CODE).toString();
-			
 			if (checkCode.toLowerCase().equals(sessionCode.toLowerCase())) {
 				return true;
 			}
@@ -108,13 +108,12 @@ public class CommonController {
 	 */
 	@RequestMapping("member/list")
 	public String getContent(@RequestParam("param")String param,HttpSession session){
-//System.out.println("list in");
 				session.setAttribute("nav", param);
 				switch (param) {
 				case "graph":
-					return "redirect:/order/graph?index=0";
+					return "redirect:/member/order/graph?index=0";
 				case "orderlist" :
-					return "redirect:/order/list?index=0";
+					return "redirect:/member/order/list?index=0";
 				case "basic":
 					return "redirect:/member/commonctr/show";
 				case "updatepwd":
@@ -123,9 +122,9 @@ public class CommonController {
 					return "redirect:/member/commonctr/showtel";
 				case "down":
 					return "redirect:/member/docctr/show";
-				case "product":
+				case "products":
 					return "redirect:/member/procollectctr/show";
-				case "org":
+				case "orgs":
 					return "redirect:/member/orgcollectctr/show";
 				case "recommend":
 					return "redirect:/member/recommendctr/show";
@@ -133,7 +132,7 @@ public class CommonController {
 					return "redirect:/member/recommendctr/findMember";
 				case "credit":
 					return "redirect:/member/recommendctr/findCredit";
-				case "question":
+				case "questiontree":
 					return "redirect:/member/questionctr/show";
 				case "main" :
 					return "redirect:/member/home/index?index=0";
@@ -142,13 +141,13 @@ public class CommonController {
 				case "authentication" :
 					return "redirect:/member/authentication/page";
 				case "reward":
-					return "redirect:/reward/reward/list";
+					return "redirect:/member/reward/reward/list";
 				case "withdraw":
-					return "redirect:/reward/withdraw/list";
+					return "redirect:/member/reward/withdraw/list";
 				case "appwithdraw":
-					return "redirect:/reward/withdraw";
+					return "redirect:/member/reward/withdraw";
 				case "bind":
-					return "redirect:/reward/bind";
+					return "redirect:/member/reward/bind";
 				default:
 					break;
 				}

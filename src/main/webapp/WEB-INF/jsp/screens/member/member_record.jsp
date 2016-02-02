@@ -42,7 +42,9 @@
 				</c:if> --%>
 			</div>
 		</div>
+	<jsp:include page="../../common/foot.jsp" />
 	</div>
+	
 </body>
 <script type="text/javascript">
 </script>

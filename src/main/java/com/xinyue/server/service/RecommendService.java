@@ -1,9 +1,9 @@
 package com.xinyue.server.service;
 
 import com.xinyue.manage.beans.PageData;
-import com.xinyue.server.bean.RecommendCredit;
+import com.xinyue.manage.beans.RecommendCredit;
+import com.xinyue.manage.beans.RecommendMember;
 import com.xinyue.server.bean.RecommendInfo;
-import com.xinyue.server.bean.RecommendMember;
 import com.xinyue.server.model.Presenter;
 
 /**

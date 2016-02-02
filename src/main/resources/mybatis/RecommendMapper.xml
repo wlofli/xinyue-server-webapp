@@ -3,16 +3,25 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.xinyue.server.dao.RecommendDao">
 	
-	<select id="getRecommendMember" resultType="com.xinyue.server.bean.RecommendMember">
+	<select id="getRecommendMember" resultType="com.xinyue.manage.beans.RecommendMember">
 		select count(*) ordinaryNum , sum(l.score) ordinaryScore 
-		from m_member_info i inner join c_member_loan l on i.id = l.presenter 
-		where i.invitation_code =  #{code}
+		from m_member_info i 
+<!-- 		modified by lzc inner join -> left join 积分未实现 -->
+		left
+<!-- 		end -->
+		join c_member_loan l on i.id = l.presenter 
+<!-- 		modified by lzc  invitation_code 改为invitedcode-->
+		where i.invited_code =  #{code}
+<!-- 		end -->
 	</select>
 	
 	
-	<select id="getRecommendCredit" resultType="com.xinyue.server.bean.RecommendCredit">
+	<select id="getRecommendCredit" resultType="com.xinyue.manage.beans.RecommendCredit">
 		select count(*) creditNum , sum(c.score) creditScore from c_manager_info m 
-		inner join c_credit_loan c on m.id = c.presentee where m.invited_code = #{code}
+		<!-- 		modified by lzc inner join -> left join 积分未实现 -->
+		left
+<!-- 		end -->
+	    join c_credit_loan c on m.id = c.presentee where m.invited_code = #{code}
 	</select>
 	
 	<select id="findRecommendMember" resultType="com.xinyue.server.model.Presenter">

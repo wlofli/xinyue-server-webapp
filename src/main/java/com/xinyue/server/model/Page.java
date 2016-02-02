@@ -24,6 +24,9 @@ public class Page {
 	//总页数
 	public int getTotalPage() {
 		if(pageSize != 0 && totalNum !=0){
+			if(totalNum % pageSize == 0){
+				return totalNum/pageSize;
+			}
 			return (totalNum / pageSize) + 1 ;
 		}else {
 			return 1;

@@ -2,6 +2,7 @@
 <!-- wenhai.you -->
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.xinyue.server.dao.OrgCollectDao">
+	
 	<select id="findPage" resultType="com.xinyue.server.model.OrgCollect">
 		select 
 		 c.id id,
@@ -12,9 +13,9 @@
 		 t.name orgType,
 		 o.site orgAddress,
 		 o.establish orgEstablish,
-		 o.scale orgScale,
-		 o.business_area businessArea,
-		 o.good_business business 
+		 o.scale orgScale
+<!-- 		 o.business_area businessArea, -->
+<!-- 		 o.good_business business  -->
 		 from c_collect_org c 
 		left join m_member_info m on m.id = c.member_id 
 		left join m_organization_info o on o.number = c.org_id 
@@ -67,73 +68,139 @@
 	</select>
 	
 	
-	<select id="findOrgPage" resultType="com.xinyue.manage.model.Organization">
-		select a.id id, a.org_img image, a.establish , a.name name , a.scale, t.name genre ,  count(distinct b.id) orderNum ,  count(distinct p.id) productNum ,
-		 a.site site , a.business_area area , a.good_business business
-		from m_organization_info a 
-		left join m_order_info b on a.id = b.bank 
-		left join m_product_info p on p.bank = a.id 
-		left join m_organization_type t on t.otypeid = a.genre 
-		where a.deleted = 0 
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	<!-- 2015-09-22 -->
+	<!-- ywh 前台页面机构显示 -->
+	<select id="findOrgPage" resultMap="org_show">
+		select 
+		o.id id, o.org_img, o.establish , o.name name ,  o.site site , 
+		d.name genre , 
+		m.select_value scale , 
+		(select count(*) from m_product_info where bank = o.id and deleted = 0 and status = 0 ) productNum, (select count(*) from m_order_info where bank = o.id) orderNum ,
+		d.name  genreName 
+		from m_organization_info o 
+		left join m_organization_type d on d.otypeid = o.genre and d.deleted = 0 
+		left join m_select_info m  on m.select_key = o.scale and m.type_code = 'org_scale' 
+		where o.deleted = 0 and o.status = 0 
 		<if test="orgCollect.business != null and orgCollect.business != ''">
-			and a.good_business like concat('%' , #{orgCollect.business} , '%')
+			and exists (select * from m_org_product_type where org_id = o.id and ptype_id = #{orgCollect.business}) 
 		</if>
 		<if test="orgCollect.area != null and orgCollect.area != ''">
-			and a.business_area like concat('%' , #{orgCollect.area} , '%')
+			and exists(select * from m_substation_org where org_id = o.id and stat_id = #{orgCollect.area})
 		</if>
 		<if test="orgCollect.typeName != null and orgCollect.typeName != ''">
-			and t.name like concat('%' , #{orgCollect.typeName} , '%')
+			and d.otypeid =  #{orgCollect.typeName} 
 		</if>
-		group by a.id 
-		<if test="orgCollect.rank == 1">
-			order by a.created_time asc 
-		</if>
-		<if test="orgCollect.rank == 2">
-			order by productNum asc
-		</if>
-		<if test="orgCollect.rank == 0">
-			order by orderNum asc
-		</if>
+		group by o.id 
+		<choose>
+			<when test="orgCollect.rank == 2">
+				order by productNum asc
+			</when>
+			<otherwise>
+				<choose>
+					<when test="orgCollect.rank == 3">
+						order by orderNum asc
+					</when>
+					<otherwise>
+						order by o.created_time asc 
+					</otherwise>
+				</choose>
+			</otherwise>
+		</choose>
 		limit #{start} , #{pageSize}
 	</select>
+	<resultMap type="com.xinyue.manage.model.Organization" id="org_show">
+		<id property="id" column="id"/>
+		<result property="name" column="name"/>
+		<result property="number" column="number"/>
+		<result property="postcode" column="postcode"/>
+		<result property="shortName" column="shortName"/>
+		<result property="genre" column="genre"/>
+		<result property="genreName" column="genreName"/>
+		<result property="establish" column="establish"/>
+		<result property="scale" column="scale"/>
+		<result property="status" column="status"/>
+		<result property="scaleName" column="scaleName"/>
+		<result property="provinceid" column="province_id"/>
+		<result property="cityid" column="city_id"/>
+		<result property="cid" column="city_id"/>
+		<result property="zoneid" column="zone_id"/>
+		<result property="zid" column="zone_id"/>
+		<result property="site" column="site"/>
+		<result property="address" column="address"/>
+		<result property="domain" column="domain"/>
+		<result property="regNum" column="reg_Num"/>
+		<result property="orderNum" column="orderNum"/>
+		<result property="capital" column="capital"/>
+		<result property="pv" column="pv"/>
+		<result property="introduce" column="introduce"/>
+		<result property="description" column="description"/>
+		<result property="image" column="org_img"/>
+		<result property="notice" column="notice"/>
+	</resultMap>
 	<select id="getOrgCount" resultType="int">
-		select count(*) from m_organization_info a 
-		left join m_organization_type t on t.otypeid = a.genre 
-		where a.deleted = 0 
+		select count(*) 
+		from m_organization_info o 
+		left join m_organization_type d on d.otypeid = o.genre and d.deleted = 0 
+		left join m_select_info m  on m.select_key = o.scale and m.type_code = 'org_scale' 
+		where o.deleted = 0 and o.status = 0 
 		<if test="orgCollect.business != null and orgCollect.business != ''">
-			and a.good_business like concat('%' , #{orgCollect.business} , '%')
+			and exists(select * from m_org_product_type where org_id = o.id and ptype_id = #{orgCollect.business}) 
 		</if>
 		<if test="orgCollect.area != null and orgCollect.area != ''">
-			and a.business_area like concat('%' , #{orgCollect.area} , '%')
+			and exists(select * from m_substation_org where org_id = o.id and stat_id = #{orgCollect.area})
 		</if>
 		<if test="orgCollect.typeName != null and orgCollect.typeName != ''">
-			and t.name like concat('%' , #{orgCollect.typeName} , '%')
+			and d.otypeid =  #{orgCollect.typeName} 
 		</if>
 	</select>
 	
-	
-	<select id="findOrgById" resultType="com.xinyue.manage.model.Organization">
-		select 
-		id, shortName ,  org_img image, establish , name ,site , business_area area , good_business business , scale , description 
-		from m_organization_info   
-		where id = #{orgid} 
-	</select>
-	
+	<!--ywh 前台机构详情 显示产品信息 -->
 	<select id="findProByBank" resultType="com.xinyue.manage.model.Product">
-		select p.id id , p.name name , p.file_name fileName , p.credit creidt , t.name typeName  
+		select p.id id , p.name name , p.file_name fileName , p.credit credit , t.name typeName  
 		from m_product_info p 
-		left join m_product_type t on p.type = t.id 
-		where p.bank = #{orgid} order by p.created_time desc
+		left join m_product_type t on p.type = t.id and t.deleted = 0 and t.status = 0 
+		where p.bank = #{orgid} and p.deleted = 0 and p.status = 2 order by p.recommend asc limit 0 , 4 
 	</select>
 	
+	<!--ywh 前台机构详情 显示产品分页信息 -->
+	<select id="findPageProByBank" resultType="com.xinyue.manage.model.Product">
+		select p.id id , p.name name , p.file_name fileName , p.credit credit , p.bank orgid, t.name typeName  
+		from m_product_info p 
+		left join m_product_type t on p.type = t.id and t.deleted = 0 and t.status = 0 
+		where p.bank = #{orgid} and p.deleted = 0 and p.status = 2 order by p.recommend asc
+		limit #{start} , #{pageSize} 
+	</select>
+	
+	<!--ywh 前台机构详情 显示产品分页总记录数 -->
+	<select id="getProByBankCount" resultType="int">
+		select count(*) from m_product_info p 
+		left join m_product_type t on p.type = t.id and t.deleted = 0 and t.status = 0 
+		where p.bank = #{orgid} and p.deleted = 0 and p.status = 2 
+	</select>
+	
+	
+	<!--ywh 前台机构详情  显示成功案例信息   -->
 	<select id="findCaseByPro" resultType="com.xinyue.manage.model.SuccessCase">
 		select 
 		s.loan_amount loanAmount , p.name productName, m.real_name creditManagerName, s.loan_days loanDays, 
 		s.applicant_company applicantCompany, s.description description, s.loan_date loanDate
 		from c_success_case s 
-		left join m_product_info p on p.id = s.product_id 
-		left join c_manager_info m on s.credit_manager_id = m.id 
-		where s.deleted = 0 
+		left join m_product_info p on p.id = s.product_id and p.deleted = 0 and p.status = 2 
+		left join c_manager_info m on s.credit_manager_id = m.id and m.deleted =0 and m.status = 0 
+		where s.deleted = 0 and s.use_flag = 0 
 		<choose>
 			<when test="list == null || list.size == 0">
 				and s.product_id = ''
@@ -145,30 +212,18 @@
 				</foreach>
 			</otherwise>
 		</choose>
-		 order by s.created_time desc 
+		 order by s.created_time desc limit 0 , 4 
 	</select>
 	
-	<select id="findPageProByBank" resultType="com.xinyue.manage.model.Product">
-		select p.id id , p.name name , p.file_name fileName , p.credit creidt , p.bank orgid, t.name typeName  
-		from m_product_info p 
-		left join m_product_type t on p.type = t.id 
-		where p.bank = #{orgid} order by p.created_time desc 
-		limit #{start} , #{pageSize} 
-	</select>
-	<select id="getProByBankCount" resultType="int">
-		select count(*) from m_product_info p 
-		left join m_product_type t on p.type = t.id 
-		where p.bank = #{orgid} 
-	</select>
-	
+	<!--ywh 前台机构详情 显示成功案例分页信息  -->
 	<select id="findPageCaseByPro" resultType="com.xinyue.manage.model.SuccessCase">
 		select 
 		s.loan_amount loanAmount , p.name productName, m.real_name creditManagerName, s.loan_days loanDays, 
 		s.applicant_company applicantCompany, s.description description, s.loan_date loanDate
 		from c_success_case s 
-		left join m_product_info p on p.id = s.product_id 
-		left join c_manager_info m on s.credit_manager_id = m.id 
-		where s.deleted = 0 
+		left join m_product_info p on p.id = s.product_id and p.deleted = 0 and p.status = 2  
+		left join c_manager_info m on s.credit_manager_id = m.id and m.deleted =0 and m.status = 0  
+		where s.deleted = 0 and s.use_flag = 0  
 		<choose>
 			<when test="list == null || list.size == 0">
 				and s.product_id = ''
@@ -183,11 +238,13 @@
 		order by s.created_time desc 
 		limit #{start} , #{pageSize} 
 	</select>
+	
+	<!--ywh 前台机构详情 显示成功案例分页记录数  -->
 	<select id="getCaseByProCount" resultType="int">
 		select count(*) from c_success_case s 
-		left join m_product_info p on p.id = s.product_id 
-		left join c_manager_info m on s.credit_manager_id = m.id 
-		where s.deleted = 0 
+		left join m_product_info p on p.id = s.product_id  and p.deleted = 0 and p.status = 2  
+		left join c_manager_info m on s.credit_manager_id = m.id  and m.deleted =0 and m.status = 0  
+		where s.deleted = 0 and s.use_flag = 0   
 		<choose>
 			<when test="list == null || list.size == 0">
 				and s.product_id = ''
@@ -201,22 +258,61 @@
 		</choose>
 	</select>
 	
+	<!-- ywh 前台机构详情 贷款咨询 分页-->
 	<select id="findPageAdvisory" resultType="com.xinyue.manage.model.Question">
 		select  q.id id , q.title ,a.content answerContent, count(distinct q.id) answerNum 
 		from  m_question_info q 
-		left join m_answer_info a on q.id = a.question_id 
-		where a.deleted = 0 and a.status = 2 and q.deleted = 0 and q.status = 2 and q.org_id = #{orgNum} 
-		<if test="title != null and name != ''">
-		and q.title like concat('%', #{title} , '%') 
-		</if>
+		left join m_answer_info a on q.id = a.question_id and a.deleted = 0 and a.status = 2  
+		where q.deleted = 0 and q.status = 2 and q.org_id = #{orgid} 
+		<if test="title != null and title != ''">
+		and q.title like concat(#{title} , '%') 
+		</if>  group by q.id 
 		limit #{start} , #{pageSize}
 	</select>
+	<!-- ywh 前台机构详情 贷款咨询 记录数-->
 	<select id="getPageAdvisory" resultType="int">
 		select count(*)	from  m_question_info q 
-		left join m_answer_info a on q.id = a.question_id 
-		where a.deleted = 0 and a.status = 2 and q.deleted = 0 and q.status = 2 and q.org_id = #{orgNum} 
-		<if test="title != null and name != ''">
-		and q.title like concat('%', #{title} , '%') 
+		left join m_answer_info a on q.id = a.question_id and a.deleted = 0 and a.status = 2 
+		where q.deleted = 0 and q.status = 2 and q.org_id = #{orgid} 
+		<if test="title != null and title != ''">
+		and q.title like concat(#{title} , '%') 
 		</if>
+	</select>
+	
+	<!-- 首页org ywh  -->
+	<select id="findOrgList" resultType="com.xinyue.server.model.OrgCollect">
+		select id , img image, name orgName, sum(realcredit) creditCount , sum(count) ordercount , pcount proCount  from (
+			select o.id id, o.name name, o.org_img img, sum(m.credit_real) realCredit , count(m.id) count , count(p.id) pcount
+			from m_organization_info o 
+			left join m_product_info p on p.bank = o.id and p.status = 2 
+			left join c_order_appoint c  on c.blank =o.id and  c.deleted = 0 
+			left join m_order_info m on m.id = c.order_id and m.deleted = 0 and m.order_status = 1 
+			where o.deleted = 0 and o.status = 0 group by o.id 
+			union  all 
+			select o.id id, o.name name, o.org_img img, sum(m.credit_real) realCredit , count(m.id) count , count(p.id) pcount  
+			from  m_organization_info o 
+			left join m_product_info p on p.bank = o.id and p.status = 2 	
+			left join c_order_appoint c  on c.blank =o.id and  c.deleted = 0
+			left join m_product_fast_info m on m.id = c.order_id and m.deleted = 0 and m.order_status = 1 
+			where o.deleted = 0 and o.status = 0  group by o.id 
+			union all   
+			select o.id id, o.name name, o.org_img img, sum(m.credit_real) realCredit , count(m.id) count , count(p.id) pcount 
+			from m_organization_info o 
+			left join m_product_info p on p.bank = o.id and p.status = 2 	
+			left join c_manager_info i on i.organization = o.id and i.deleted = 0  and i.status = 0 
+			left join c_order_fixed c on i.id = c.manage_id and c.deleted = 0 
+			left join m_order_info m on m.id = c.order_id and m.deleted = 0 and m.order_status = 1 
+			
+			where o.deleted = 0 and o.status = 0  group by o.id 
+			union all  
+			select o.id id, o.name name, o.org_img img, sum(m.credit_real) realCredit , count(m.id) count , count(p.id) pcount 
+			from m_organization_info o 
+			left join m_product_info p on p.bank = o.id and p.status = 2 	
+			left join c_manager_info i on i.organization = o.id and i.deleted = 0  and i.status = 0 
+			left join c_order_fixed c on i.id = c.manage_id and c.deleted = 0 
+			left join m_product_fast_info m on m.id = c.order_id and m.deleted = 0 and m.order_status = 1 
+			where o.deleted = 0 and o.status = 0  group by o.id 
+		) s group by id  limit 0 , #{pageSize}
+				
 	</select>
 </mapper>

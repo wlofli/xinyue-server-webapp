@@ -43,8 +43,9 @@
 		<div class="nr_center">
 			<div class="position">
 				<div class="site">
-					<i class="site_tb"></i><a href="javascript:void(0)">网站首页</a>&gt;<a
-						href="javascript:void(0)" class="a" onclick="${ctx}/quest/show">问答列表</a>&gt;<span>问答详情</span>
+					<i class="site_tb"></i>
+					<a href="javascript:void(0)">网站首页</a>&gt;
+					<a href="javascript:void(0)" class="a" onclick="document.location.href='${ctx}/quest/show'">问答列表</a>&gt;<span>问答详情</span>
 					<div class="clear"></div>
 				</div>
 			</div>
@@ -57,7 +58,12 @@
 						<i>问</i><span>${recommendquest.title }</span>
 					</p>
 					<p class="wt_ms_xx">
-						<span>提问者：${recommendquest.name } </span>
+						<span>提问者：
+						<c:choose>
+							<c:when test="${empty recommendquest.mqcreateName }">匿名</c:when>
+							<c:otherwise>${recommendquest.mqcreateName } </c:otherwise>
+						</c:choose>
+						</span>
 						<span>问题来自：${recommendquest.address }</span><span>时间：${recommendquest.qtime }</span>
 					</p>
 					<p class="wt_ms_nr">${recommendquest.content }</p>
@@ -67,14 +73,12 @@
 							<span class="fx_right_span">分享到：</span>
 							<div class="bshare-custom icon-medium">
 								<div class="bsPromo bsPromo2"></div>
-								<a title="分享到新浪微博" class="bshare-sinaminiblog"></a> <a
-									title="分享到腾讯微博" class="bshare-qqmb"></a> <a title="分享到朋友网"
-									class="bshare-qqxiaoyou" href="javascript:void(0);"></a> <a
-									title="分享到微信" class="bshare-weixin" href="javascript:void(0);"></a>
-								<a title="分享到QQ好友" class="bshare-qqim"
-									href="javascript:void(0);"></a> <a title="更多平台"
-									class="bshare-more bshare-more-icon more-style-addthis"></a><span
-									style="float: none;" class="BSHARE_COUNT bshare-share-count">0</span>
+								<a title="分享到新浪微博" class="bshare-sinaminiblog" href="javascript:void(0);" onclick="weiboShare()"></a> 
+								<a title="分享到腾讯微博" class="bshare-qqmb" href="javascript:void(0);" onclick="qqWeiboShare()"></a> 
+								<a title="分享到朋友网" class="bshare-qqxiaoyou" href="javascript:void(0);" onclick="createCode()"></a> 
+								<a title="分享到微信" class="bshare-weixin" href="javascript:void(0);" onclick="createCode()"></a>
+								<a title="分享到QQ好友" class="bshare-qqim" href="javascript:void(0);" onclick="qqShare()"></a> 
+								
 							</div>
 							<script type="text/javascript" charset="utf-8"
 								src="http://static.bshare.cn/b/buttonLite.js#style=-1&amp;uuid=&amp;pophcol=2&amp;lang=zh"></script>
@@ -89,14 +93,14 @@
 							<s:hidden path="questid" value="${recommendquest.id }"/>
 							
 							<input type="button" onclick="commitAnswer('${recommendquest.id}')" value="提交答案" class="tj_da_btn"/>
-							<s:hidden path="createid" id="answer_createid_${recommendquest.id} }"/>
+							<s:hidden path="createid" id="answer_createid"/>
 							<span class="nm_span">匿名</span>
-							<input type="checkbox" onclick="javascript:$('#answer_createid_${recommendquest.id }').val(this.checked?'0':'${answer.createid }')" class="ch1"/>
+							<input type="checkbox" onclick="checkedCreate(this.checked)" class="ch1"/>
 						</s:form>
 					</div>
 					<div class="clear"></div>
 				</div>
-				<c:if test="${not empty recommendquest.atime }">
+				<c:if test="${recommendquest.recommend == '1' }">
 					<div class="tjhd_mk">
 						<div class="bt">
 							<span>推荐回答</span>
@@ -131,8 +135,15 @@
 					</div>
 					<div class="xs_wt_lb">
 						<ul>
-							<c:forEach items="relevant" var="rel">
-								<li><a href="javascript:void(0)">${rel.title }</a></li>
+							<c:forEach items="${relevant }" var="rel">
+								<c:choose>
+									<c:when test="${rel.id == recommendquest.id }">
+									</c:when>
+									<c:otherwise>
+										<li><a href="javascript:void(0)" onclick="document.location.href='${ctx}/quest/detail?questid=${rel.id }'">${rel.title }</a></li>
+									</c:otherwise>
+								</c:choose>	
+								
 							</c:forEach>
 						</ul>
 					</div>
@@ -141,87 +152,7 @@
 				
 			</div>
 			<div class="pro_xq_right">
-
-				<div class="wd_fl">
-					<div class="wd_bt">
-						<span>问答分类</span>
-					</div>
-					<s:form commandName="qbean" method="post" action="${ctx }/quest/show" id="quest_detail_form">
-						<s:hidden path="questype" id="quest_questype"/>
-					</s:form>
-					<div class="wd_lb">
-						<dl class="wd_fl1">
-							<dt>
-								<span>按贷款知识分类</span>
-							</dt>
-							<dd>
-								<a href="javascript:void(0)" onclick="show(this)">常用知识</a>
-							</dd>
-							<dd>
-								<a href="javascript:void(0)" onclick="show(this)">贷款流程</a>
-							</dd>
-							<dd>
-								<a href="javascript:void(0)" onclick="show(this)">资质咨询</a>
-							</dd>
-							<dd>
-								<a href="javascript:void(0)" onclick="show(this)">利息咨询</a>
-							</dd>
-							<div class="clear"></div>
-						</dl>
-						<dl class="wd_fl2">
-							<dt>
-								<span>按产品类型分类</span>
-							</dt>
-							<dd>
-								<a href="javascript:void(0)" onclick="show(this)">抵押贷款</a>
-							</dd>
-							<dd>
-								<a href="javascript:void(0)" onclick="show(this)">无抵押贷款</a>
-							</dd>
-							<dd>
-								<a href="javascript:void(0)" onclick="show(this)">按揭贷款</a>
-							</dd>
-							<div class="clear"></div>
-						</dl>
-						<dl class="wd_fl3">
-							<dt>
-								<span>按贷款类型分类</span>
-							</dt>
-							<dd>
-								<a href="javascript:void(0)" onclick="show(this)">消费贷款</a>
-							</dd>
-							<dd>
-								<a href="javascript:void(0)" onclick="show(this)">经营贷款</a>
-							</dd>
-							<dd>
-								<a href="javascript:void(0)" onclick="show(this)">买车贷款</a>
-							</dd>
-							<dd>
-								<a href="javascript:void(0)" onclick="show(this)">买房贷款</a>
-							</dd>
-							<div class="clear"></div>
-						</dl>
-					</div>
-
-				</div>
-				<div class="rm_zx">
-					<div class="zx_bt">
-						<span>热门问答</span><a href="javascript:void(0)" onclick="document.location.href='${ctx}/quest/show'">更多&gt;</a>
-						<div class="clear"></div>
-					</div>
-					<div class="zx_lb">
-						<ul>
-							<c:forEach items="${questlist }" var="quest">
-								<Li><a href="javascript:void(0)" onclick="document.location.href='${ctx}/quest/detail?questid=${quest.id }'">${quest.title }</a></Li>
-							</c:forEach>
-						</ul>
-					</div>
-
-				</div>
-				<div class="ad_mk1">
-					<a href="#"> <img src="${ctx }/images1/ad1.jpg" /></a>
-				</div>
-
+				<jsp:include page="questcommon.jsp"></jsp:include>
 			</div>
 			<div class="clear"></div>
 		</div>
@@ -230,15 +161,93 @@
 	<!--中间部分-->
 	<%@ include file="../../common/foot.jsp"%>
 	<script type="text/javascript">
-		function show(){
-			if(arguments.length == 0){
-				$("#quest_detail_form").submit();
-			}else{
-				$("#quest_questype").val($(arguments[0]).html());
-				$("#quest_detail_form").submit();
+		
+		function checkedCreate(node , c){
+			if(node){
+				$("#answer_createid").val(0);
 			}
 		}
-		
+		//新浪
+		function weiboShare(){
+			//微博网址
+			var url = "http://v.t.sina.com.cn/share/share.php";
+			//key
+			var appKey = "2469601826";
+			var htl = window.location.href;
+			//分享内容
+			var title = encodeURIComponent(htl);
+			
+			var source = encodeURIComponent(htl);
+				
+			window.open(url+"?appkey="+appKey+"&title="+title+"&url="+source,"share","toolbar=0,height=400,width=400,top=100,left=100");
+			
+			
+		}
+		//qq
+		function qqWeiboShare(){
+			var _url = window.location.href;
+			var _assname = encodeURI("2740293039");//你注册的帐号，不是昵称
+			var _appkey = encodeURI("101204626");//你从腾讯获得的appkey
+			var _pic = encodeURI('');//（例如：var _pic='图片url1|图片url2|图片url3....）
+			var _t = '测试标题';//标题和描述信息
+			var metainfo = document.getElementsByTagName("meta");
+			for(var metai = 0;metai < metainfo.length;metai++){
+				if((new RegExp('description','gi')).test(metainfo[metai].getAttribute("name"))){
+					_t = metainfo[metai].attributes["content"].value;
+				}
+			}
+			_t =  "测试内容";//请在这里添加你自定义的分享内容
+			if(_t.length > 120){
+				_t= _t.substr(0,117)+'...';
+			}
+			_t = encodeURI(_t);
+
+			var _u = 'http://share.v.t.qq.com/index.php?c=share&a=index&url='+_url+'&appkey='+_appkey+'&assname='+_assname+'&title='+_t;
+			window.open( _u,'', 'width=700, height=680, top=0, left=0, toolbar=no, menubar=no, scrollbars=no, location=yes, resizable=no, status=no' );
+
+		}
+		//朋友
+		function createCode(){
+			
+			$.ajax({
+				url:'${ctx}/member/recommendctr/createCode',
+				type:'post',
+				dataType:'json',
+				contentType:'application/json',
+				data:JSON.stringify(window.location.href),
+				success:function(data){
+					if(data != 'fail'){
+// 						alert(data);
+// 						alert("分享成功");
+					}else{
+						alert("分享失败");
+					}
+				}
+			});
+		}
+		//qq
+		function qqShare(){
+			var path = "http://connect.qq.com/widget/shareqq/index.html?";
+			
+			var p = {
+					url:window.location.href, /*获取URL，可加上来自分享到QQ标识，方便统计*/
+					desc:'', /*分享理由(风格应模拟用户对话),支持多分享语随机展现（使用|分隔）*/
+					title:'新越网', /*分享标题(可选)*/
+					summary:'', /*分享摘要(可选)*/
+					pics:'', /*分享图片(可选)*/
+					flash: '', /*视频地址(可选)*/
+					site:'新越网', /*分享来源(可选) 如：QQ分享*/
+					style:'201',
+					width:32,
+					height:32
+					};
+			var s = "";
+			for(var i in p){
+				s =s+i + '=' + encodeURIComponent(p[i]||'')+"&";
+			}
+			window.open(path+s, "QQshare","toolbar=0,scrollbars=no,height=600,width=900,top=100,left=100");
+			
+		}
 	</script>
 </body>
 </html>

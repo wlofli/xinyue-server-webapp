@@ -7,7 +7,7 @@ function tab_item(n)
 		for(var i = 0; i< menuli.length; i++)
 		{
 			menuli[i].className="";
-			menuli[n].className="hit";
+			menuli[n + 1].className="hit";
 			document.getElementById("tab"+ i).style.display = "none";
 			document.getElementById("tab"+ n).style.display = "block";
 		}

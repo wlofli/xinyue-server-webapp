@@ -46,6 +46,9 @@
 		<div class="nr">
 			<div class="nr_left">
 				<sf:form action="" commandName="applicantFast" method="post" id="stepTwo">
+					<p><span>联系人姓名：</span>
+						<sf:input path="name" cssClass="sjyz_t required"/>
+					</p> 
 					<p>
 						<span>贷款金额：</span>
 						<sf:input path="loanAmount" cssClass="sjyz_t required digits"/>
@@ -56,10 +59,11 @@
 					</p>
 					<p>
 						<span>职业身份：</span>
-						<sf:select path="profession" cssClass="sdzl_s required">
-							<sf:option value="">请选择</sf:option>
-							<sf:options items="${professions}" itemValue="key" itemLabel="value"/>
-						</sf:select>
+						<sf:input path="profession" cssClass="sjyz_t required"/>
+<%-- 						<sf:select path="profession" cssClass="sdzl_s required"> --%>
+<%-- 							<sf:option value="">请选择</sf:option> --%>
+<%-- 							<sf:options items="${professions}" itemValue="key" itemLabel="value"/> --%>
+<%-- 						</sf:select> --%>
 					</p>
 					<p>
 						<span>总经营流水/月：</span>
@@ -284,14 +288,14 @@ $(function(){
 	function zxtck1() {
 		if ($("#stepOne").valid()) {
 			$.ajax({
-				url:"order/fast/step/one",
+				url:"${ctx}/order/fast/step/one",
 				type:"post",
 				data:{
-					phone:$("#tel").val(),
+					tel:$("#tel").val(),
 					managerId:$("#hid_managerId").val()
 				},
 				success:function(data){
-					alert(data);
+// 					alert(data);
 					if (data=="true") {
 						tck1.style.display = "block";
 						tck.style.display = "none";
@@ -311,7 +315,7 @@ $(function(){
 	function zxtck2() {
 		if ($("#stepTwo").valid()) {
 			$.ajax({
-				url:"order/fast/step/two",
+				url:"${ctx}/order/fast/step/two",
 				type:"post",
 				data:$("#stepTwo").serialize(),
 				success:function(data){
@@ -333,7 +337,7 @@ $(function(){
 	function zxtck3() {
 		if ($("#stepThree").valid()) {
 			$.ajax({
-				url:"order/fast/step/three",
+				url:"${ctx}/order/fast/step/three",
 				type:"post",
 				data:$("#stepThree").serialize(),
 				success:function(data){

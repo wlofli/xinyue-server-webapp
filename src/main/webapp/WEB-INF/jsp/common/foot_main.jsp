@@ -4,14 +4,14 @@
 	<div class="f1">
 		<ul class="f1_l1">
 			<li><span>贷款用户</span></li>
-			<li><a href="${ctx}/login/member">登录/注册</a></li>
-			<li><a href="${ctx}/help/detail?id=f03e52ac371342ffbbb0c610a7610787">申贷流程</a></li>
+			<li><a href="${ctx }/login/member">登录/注册</a></li>
+			<li><a href="${ctx }/help/">申贷流程</a></li>
 			<li><a href="#">推荐会员</a></li>
 		</ul>
 		<ul class="f1_l2">
 			<li><span>信贷经理</span></li>
-			<li><a href="http://credit.91loan.cn/register/credit/page">平台入驻</a></li>
-			<li><a href="#">实名认证</a></li>
+			<li><a href="/credit-manager-web/register/credit/page">平台入驻</a></li>
+			<li><a href="${ctx }/help">实名认证</a></li>
 			<li><a href="#">产品推广</a></li>
 		</ul>
 		<ul class="f1_l3">
@@ -21,9 +21,9 @@
 		</ul>
 		<ul class="f1_l4">
 			<li><span>用心服务</span></li>
-			<li><a href="${ctx}/help/detail?id=cef538d2a2ff492082caebf7edd518bf">联系我们</a></li>
+			<li><a href="${ctx }/help/detail?id=cef538d2a2ff492082caebf7edd518bf">联系我们</a></li>
 			<li><a href="#">网站地图</a></li>
-			<li><a href="${ctx}/city/list">城市分站</a></li>
+			<li><a href="${ctx }/city/list">城市分站</a></li>
 		</ul>
 		<div class="kf">
 			<p>

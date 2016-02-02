@@ -8,6 +8,7 @@
 				login_name,
 				password,
 				sex,
+				status,
 				contact_name,
 				contact_phone,
 				company,
@@ -34,10 +35,16 @@
 				modified_id
 			)
 		values(
-			replace(uuid(), '-', ''),
+<!-- 			modified by lzc -->
+<!-- 			replace(uuid(), '-', ''), -->
+			#{registerInfo.id},
+<!-- 			end -->
 			#{registerInfo.loginName},
 			#{registerInfo.password},
 			3,
+<!-- 			add by lzc status初始化 -->
+			0,
+<!-- 			end -->
 			#{registerInfo.contactName},
 			#{registerInfo.contactPhone},
 			#{registerInfo.company},

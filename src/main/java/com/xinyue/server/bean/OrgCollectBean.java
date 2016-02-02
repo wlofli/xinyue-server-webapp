@@ -18,7 +18,7 @@ public class OrgCollectBean implements Serializable {
 	private int bindex;
 	private String area;
 	private int aindex;
-	private String typeName;
+	private String typeName;//机构类型名称
 	private int tindex;
 	private int rank;
 	
@@ -81,6 +81,14 @@ public class OrgCollectBean implements Serializable {
 	}
 	public void setRank(int rank) {
 		this.rank = rank;
+	}
+	@Override
+	public String toString() {
+		return "OrgCollectBean [orgName=" + orgName + ", topage=" + topage
+				+ ", memberid=" + memberid + ", business=" + business
+				+ ", bindex=" + bindex + ", area=" + area + ", aindex="
+				+ aindex + ", typeName=" + typeName + ", tindex=" + tindex
+				+ ", rank=" + rank + "]";
 	}
 	
 }

@@ -1,13 +1,14 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="sf" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<c:set var="ctx" value="${pageContext.request.contextPath}" />
 <div class="pro_xq_right">
 	<div class="p_r_dk">
 		<div class="dk_bt">
 			<span>我要贷款</span>
 		</div>
 		<div class="dk_nr">
-			<sf:form action="" commandName="psInfo" method="post" id="loanForm">
+			<sf:form action="${ctx }/product/show" commandName="psInfo" method="post" id="loanForm">
 			<p>
 				<span>产品类别：</span>
 				<sf:select path="productType" cssClass="lb_s">
@@ -17,8 +18,8 @@
 			</p>
 			<p>
 				<span>贷款金额：</span>
-				<sf:select path="loanAmount" cssClass="lb_s">
-					<sf:option value="">不限</sf:option>
+				<sf:select path="loanAmountIndex" cssClass="lb_s">
+					<sf:option value="0">不限</sf:option>
 					<sf:options items="${amounts}" itemValue="key" itemLabel="value"/>
 				</sf:select>
 			</p>
@@ -30,7 +31,7 @@
 				</sf:select>
 			</p>
 			<p class="mar_bot">
-				<input type="button" class="lb_b" value="搜索产品" />
+				<input type="button" class="lb_b" value="搜索产品" onclick="find()"/>
 			</p>
 			</sf:form>
 		</div>
@@ -49,6 +50,11 @@
 		</div>
 	</div>
 	<div class="ad_mk1">
-		<a href="${advert}"><img src="${showPath}${advert.url}${advert.thumbnail}" /></a>
+		<a href="${advert.url}"><img src="${showPath}${advert.directory}${advert.thumbnail}" height="422" width="400"/></a>
 	</div>
 </div>
+<script type="text/javascript">
+	function find(){
+		$("#loanForm").submit();
+	}
+</script>

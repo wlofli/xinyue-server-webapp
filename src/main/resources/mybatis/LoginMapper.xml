@@ -23,7 +23,13 @@
 		    id, 
 		    login_name as loginName, 
 		    contact_name as contactName, 
+		    <!-- ywh start -->
+		    contact_phone as contactPhone,
+		    <!-- ywh over -->
 		    company as company, 
+<!-- 		    add by lzc -->
+		    invitation_code as invitationCode,
+<!-- 		    end -->
 		    date_format(login_time,'%Y-%m-%d') as loginTime
 		from
 		    m_member_info

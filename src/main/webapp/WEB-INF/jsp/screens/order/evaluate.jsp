@@ -17,14 +17,14 @@ function save(){
 		$("#level").val(star);
 // 		alert($("#level").val());
 		$.ajax({
-		   url:"${ctx}/order/save/evaluate",
+		   url:"${ctx}/member/order/save/evaluate",
 		   method:"post",
 		   data:$("#form").serialize(),
 		   async:true,
 		   success:function(data){
 			   if(data == "success"){
 				   alert("评价成功");
-				   window.location.href="${ctx}/order/detail?id=${order.id}";
+				   window.location.href="${ctx}/member/order/detail?id=${order.id}";
 			   }else{
 				   alert("评价失败");
 			   }
@@ -50,7 +50,7 @@ function save(){
 <div class="bt"><strong>评价</strong></div></div>
 <div class="ddxq_top"> 
 <div class="ddxq_nr">
-<sf:form action="${ctx }/order/save/evaluate" commandName="order" method="post" id="form">
+<sf:form action="${ctx }/member/order/save/evaluate" commandName="order" method="post" id="form">
 <sf:hidden path="id"/>
 <sf:hidden path="level"/>
 <div id="star"><span>星级：</span>

@@ -19,8 +19,8 @@
 			<div class="hy_right">
 				<div class="hy_right_bt">
 					<ul class="menu1">
-						<li class=""><a href="javascript:void(0)" onclick="document.location.href='${ctx }/member/list?param=product'">产品收藏</a></li>
-						<li class="hit"><a href="javascript:void(0)" onclick="document.location.href='${ctx }/member/list?param=org'">机构收藏</a></li>
+						<li class=""><a href="javascript:void(0)" onclick="document.location.href='${ctx }/member/list?param=products'">产品收藏</a></li>
+						<li class="hit"><a href="javascript:void(0)" onclick="document.location.href='${ctx }/member/list?param=orgs'">机构收藏</a></li>
 					</ul>
 				</div>
 				<div class="tab">
@@ -45,8 +45,12 @@
 										<span>所在地：<strong>${org.orgAddress }</strong></span>
 										<span>成立时间：<strong>${org.orgEstablish }年</strong></span>
 										<span>公司规模：<strong>${org.orgScale }人</strong></span>
-										<span>业务区域：<strong>${org.businessArea }</strong></span>
-										<span>擅长业务：<strong>${org.business }</strong></span>
+										<span>业务区域：<strong>
+										<c:forEach items="${org.businessAreas }" var="area" varStatus="vs">${area }</c:forEach>
+										</strong></span>
+										<span>擅长业务：<strong>
+										<c:forEach items="${org.businessType }" var="types" varStatus="vs" >${types}<c:if test="${!isLast() }">,</c:if></c:forEach>	
+										</strong></span>
 									</p>
 								</div>
 								<div class="sc_float_right">

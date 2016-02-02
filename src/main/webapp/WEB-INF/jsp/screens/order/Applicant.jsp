@@ -93,22 +93,27 @@ function getZones(val1,val2){
 }
 
 function save(n){
-// 	alert("in");
 	if(!checkOrder()){
 		return;
 	}
-	$.ajax({
-		url:"${ctx}/order/save/applicant",
-		data:$("#applicantForm").serialize(),
-		type:'post',
-		success:function(data){
-			if(data == "success"){
-				alert("success");
-			}else{
-				alert("fail")
+	if($("#applicantForm").valid()){
+		$.ajax({
+			url:"${ctx}/member/order/save/applicant",
+			data:$("#applicantForm").serialize(),
+			type:'post',
+			success:function(data){
+				if(data == "success"){
+					alert("保存成功");
+					if(n == 1){
+						window.location.href = "${ctx }/member/order/detail/companybase?id=${order.id}";
+					}
+				}else{
+					alert("保存失败")
+				}
 			}
-		}
-	});
+		});
+	}
+	
 	
 }
 </script>
@@ -125,53 +130,54 @@ function save(n){
 </div>
 <div class="tab" id="tab0" >
 
-<sf:form action="${ctx}/order/save/applicant" commandName="applicationInfo" method="post" id="applicantForm">
+<sf:form action="${ctx}/member/order/save/applicant" commandName="applicationInfo" method="post" id="applicantForm">
 <input type="hidden" name="orderId" value="${order.id }">
 <sf:hidden path="id"/>
-<p><span>申请人姓名：</span><sf:input path="name" cssClass="t1" /></p>
-<p><span>联系方式：</span><sf:input path="phone" cssClass="t1" /></p>
-<p><span>电子邮箱：</span><sf:input path="email" cssClass="t1" /></p>
+<p><span>申请人姓名：</span><sf:input path="name" cssClass="t1 required" /></p>
+<p><span>联系方式：</span><sf:input path="phone" cssClass="t1 required" /></p>
+<p><span>电子邮箱：</span><sf:input path="email" cssClass="t1 required" /></p>
 <p><span>两年内信用：</span>
-<sf:select path="twoYearCredit" cssClass="s1">
+<sf:select path="twoYearCredit" cssClass="s1 required">
 <sf:option value="">请选择</sf:option>
 <sf:options items="${creditList}" itemValue="key" itemLabel="value" />
 </sf:select></p>
-<p><span>申贷期限(月)：</span><sf:input path="limitDate" cssClass="t1" /></p>
-<p><span>申贷金额(万)：</span><sf:input path="money" cssClass="t1" /></p>
-<p><span>申贷用途：</span><sf:select path="creditPurpose" cssClass="s1">
+<p><span>申贷期限(月)：</span><sf:input path="limitDate" cssClass="t1 required" /></p>
+<p><span>申贷金额(万)：</span><sf:input path="money" cssClass="t1 required" /></p>
+<p><span>申贷用途：</span><sf:select path="creditPurpose" cssClass="s1 required">
 				<sf:option value="">请选择</sf:option>
 				<sf:options items="${purposeList}" itemValue="key" itemLabel="value" />
 			</sf:select></p>
-<p><span>可接受最高利率：</span><sf:select path="interestRate" cssClass="s1">
+<p><span>可接受最高利率：</span><sf:select path="interestRate" cssClass="s1 required">
 				<sf:option value="">请选择</sf:option>
 				<sf:options items="${maxRateList}" itemValue="key" itemLabel="value" />
 			</sf:select></p>
-<p><span>还款方式：</span><sf:select path="repayType" cssClass="s1">
+<p><span>还款方式：</span><sf:select path="repayType" cssClass="s1 required">
 				<sf:option value="">请选择</sf:option>
 				<sf:options items="${repayList}" itemValue="key" itemLabel="value" />
 			</sf:select></p>
-<p><span>主要担保方式：</span><sf:select path="guaranteeType" cssClass="s1">
+<p><span>主要担保方式：</span><sf:select path="guaranteeType" cssClass="s1 required">
 				<sf:option value="">请选择</sf:option>
 				<sf:options items="${guaranteeList}" itemValue="key"
 					itemLabel="value" />
 			</sf:select></p>
-<p><span>担保人姓名：</span><sf:input path="guaranteePerson" cssClass="t1" /></p>
-<p><span>担保物名称：</span><sf:input path="guaranteeGoods" cssClass="t1" /></p>
-<p><span>担保金额(万)：</span><sf:input path="guaranteeMoney" cssClass="t1" /></p>
-<p><span>担保物所在地区：</span><sf:select path="guaranteeProvince" cssClass="s2" id="editP"
+<p><span>担保人姓名：</span><sf:input path="guaranteePerson" cssClass="t1 required" /></p>
+<p><span>担保物名称：</span><sf:input path="guaranteeGoods" cssClass="t1 required" /></p>
+<p><span>担保金额(万)：</span><sf:input path="guaranteeMoney" cssClass="t1 required" /></p>
+<p><span>担保物所在地区：</span><sf:select path="guaranteeProvince" cssClass="s2 required" id="editP"
 				onchange="getCities('')">
 				<sf:option value="">请选择</sf:option>
-				<sf:options items="${provinceList}" itemValue="key"
-					itemLabel="value" />
+				<sf:options items="${provinceList}" itemValue="key"	itemLabel="value" />
 			</sf:select>
-			<sf:select path="guaranteeCity" cssClass="s2" id="editC"
+			<sf:select path="guaranteeCity" cssClass="s2 required" id="editC"
 				onchange="getZones('','')">
 				<sf:option value="">请选择</sf:option>
+				<sf:options items="${cityList }" itemLabel="value" itemValue="key"/>
 			</sf:select>
-			<sf:select path="guaranteeZone" cssClass="s2" id="editZ">
+			<sf:select path="guaranteeZone" cssClass="s2 required" id="editZ">
 				<sf:option value="">请选择</sf:option>
+				<sf:options items="${zoneList }" itemLabel="value" itemValue="key"/>
 			</sf:select></p>
-<p><span>担保物是否在本地：</span><sf:select path="isLocation" cssClass="s1">
+<p><span>担保物是否在本地：</span><sf:select path="isLocation" cssClass="s1 required">
 				<sf:option value="">请选择</sf:option>
 				<sf:option value="1">是</sf:option>
 				<sf:option value="0">否</sf:option>

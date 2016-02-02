@@ -25,7 +25,15 @@
 						<c:forEach items="${questpage.data }" var="quest">
 							<li class="b_b_n">
 								<div class="wd_left">
-									<a href="javascript:void(0)">${quest.title }</a>
+									<c:choose>
+										<c:when test="${quest.sign == '审核通过' }">
+										<a href="javascript:void(0)" onclick="document.location.href='${ctx}/quest/detail?questid=${quest.id}'">${quest.title }</a>
+										</c:when>
+										<c:otherwise>
+										<a href="javascript:void(0)" >${quest.title }</a>
+										</c:otherwise>
+									</c:choose>
+									
 									<p>
 										<span class="wds">${quest.createtime }</span><span class="wds">回复：${quest.num }个</span>
 									</p>

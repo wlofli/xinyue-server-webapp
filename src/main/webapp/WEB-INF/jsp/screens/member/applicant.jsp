@@ -9,11 +9,11 @@
 		<li class=""><a href="${ctx}/member/record/estate">抵押物信息</a></li>
 		<li class=""><a href="${ctx}/member/record/debt">负债信息</a></li>
 		<li class=""><a href="${ctx}/member/record/document">上传资料</a></li>
-		<li class=""><a href="${ctx}/member/record/rating">评级信息</a></li>
+<%-- 		<li class=""><a href="${ctx}/member/record/rating">评级信息</a></li> --%>
 	</ul>
 </div>
 <div class="tab">
-	<sf:form action="${ctx}/member/save" commandName="applicationInfo" method="post" id="applicantForm">
+	<sf:form action="${ctx}/member/save" commandName="applicantInfo" method="post" id="applicantForm">
 		<p class="qiye_bt">
 			<strong>申请人信息 </strong>
 		</p>
@@ -90,9 +90,11 @@
 			<sf:select path="guaranteeCity" cssClass="s2" id="editC"
 				onchange="getZones('','')">
 				<sf:option value="">请选择</sf:option>
+				<sf:options items="${cityList }" itemLabel="value" itemValue="key"/>
 			</sf:select>
 			<sf:select path="guaranteeZone" cssClass="s2" id="editZ">
 				<sf:option value="">请选择</sf:option>
+				<sf:options items="${zoneList }" itemLabel="value" itemValue="key"/>
 			</sf:select>
 		</p>
 		<p>

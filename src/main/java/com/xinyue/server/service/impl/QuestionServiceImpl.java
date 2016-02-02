@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import com.xinyue.manage.beans.PageData;
 import com.xinyue.manage.beans.ShowAnswer;
 import com.xinyue.manage.model.Answer;
+import com.xinyue.manage.model.AnswerType;
 import com.xinyue.manage.model.Question;
 import com.xinyue.manage.util.GlobalConstant;
 import com.xinyue.server.bean.QuestionBean;
@@ -72,7 +73,10 @@ public class QuestionServiceImpl implements QuestionService {
 			if("0".equals(answer.getCreateid()) || "".equals(answer.getCreateid())){
 				answer.setType("n");
 				answer.setCreateid("0");
+			}else{
+				answer.setType("m");
 			}
+			
 			qdao.addAnswer(answer);
 			logger.info("添加问题回答成功");
 			return true;
@@ -93,8 +97,6 @@ public class QuestionServiceImpl implements QuestionService {
 	public boolean addQuestion(Question question) {
 		// TODO Auto-generated method stub
 		try {
-			System.out.println("0".equals(question.getCreateid()));
-			System.out.println("".equals(question.getCreateid()));
 			if("0".equals(question.getCreateid()) || GlobalConstant.isNull(question.getCreateid())){
 				question.setQuestionerType("n");
 				question.setCreateid("0");
@@ -106,7 +108,20 @@ public class QuestionServiceImpl implements QuestionService {
 			return true;
 		} catch (Exception e) {
 			// TODO: handle exception
+			logger.error("添加提交问题失败" , e);
 			return false;
 		}
+	}
+	
+	@Override
+	public List<AnswerType> findQuestType() {
+		// TODO Auto-generated method stub
+		return qdao.findQuestType();
+	}
+
+	@Override
+	public List<Question> getQuestionHot(int index, int pageSize) {
+		// TODO Auto-generated method stub
+		return qdao.getQuestionHot(index, pageSize);
 	}
 }

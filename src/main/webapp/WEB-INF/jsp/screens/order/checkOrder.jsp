@@ -27,10 +27,10 @@ function save(){
 <div class="bt"><strong>订单确认</strong></div></div>
 <div class="ddxq_top">
 <div class="ddxq_nr">
-<sf:form action="${ctx }/order/detail/evaluate" method="post" id="form">
+<sf:form action="${ctx }/member/order/detail/evaluate" method="post" id="form">
 <input type="hidden" name="id" value="${order.id }"/>
 <span>订单号:<strong>${order.code }</strong></span><br />
-<span>订单提交时间:<strong><fmt:formatDate value="${order.createdTime }" pattern="yyyy-MM-dd h:m"/></strong></span><br />
+<span>订单提交时间:<strong><fmt:formatDate value="${order.createdTime }" pattern="yyyy-MM-dd H:m"/></strong></span><br />
  <span>企业名称:<strong>${order.companyInfo}</strong></span><br />
 <span>企业申贷额度:<strong>${order.credit }万元</strong></span><br />
 <span>申请人姓名:<strong>${order.applicatPerson }</strong></span><br />
@@ -38,17 +38,17 @@ function save(){
 <span>产品名称:<a href="#">${order.productName }</a></span><br />
 <span>产品所属机构:<strong>${order.bank }</strong></span><br />
 <span>所在地区:<strong>${order.province }${order.city }${order.zone }</strong></span><br />
-<span>新越网审核通过时间:<strong><fmt:formatDate value="${order.taxAuditeTime }" pattern="yyyy-MM-dd h:m"/></strong></span><br />
+<span>新越网审核通过时间:<strong><fmt:formatDate value="${order.taxAuditeTime }" pattern="yyyy-MM-dd H:m"/></strong></span><br />
 <span>新越网审核人员:<strong>${order.taxAuditePerson }</strong></span><br />
-<span>信贷经理受理时间:<strong><fmt:formatDate value="${order.blankAuditeTime }" pattern="yyyy-MM-dd h:m"/></strong></span><br />
+<span>信贷经理受理时间:<strong><fmt:formatDate value="${order.blankAuditeTime }" pattern="yyyy-MM-dd H:m"/></strong></span><br />
 <span>信贷经理姓名:<strong>${order.blankAuditePerson }</strong></span><br />
-<span>放款时间:<strong><fmt:formatDate value="${order.auditeTime }" pattern="yyyy-MM-dd h:m"/></strong></span><br />
+<span>放款时间:<strong><fmt:formatDate value="${order.auditeTime }" pattern="yyyy-MM-dd H:m"/></strong></span><br />
 <span>放款金额:<strong>${order.creditReal }</strong>万元</span><br />
 <c:choose>
 	<c:when test="${order.level != null }">
 		<span>评价星级:<strong>${order.level }</strong>颗星</span><br />
 		<span>评价内容:<strong>${order.evaluateContent }</strong></span><br />
-		<span>评价时间:<strong><fmt:formatDate value="${order.evaluationTime }" pattern="yyyy-MM-dd h:m"/></strong></span><br />
+		<span>评价时间:<strong><fmt:formatDate value="${order.evaluationTime }" pattern="yyyy-MM-dd H:m"/></strong></span><br />
 	</c:when>
 	<c:otherwise>
 		<span class="btn_span"><input type="button" class="btn" onclick="save()" value="确定收款" /></span>

@@ -28,7 +28,7 @@ function save(){
 
 <div class="tab">
 <div class="bdzfb1"></div>
-<form action="${ctx }/reward/bindalipay" method="post" id="form">
+<form action="${ctx }/member/reward/bindalipay" method="post" id="form">
 <p class="wdt_905"><span>支付宝账号：</span><input type="text" name="account" class="t1" />
 <span class="yts">您已设置真实姓名为：刘某某，支付宝开户名必须与此一致才能顺利打款.</span></p>
 <p class="wdt_905"><input type="button" onclick="save()"  value="确认绑定" class="b1" /></p>

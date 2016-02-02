@@ -30,7 +30,7 @@ public class QuestionController {
 	public String show(Model model , HttpServletRequest req){
 		Member member = (Member)req.getSession().getAttribute(GlobalConstant.SESSION_MEMBER_INFO);
 		//PageData<Question> pdata = qbiz.findPage(member.getId(), req.getParameter("topage"));
-		PageData<QuestionBean> pdata = qbiz.findPage("00022b625df943ab934299050c5d6f43", req.getParameter("topage"));
+		PageData<QuestionBean> pdata = qbiz.findPage(member.getId(), req.getParameter("topage"));
 		model.addAttribute("questpage", pdata);
 		return "screens/quest/question";
 	}

@@ -7,6 +7,8 @@ import javax.annotation.Resource;
 import org.springframework.stereotype.Service;
 
 import com.xinyue.manage.beans.PageData;
+import com.xinyue.manage.dao.CityStationDao;
+import com.xinyue.manage.dao.OrganizationDao;
 import com.xinyue.manage.dao.OrganizationTypeDao;
 import com.xinyue.manage.dao.ProductTypeDao;
 import com.xinyue.manage.model.Organization;
@@ -14,6 +16,7 @@ import com.xinyue.manage.model.OrganizationType;
 import com.xinyue.manage.model.Product;
 import com.xinyue.manage.model.ProductType;
 import com.xinyue.manage.model.Question;
+import com.xinyue.manage.model.SubStation;
 import com.xinyue.manage.model.SuccessCase;
 import com.xinyue.manage.util.GlobalConstant;
 import com.xinyue.server.bean.OrgCollectBean;
@@ -39,7 +42,17 @@ public class OrgCollectServiceImpl implements OrgCollectService {
 		int currentPage = GlobalConstant.isNull(orgCollect.getTopage()) || "0".equals(orgCollect.getTopage())?1:Integer.valueOf(orgCollect.getTopage());
 		int total = odao.getOrgTotal(orgCollect);
 		int start = (currentPage - 1)*GlobalConstant.PAGE_SIZE;
-		return new PageData<OrgCollect>(odao.findPage(orgCollect, start, GlobalConstant.PAGE_SIZE), total, currentPage);
+		//add by lzc
+		List<OrgCollect> oList = odao.findPage(orgCollect, start, GlobalConstant.PAGE_SIZE);
+		for (OrgCollect collect : oList) {
+			Organization o = orgdao.findShop(collect.getId());
+			collect.setBusinessType(o.getPtype());
+			collect.setBusinessAreas(o.getStat());
+		}
+		//end by lzc
+		
+		
+		return new PageData<OrgCollect>(oList, total, currentPage);
 	}
 
 
@@ -59,6 +72,9 @@ public class OrgCollectServiceImpl implements OrgCollectService {
 		return odao.showDetail(id);
 	}
 	
+	@Resource
+	private OrganizationDao orgdao;
+	
 	@Override
 	public PageData<Organization> findOrgPage(OrgCollectBean orgCollect) {
 		// TODO Auto-generated method stub
@@ -66,6 +82,11 @@ public class OrgCollectServiceImpl implements OrgCollectService {
 		int currentPage = GlobalConstant.isNull(topage) || "0".equals(topage)?1:Integer.valueOf(topage);
 		int start = (currentPage - 1)*GlobalConstant.PAGE_SIZE;
 		List<Organization> data = odao.findOrgPage(orgCollect, start, GlobalConstant.PAGE_SIZE);
+		for (Organization org : data) {
+			Organization o = orgdao.findShop(org.getId());
+			org.setStat(o.getStat());
+			org.setPtype(o.getPtype());
+		}
 		int count = odao.getOrgCount(orgCollect);
 		return new PageData<Organization>(data , count, currentPage); 
 	}
@@ -73,7 +94,7 @@ public class OrgCollectServiceImpl implements OrgCollectService {
 	@Override
 	public Organization findOrgById(String orgid) {
 		// TODO Auto-generated method stub
-		return odao.findOrgById(orgid);
+		return orgdao.findShop(orgid);//odao.findOrgById(orgid);
 	}
 	
 	@Override
@@ -108,14 +129,14 @@ public class OrgCollectServiceImpl implements OrgCollectService {
 	}
 	
 	@Override
-	public PageData<Question> findPageAdvisory(String orgnum, String title,
+	public PageData<Question> findPageAdvisory(String orgid, String title,
 			String topage) {
 		// TODO Auto-generated method stub
 		int currentPage = GlobalConstant.isNull(topage) || "0".equals(topage)?1:Integer.valueOf(topage);
 		int start = (currentPage - 1)*GlobalConstant.PAGE_SIZE;
 		return new PageData<Question>(
-				odao.findPageAdvisory(orgnum, title, start, GlobalConstant.PAGE_SIZE), 
-				odao.getPageAdvisory(orgnum, title), 
+				odao.findPageAdvisory(orgid, title, start, GlobalConstant.PAGE_SIZE), 
+				odao.getPageAdvisory(orgid, title), 
 				currentPage);
 	}
 	
@@ -134,5 +155,20 @@ public class OrgCollectServiceImpl implements OrgCollectService {
 	public List<OrganizationType> findOrgTypes() {
 		// TODO Auto-generated method stub
 		return otdao.findTypes();
+	}
+	
+	@Resource
+	private CityStationDao cdao;
+	@Override
+	public List<SubStation> findAllStation() {
+		// TODO Auto-generated method stub
+		return cdao.findAllStation();
+	}
+	
+	
+	@Override
+	public List<OrgCollect> findOrgList() {
+		// TODO Auto-generated method stub
+		return odao.findOrgList(14);
 	}
 }

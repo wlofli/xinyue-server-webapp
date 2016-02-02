@@ -14,6 +14,7 @@ import com.xinyue.manage.dao.ProductDao;
 import com.xinyue.manage.dao.ProductTypeDao;
 import com.xinyue.manage.model.Collect;
 import com.xinyue.manage.model.CreditManager;
+import com.xinyue.manage.model.CreditManagerInfo;
 import com.xinyue.manage.model.Product;
 import com.xinyue.manage.model.ProductFile;
 import com.xinyue.manage.model.ProductType;
@@ -61,12 +62,7 @@ public class ProductCollectServiceImpl implements ProductCollectService {
 		return pdao.showDetail(id);
 	}
 
-	public PageData<Product> findProductPageData(ProductSearch psearch){
-		int currentPage = GlobalConstant.isNull(psearch.getTopage()) || "0".equals(psearch.getTopage())?1:Integer.valueOf(psearch.getTopage());
-		int total = pdao.getProductTypeCount(psearch);
-		int start = (currentPage -1)*GlobalConstant.PAGE_SIZE;
-		return new PageData<Product>(pdao.findProductPage(psearch , start , GlobalConstant.PAGE_SIZE), total, currentPage);
-	}
+
 	
 	@Resource
 	private OrganizationDao ogao;
@@ -97,7 +93,15 @@ public class ProductCollectServiceImpl implements ProductCollectService {
 	@Resource
 	private CreditManagerDAO cdao;
 	
-	public List<CreditManager> findCreditByOrgid(String orgid){
+	public List<CreditManagerInfo> findCreditByOrgid(String orgid){
 		return cdao.findCreditByOrgid(orgid);
+	}
+	
+	//2015-09-24
+	public PageData<Product> findProductPageData(ProductSearch psearch){
+		int currentPage = GlobalConstant.isNull(psearch.getTopage()) || "0".equals(psearch.getTopage())?1:Integer.valueOf(psearch.getTopage());
+		int total = pdao.getProductCount(psearch);
+		int start = (currentPage -1)*GlobalConstant.PAGE_SIZE;
+		return new PageData<Product>(pdao.findProductPage(psearch , start , GlobalConstant.PAGE_SIZE), total, currentPage);
 	}
 }

@@ -37,7 +37,6 @@ public class ProductCollectController {
 			cbean.setMemberid(m.getId());
 		}
 		PageData<Collect> pdata = pbiz.findPageData(cbean);
-		System.out.println(pdata.getTotal()+","+pdata.getPageSize()+","+pdata.getTotalPage());
 		
 		model.addAttribute("pdata", pdata);
 		model.addAttribute("cbean", cbean);

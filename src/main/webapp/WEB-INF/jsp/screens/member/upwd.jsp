@@ -12,7 +12,7 @@
 <script type="text/javascript">
 $(function(){
 	
-	$("#common_pwd_from").validate({
+	$("#common_pwd_form").validate({
 		rules: {
 			password:{
 				required:true,
@@ -26,7 +26,7 @@ $(function(){
 			},
 			passwordConfirm:"required",
 			passwordCheck: {
-				equalTo:"#passwordConfirm"
+				equalTo:"#common_confirm_pwd"
 			}
 		},
 		messages: {

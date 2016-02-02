@@ -15,25 +15,37 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.alibaba.fastjson.JSONObject;
+import com.xinyue.manage.beans.PageData;
+import com.xinyue.manage.beans.ProductTypeInfo;
 import com.xinyue.manage.beans.SearchNew;
 import com.xinyue.manage.beans.SelectInfo;
 import com.xinyue.manage.beans.SubCityInfo;
 import com.xinyue.manage.model.Advertising;
+import com.xinyue.manage.model.CreditManagerInfo;
 import com.xinyue.manage.model.FastProduct;
 import com.xinyue.manage.model.Member;
 import com.xinyue.manage.model.NewInfo;
+import com.xinyue.manage.model.Product;
+import com.xinyue.manage.model.ProductType;
 import com.xinyue.manage.model.Province;
+import com.xinyue.manage.model.Question;
+import com.xinyue.manage.model.SuccessCase;
 import com.xinyue.manage.service.AdvertisingService;
 import com.xinyue.manage.service.CityService;
+import com.xinyue.manage.service.CreditManagerService;
 import com.xinyue.manage.service.FastProductService;
 import com.xinyue.manage.service.MemberService;
 import com.xinyue.manage.service.NewService;
 import com.xinyue.manage.service.OrganizationTypeService;
 import com.xinyue.manage.service.ProductService;
+import com.xinyue.manage.service.ProductTypeService;
 import com.xinyue.manage.service.SelectService;
+import com.xinyue.manage.service.SuccessCaseService;
 import com.xinyue.manage.util.CommonFunction;
 import com.xinyue.manage.util.GlobalConstant;
 import com.xinyue.server.bean.BaiduCityInfo;
+import com.xinyue.server.service.OrgCollectService;
+import com.xinyue.server.service.QuestionService;
 import com.xinyue.server.util.MapFunction;
 
 /**
@@ -41,6 +53,11 @@ import com.xinyue.server.util.MapFunction;
  * @author MK)茅
  * @version v1.0
  * @date 创建时间：2015年8月6日
+ */
+/**
+ * lzc 15-12-01 index()路径修改
+ * lzc 15-12-01 index()添加成功案例
+ * lzc 15-12-10 jsonCity()修改返回方法
  */
 @Controller
 public class IndexController {
@@ -55,6 +72,9 @@ public class IndexController {
 	ProductService productService;
 	
 	@Resource
+	private ProductTypeService productTypeService;
+	
+	@Resource
 	MemberService memberService;
 	
 	@Resource
@@ -66,9 +86,21 @@ public class IndexController {
 	@Resource
 	CityService cityService;
 	
+	@Resource
+	private CreditManagerService creditManagerService;
+	
+	@Resource
+	private QuestionService questionService;
+	
+	
+	@Resource
+	private OrgCollectService obiz;
 	
 	@Resource
 	NewService newService;
+	
+	@Resource 
+	private SuccessCaseService successCaseService;
 	
 	private Logger log = Logger.getLogger(IndexController.class);
 	
@@ -133,8 +165,9 @@ public class IndexController {
 		//取得大广告
 		List<Advertising> adList = advertisingService.getIndexAD();
 		model.addAttribute("indexADs", adList);
-		model.addAttribute("showPath", SHOW_PATH);
-		
+		//modified by lzc 路径添加 moko/images/
+		model.addAttribute("showPath", SHOW_PATH + "moko/images/");
+		//end
 		//快速申贷
 		FastProduct fastProduct = new FastProduct();
 		model.addAttribute("fastLoanInfo", fastProduct);
@@ -156,15 +189,60 @@ public class IndexController {
 		int companyCount = memberService.getCount(null);
 		model.addAttribute("companyCount", companyCount);
 		
+		//add by lzc
+		List<SuccessCase> successCases = successCaseService.getSuccessByTime(0, GlobalConstant.PAGE_SIZE_FIFTY);
+		model.addAttribute("successCase", successCases);
+		
+		
+		
 		SearchNew searchNew = new SearchNew();
 		//undone->city
 //		searchNew.setCity();
 		
 		List<NewInfo> newList = newService.getNewInfoListByTime(searchNew, 0, GlobalConstant.PAGE_SIZE);
 		model.addAttribute("newlist", newList);
+
+		//贷款产品
+		PageData<ProductType> product = productTypeService.findFirstPagedata(new ProductTypeInfo());
+		for (ProductType type : product.getData()) {
+			type.setProducts(productService.getListByType(type.getId(), "0", 0, GlobalConstant.PAGE_SIZE));
+		}
+		model.addAttribute("product", product);
+		model.addAttribute("proShowPath", SHOW_PATH + "moko/images/pro/");
+		
+		
+		//贷款攻略
+		List<NewInfo> loanList = newService.getNewInfoByNewTypeName(GlobalConstant.INDEX_LOAN, 0, GlobalConstant.PAGE_SIZE);
+		model.addAttribute("loan", loanList);
+		
+		
+		//初始化有产品的快速申贷订单
+		fastProductService.initFastApplicant(model);
+		
+		
+		//查看用户是否登录
+		Member member = (Member) request.getSession().getAttribute(GlobalConstant.SESSION_MEMBER_INFO);
+		if(!GlobalConstant.isNull(member)){
+			model.addAttribute("phone", true);
+		}
+		
+		
+		//热门问答
+		List<Question> questions = questionService.getQuestionHot(0, GlobalConstant.PAGE_SIZE);
+		model.addAttribute("question", questions);
+		
+		
+		//推荐信贷经理
+		List<CreditManagerInfo> creditManagerInfos = creditManagerService.getCreditManagerInfoByIndex(0, 6);
+		model.addAttribute("creditList", creditManagerInfos);
 		
 		request.getSession().setAttribute(GlobalConstant.INDEX_TYPE, "index");
-		
+		//ywh start
+		//产品类型
+		model.addAttribute("protype", obiz.findByStatus());
+		//机构
+		model.addAttribute("orglist", obiz.findOrgList());
+		//ywh over
 		return "screens/index"; 
 	}
 	
@@ -328,7 +406,6 @@ public class IndexController {
 		
 		try {
 			String cityNameTemp = URLDecoder.decode(cityName,"utf-8");
-			
 			String cityCode = cityService.findCityCodeByName(cityNameTemp);
 			
 			request.getSession().setAttribute(GlobalConstant.SUB_CITY_INFO, jsonCity(cityCode, cityNameTemp+"市"));
@@ -356,9 +433,16 @@ public class IndexController {
 		JSONObject jo = new JSONObject();
 		jo.put("cityCode", cityCode);
 		jo.put("cityName", cityName);
-		
-		result = jo.toJSONString();
-		
+		//modified by lzc 15-12-10 
+//		result = jo.toJSONString();
+		result = jo.toString();
+		//end
 		return result;
+	}
+	
+	
+	@RequestMapping("redirect")
+	public String  redirect(){
+		return "common/redirect";
 	}
 }

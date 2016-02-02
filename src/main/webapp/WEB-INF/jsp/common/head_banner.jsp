@@ -5,11 +5,19 @@
 	<div id="full-screen-slider">
 		<ul id="slides">
 			<!-- 大广告 -->
-			<c:forEach items="${indexADs}" var="banner" varStatus="vs">
-				<li style="background: url('${showPath}${banner.directory}${banner.thumbnail}') no-repeat center top">
-					<a href="#" target="_blank">${banner.title}</a>
-				</li>
-			</c:forEach>
+			<c:if test="${indexADs.size() > 0 }">
+				<c:forEach items="${indexADs}" var="banner" varStatus="vs">
+					<li style="background: url('${showPath}${banner.directory}${banner.thumbnail}') no-repeat center top">
+						<a href="${banner.url }" target="_blank">${banner.title}</a>
+					</li>
+				</c:forEach>
+			</c:if>
+			<c:if test="${indexADs.size() == 0 }">
+				<li style="background:url('${ctx}/images/01.png') no-repeat center top"><a href="#" target="_blank">新越网</a></li>
+				<li style="background:url('${ctx}/images/02.png') no-repeat center top"><a href="#" target="_blank">新越网</a></li>
+				<li style="background:url('${ctx}/images/03.jpg') no-repeat center top"><a href="#" target="_blank">新越网</a></li>
+				<li style="background:url('${ctx}/images/04.png') no-repeat center top"><a href="#" target="_blank">新越网</a></li>
+			</c:if>
 		</ul>
 	</div>
 	<div class="form_sd">
@@ -22,11 +30,11 @@
 			</dd>
 			<dd>
 				<span class="bt_span">所属地区：</span>
-				<sf:select path="areaProvince" cssClass="sd_select1" id="sel_p" onchange="getCities()">
+				<sf:select path="areaProvince" cssClass="sd_select1" id="sel_p" onchange="getCities1()">
 					<sf:option value="">选择省</sf:option>
 					<sf:options items="${provinces}" itemValue="key" itemLabel="value"/>
 				</sf:select>
-				<sf:select path="areaCity" cssClass="sd_select1" id="sel_c" onchange="getZones()">
+				<sf:select path="areaCity" cssClass="sd_select1" id="sel_c" onchange="getZones1()">
 					<sf:option value="">选择市</sf:option>
 				</sf:select>
 				<sf:select path="areaZone" cssClass="sd_select1" id="sel_z">
@@ -43,8 +51,8 @@
 			</dd>
 			<dd>
 				<span class="bt_span">联系手机：</span>
-				<sf:input path="contactPhone" cssClass="sd_input1" placeholder="请输入联系人手机" id="id_tel"/>
-				<input type="button" class="sd_yzsj_btn" value="获取验证码" id="code_btn" onclick="getCode()"/>
+				<sf:input path="contactPhone" cssClass="sd_input1" placeholder="请输入联系人手机" id="tels"/>
+				<input type="button" class="sd_yzsj_btn" value="获取验证码" id="code_btns" onclick="getCode()"/>
 			</dd>
 			<dd>
 				<span class="bt_span">手机验证码：</span>
@@ -75,14 +83,16 @@
 	</ul>
 </div>
 <script type="text/javascript">
-var time = 61;
+var times = 61;
 function fastSubmit(){
-	if ($("#id_company").val() != "" && $("#sel_z").val() != "" && $("#id_money").val() != "" && $("#id_name").val() != "" && $("#id_tel").val() != "") {
+	if ($("#id_company").val() != "" && $("#sel_z").val() != "" && $("#id_money").val() != "" && $("#id_name").val() != "" && $("#tels").val() != "") {
 		$.ajax({
-			url:"",
+			url:"${ctx}/common/check/code",
+			method:"post",
 			data:{checkCode:$("#id_check").val()},
 			success:function(data){
-				if (data != "true") {
+// 				alert(data);
+				if (data != true) {
 					alert("手机验证码不正确");
 				}else{
 					$("#fastForm").submit();
@@ -93,7 +103,7 @@ function fastSubmit(){
 		alert("请正确填写相关信息");
 	}
 }
-function getCities(){
+function getCities1(){
 var provinceVal = $("#sel_p option:selected").val();
 	
 	$("#sel_c").empty();
@@ -123,7 +133,7 @@ var provinceVal = $("#sel_p option:selected").val();
 		});
 	}
 }
-function getZones(){
+function getZones1(){
 var cityVal = $("#sel_c option:selected").val();
 	
 	$("#sel_z").empty();
@@ -149,7 +159,7 @@ var cityVal = $("#sel_c option:selected").val();
 	}
 }
 function getCode(){
-	var tel = $("#tel").val();
+	var tel = $("#tels").val();
 	if (tel == "") {
 		alert("请填写手机号！");
 		return;
@@ -159,27 +169,27 @@ function getCode(){
 		type:"post",
 		success:function(data){
 			if (data=="true") {
-				timer();
+				timers();
 			} else {
 				alert("验证码发送失败！");
 			}
 		}
 	});
 }
-function timer(){
-	if (time == 1) {
-		$("#code_btn").val("获取验证码");
-		$("#code_btn").removeClass("sd_yzsj_btn1");
-		$("#code_btn").addClass("sd_yzsj_btn");
-		$("#code_btn").removeAttr("disabled");
-		time = 61;
+function timers(){
+	if (times == 1) {
+		$("#code_btns").val("获取验证码");
+		$("#code_btns").removeClass("sd_yzsj_btn1");
+		$("#code_btns").addClass("sd_yzsj_btn");
+		$("#code_btns").removeAttr("disabled");
+		times = 61;
 	} else {
-		$("#code_btn").removeClass("sd_yzsj_btn");
-		$("#code_btn").addClass("sd_yzsj_btn1");
-		$("#code_btn").attr("disabled","disabled");
-		time = time - 1;
-		$("#code_btn").val(time+"秒后重置");
-		setTimeout(function(){timer()},1000);
+		$("#code_btns").removeClass("sd_yzsj_btn");
+		$("#code_btns").addClass("sd_yzsj_btn1");
+		$("#code_btns").attr("disabled","disabled");
+		times = times - 1;
+		$("#code_btns").val(times+"秒后重置");
+		setTimeout(function(){timers()},1000);
 	}
 }
 </script>

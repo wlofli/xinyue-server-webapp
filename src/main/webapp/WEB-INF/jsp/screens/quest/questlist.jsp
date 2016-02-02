@@ -34,8 +34,8 @@
 						<s:textarea path="title" class="tw_txt1"/>
 						<s:hidden path="topage" id="quest_topage"/>
 						<s:hidden path="questype" id="quest_questype"/>
-						<input type="button" value="我要提问" class="tw_btn" onclick="ask()"/> <input
-							type="button" value="搜索答案" class="da_btn" onclick="show()"/>
+						<input type="button" value="我要提问" class="tw_btn" onclick="askquest()"/> 
+						<input type="button" value="搜索答案" class="da_btn" onclick="showquest()"/>
 						<div class="clear"></div>
 					</s:form>
 				</div>
@@ -59,84 +59,7 @@
 				</div>
 			</div>
 			<div class="pro_xq_right">
-
-				<div class="wd_fl">
-					<div class="wd_bt">
-						<span>问答分类</span>
-					</div>
-					<div class="wd_lb">
-						<dl class="wd_fl1">
-							<dt>
-								<span>按贷款知识分类</span>
-							</dt>
-							<dd>
-								<a href="javascript:void(0)" onclick="show(this)">常用知识</a>
-							</dd>
-							<dd>
-								<a href="javascript:void(0)" onclick="show(this)">贷款流程</a>
-							</dd>
-							<dd>
-								<a href="javascript:void(0)" onclick="show(this)">资质咨询</a>
-							</dd>
-							<dd>
-								<a href="javascript:void(0)" onclick="show(this)">利息咨询</a>
-							</dd>
-							<div class="clear"></div>
-						</dl>
-						<dl class="wd_fl2">
-							<dt>
-								<span>按产品类型分类</span>
-							</dt>
-							<dd>
-								<a href="javascript:void(0)" onclick="show(this)">抵押贷款</a>
-							</dd>
-							<dd>
-								<a href="javascript:void(0)" onclick="show(this)">无抵押贷款</a>
-							</dd>
-							<dd>
-								<a href="javascript:void(0)" onclick="show(this)">按揭贷款</a>
-							</dd>
-							<div class="clear"></div>
-						</dl>
-						<dl class="wd_fl3">
-							<dt>
-								<span>按贷款类型分类</span>
-							</dt>
-							<dd>
-								<a href="javascript:void(0)" onclick="show(this)">消费贷款</a>
-							</dd>
-							<dd>
-								<a href="javascript:void(0)" onclick="show(this)">经营贷款</a>
-							</dd>
-							<dd>
-								<a href="javascript:void(0)" onclick="show(this)">买车贷款</a>
-							</dd>
-							<dd>
-								<a href="javascript:void(0)" onclick="show(this)">买房贷款</a>
-							</dd>
-							<div class="clear"></div>
-						</dl>
-					</div>
-
-				</div>
-				<div class="rm_zx">
-					<div class="zx_bt">
-						<span>热门问答</span><a href="javascript:void(0)">更多&gt;</a>
-						<div class="clear"></div>
-					</div>
-					<div class="zx_lb">
-						<ul>
-							<c:forEach items="${questlist }" var="question">
-								<Li><a href="javascript:void(0)" onclick="document.location.href='${ctx}/quest/detail?questid=${question.id }'">${question.title }</a></Li>
-							</c:forEach>
-						</ul>
-					</div>
-
-				</div>
-				<div class="ad_mk1">
-					<a href="javascript:void(0)"> <img src="${ctx }/images1/ad1.jpg" /></a>
-				</div>
-
+				<jsp:include page="questcommon.jsp"></jsp:include>				
 			</div>
 			<div class="clear"></div>
 		</div>
@@ -147,19 +70,19 @@
 	<script type="text/javascript">
 		function changePage(url , topage){
 			$("#quest_topage").val(topage);
-			show();
+			showquest();
 		}
 		
-		function show(){
+		function showquest(){
 			if(arguments.length == 0){
 				$("#quest_form").submit();
 			}else{
-				$("#quest_questype").val($(arguments[0]).html());
+				$("#quest_questype").val(arguments[0]);
 				$("#quest_form").submit();
 			}
 		}
 		
-		function ask(){
+		function askquest(){
 			document.location.href="${ctx}/quest/ask";
 		}
 	</script>

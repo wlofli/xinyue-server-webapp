@@ -28,7 +28,7 @@
 	
 	<update id="saveMember" parameterType="com.xinyue.manage.model.Member">
 		update m_member_info set sex = #{sex} , contact_name = #{contactName} , contact_phone = #{contactPhone} , company=#{company} , area_province = #{provinceid},
-			area_city = #{cityid} , area_zone = #{zoneid} , address = #{address} , email = #{email} , modified_id = #{loginName} , modified_time = now() where id = #{id}
+			area_city = #{cityid} , area_zone = #{zoneid} , address = #{address} , email = #{email} , modified_id = #{id} , modified_time = now() where id = #{id}
 	</update>
 	
 	<select id="inspectPwd" resultType="string">

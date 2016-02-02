@@ -63,7 +63,7 @@ function timer(){
 
 <div class="tab">
 <div class="bdzfb2"></div>
-<form action="${ctx }/reward/bindalipay2" method="post" id="form">
+<form action="${ctx }/member/reward/bindalipay2" method="post" id="form">
 <p class="wdt_905"><span>已绑定手机：</span><span class="ytxx_hy">${phone }</span></p>
 <p class="wdt_905"><span>验证码：</span><input type="text" name="authcode" class="t2" />
 <input type="button" onclick="send()" class="b2" id="verify_code" value="获取验证码" /> <a href="#" class="jbxx">收不到短信/语音验证码?</a> </p>

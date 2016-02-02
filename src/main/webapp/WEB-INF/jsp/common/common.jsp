@@ -15,8 +15,10 @@
 
 <script type="text/javascript">
 jQuery.validator.addMethod("charstr", function(value, element) { 
-	var chrnum = /^([a-zA-Z0-9]+)$/; 
-	var chinese = /^[\u4e00-\u9fa5]+$/;
-	return this.optional(element) || (chrnum.test(value)) || (chinese.test(value)); 
+	//modified by lzc 
+	//将chrnum与chinese合并
+	var chrnum = /^([a-zA-Z0-9\u4e00-\u9fa5]+)$/; 
+// 	var chinese = /^[\u4e00-\u9fa5]+$/;
+	return this.optional(element) || (chrnum.test(value)); 
 	}, "<span class='zc_zs'>* 只能输入数字、字母或中文</span>"); 
 </script>

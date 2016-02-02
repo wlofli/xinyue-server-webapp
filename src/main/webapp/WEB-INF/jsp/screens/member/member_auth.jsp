@@ -328,7 +328,7 @@ function showM(){
 				<p><span class="zs">图片大小为大于或等于300kb，文件为jpg、png或gif </span></p>
 				<p><input type="file" id="id_file" name="authFiles" class="file"/></p>
 				<p><span class="zs1" id="img_err"></span></p>
-				<a href="javascript:void();" onclick="uploadFile()" class="qd_btn">上传文件</a>
+				<p><a href="javascript:void();" onclick="uploadFile()" class="qd_btn">上传文件</a></p>
 			</div>
 		</div>
 	</div>
@@ -509,6 +509,7 @@ function uploadFile(){
 		dataType:'json',
 		success:function(data){
 			if (data != "fail") {
+				alert("上传成功");
 				hide();
 				data = eval(data);
 				$("#hid_"+imgType).val(data[0].name);

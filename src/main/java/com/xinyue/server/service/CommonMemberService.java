@@ -30,4 +30,11 @@ public interface CommonMemberService {
 	public boolean updateTel(String id , String contactPhone);
 	
 	public PageData<FileInfo> showDoc(String topage);
+	
+	/**
+	 * ywh gg 根据电话号码查询会员 信息
+	 * @param contactPhone
+	 * @return
+	 */
+	public Member getMemberByPhone(String contactPhone);
 }

@@ -69,7 +69,7 @@ function getOrder(n){
 	 }
 	 order_i += n;
 	 $.ajax({
-		 url:"${ctx}/order/getorder?index="+order_i,
+		 url:"${ctx}/member/order/getorder?index="+order_i,
 		 type:"post",
 	 	 async:false,
 	 	 success:function(data){
@@ -78,16 +78,36 @@ function getOrder(n){
 	 	 var date = new Date(jsonData.order.createdTime.time).Format("yyyy-MM-dd hh:mm:ss");
 			 if(jsonData.result == "success"){
 		 		 $(".hy_dd_nr1").empty();
-		 		 $(".hy_dd_nr1").append("<span>订单号：<a href='#undone->不知道去哪'>" + jsonData.order.code + "</a>&nbsp;&nbsp;&nbsp;&nbsp;"
+		 		 $(".hy_dd_nr1").append("<span>订单号：<a href='${ctx}/member/order/detail/applicant?id="+ jsonData.order.id + "'>" + jsonData.order.code + "</a>&nbsp;&nbsp;&nbsp;&nbsp;"
 		 		 +"订单提交日期：<strong>"+date+"</strong></span>");
 		 		 $(".hy_dd_nr2").empty();
-		 		 $(".hy_dd_nr2").append("<img src='${ctx }/images/cp_tx.png' class='cp_tx' />"
-		 		 +"<div class='float_l_hy1'><span>产品名称：<strong>" + jsonData.order.productName + "</strong></span>"
+		 		 if(jsonData.order.productImg != null){
+		 			 $(".hy_dd_nr2").append("<img id='proimg' src='${propath }" + jsonData.order.productImg + "' class='cp_tx' width='70px' height='70px' /> ");
+		 		 }else{
+		 			 $(".hy_dd_nr2").append("<img id='proimg' src='${ctx }/images/cp_tx.png' class='cp_tx' />");
+		 		 }
+		 		 $(".hy_dd_nr2").append("<div class='float_l_hy1'><span>产品名称：<strong>" + jsonData.order.productName + "</strong></span>"
 		 		 +"<span>所属机构：<strong>" + jsonData.order.bank + " </strong></span><span>订单状态：<strong>" +jsonData.order.status + "</strong></span>"
-		 		 +"</div><div class='float_y_hy'><p>"
-		 		 +"<a class='float_y_hy_a' href='${ctx }/order/detail/document?id=${order.id}'>附件补充</a><a class='float_y_hy_a' href='${ctx }/order/detail/applicant?id=${list.id}'>完善资料</a>"
-		 		 +"<a class='float_y_hy_a' href='${ctx }/order/detail/applicant?id=${list.id}'>查看详情</a><a class='float_y_hy_a' href='javascript:deleteOrder(&quot;" + jsonData.order.id + "&quot;)'>取消订单</a></p></div>"
+		 		 +"</div><div id='orderoperation' class='float_y_hy'>"
+		 		 +"</div>"
 		 		 +"<div class='clear'></div><div class='hy_dd_nr2'></div>");
+		 		
+		 		 $("#orderoperation").empty();
+		 		 if(jsonData.order.status == "需求填写中" || jsonData.order.status == "等待新越网审核"){
+		 			 $("#orderoperation").append(
+		 			  "<p><a class='float_y_hy_a' href='${ctx }/member/order/detail/document?id="+ jsonData.order.id + "'>附件补充</a>"
+			 		 +"<a class='float_y_hy_a' href='${ctx }/member/order/detail/applicant?id="+ jsonData.order.id +"'>完善资料</a>"
+			 		 +"<a class='float_y_hy_a' href='${ctx }/member/order/detail/applicant?id=" + jsonData.order.id + "'>查看详情</a>"
+			 		 +"<a class='float_y_hy_a' href='javascript:deleteOrder(&quot;" + jsonData.order.id + "&quot;)'>取消订单</a></p>");
+		 		 }else if(jsonData.order.status == "放款成功"){
+		 			 $("#orderoperation").append("<p><a class='float_y_hy_a' href='${ctx }/member/order/detail?id=" + jsonData.order.id + "'>确认收款</a></p>");
+		 			 
+		 		 }else{
+		 			 $("#orderoperation").append(
+		 			    "<p><a class='float_y_hy_a' href='${ctx }/member/order/detail/applicant?id=" + jsonData.order.id + "'>查看详情</a></p>"
+		 			   );
+		 					 
+		 		 }
 		 		 $(".hy_dd_nr3").empty();
 		 		 if(jsonData.order.status == "需求填写中"){
 		 			$(".hy_dd_nr3").append("<img src='${ctx }/images/order_zt_bj.png' />");
@@ -111,7 +131,7 @@ function getOrder(n){
 	
 function deleteOrder(id){
 	$.ajax({
-		url:"${ctx}/order/delete?list=" + id,
+		url:"${ctx}/member/order/delete?list=" + id,
 		type:'post',
 		async:false,
 		success:function(data){
@@ -139,23 +159,27 @@ function deleteOrder(id){
 <img src="${ctx }/images/tx_hy.png" onclick="javascript:show1()" style="cursor:pointer;" />
 <div class="float_l_hy">
 <span class="yhm">用户名：<strong>${user.contactName }</strong></span>
-<span class="yhm"><a href="#" title="个人信息" class="per_icon"></a><a href="#" title="手机验证"  class="tel_icon"></a><a href="#" title="实名认证"  class="sm_icon"></a><a href="#" title="邮箱验证"  class="yx_icon"></a></span>
+<span class="yhm">
+<a href="${ctx }/member/list?param=basic" title="个人信息" class="per_icon"></a>
+<a href="${ctx }/member/list?param=tel" title="手机验证"  class="tel_icon"></a>
+<a href="${ctx }/member/list?param=authentication" title="实名认证"  class="sm_icon"></a>
+<a href="#" title="邮箱验证"  class="yx_icon"></a></span>
 <div class="clear"></div>
 <span>企业名称：<strong>${user.company }</strong></span>
 </div>
 <ul class="float_y_hy">
-<li><a href="#"><strong>200<font>元</font></strong><span>推荐奖励</span></a></li>
-<li><a href="#"><strong>12<font>个</font></strong><span>推荐会员</span></a></li>
-<li><a href="#"><strong>${orderNum}<font>个</font></strong><span>贷款订单</span></a></li>
+<li><a href="${ctx }/member/list?param=reward"><strong>${reward }<font>元</font></strong><span>推荐奖励</span></a></li>
+<li><a href="${ctx }/member/list?param=recommend"><strong>${recommendNum }<font>个</font></strong><span>推荐会员</span></a></li>
+<li><a href="${ctx }/member/list?param=orderlist"><strong>${orderNum}<font>个</font></strong><span>贷款订单</span></a></li>
 <li class="clear"></li>
 </ul>
 </div>
 <div class="hy_r_top2">
 <ul class="rz_ul">
-<li class="rz_li1"><a href="#"><i></i><span>帐号信息</span></a></li>
-<li class="rz_li2"><a href="#"><i></i><span>企业档案</span></a></li>
-<li class="rz_li3"><a href="#"><i></i><span>实名认证</span></a></li>
-<li class="rz_li4"><a href="#"><i></i><span>下载中心</span></a></li>
+<li class="rz_li1"><a href="${ctx }/member/list?param=basic"><i></i><span>帐号信息</span></a></li>
+<li class="rz_li2"><a href="${ctx }/member/list?param=companyrecord"><i></i><span>企业档案</span></a></li>
+<li class="rz_li3"><a href="${ctx }/member/list?param=authentication"><i></i><span>实名认证</span></a></li>
+<li class="rz_li4"><a href="${ctx }/member/list?param=down"><i></i><span>下载中心</span></a></li>
 <li class="clear"></li>
 </ul>
 </div>
@@ -164,22 +188,47 @@ function deleteOrder(id){
 <div class="hy_dd_bt"><span>我的贷款订单</span></div>
 <div class="hy_dd_nr">
 <div class="hy_dd_nr1">
-<span>订单号：<a href="#">${order.code }</a>&nbsp;&nbsp;&nbsp;&nbsp;
-订单提交日期：<strong><fmt:formatDate value="${order.createdTime }" pattern="yyyy-MM-dd h:m"/></strong></span> </div>
+<span>订单号：<a href="${ctx }/member/order/detail/applicant?id=${order.id}">${order.code }</a>&nbsp;&nbsp;&nbsp;&nbsp;
+订单提交日期：<strong><fmt:formatDate value="${order.createdTime }" pattern="yyyy-MM-dd H:m"/></strong></span> </div>
 <div class="hy_dd_nr2">
-<img src="${ctx }/images/cp_tx.png" class="cp_tx" />
+<c:choose>
+	<c:when test="${empty order.productImg }">
+		<img id="proimg" src="${ctx }/images/cp_tx.png" class="cp_tx" />
+	</c:when>
+	<c:otherwise>
+		<img id="proimg" src="${propath }${order.productImg}" class="cp_tx"  width="70px" height="70px" />
+	</c:otherwise>
+</c:choose>
+
 <div class="float_l_hy1">
 <span>产品名称：<strong>${order.productName }</strong></span>
 <span>所属机构：<strong>${order.bank }</strong></span>
 <span>订单状态：<strong>${order.status }</strong></span>
 
 </div>
-<div class="float_y_hy">
+<div id="orderoperation" class="float_y_hy">
 <p>
-<a class="float_y_hy_a" href="#undone">附件补充</a>
-<a class="float_y_hy_a" href="${ctx }/order/detail/applicant?id=${list.id}">完善资料</a>
-<a class="float_y_hy_a" href="${ctx }/order/detail/applicant?id=${list.id}">查看详情</a>
-<a class="float_y_hy_a" href="javascript:deleteOrder('${order.id }')">取消订单</a></p>
+<c:choose>
+	<c:when test="${order.status == '需求填写中'}">
+		<a class="float_y_hy_a" href="${ctx }/member/order/detail/document?id=${order.id}">附件补充</a>
+		<a class="float_y_hy_a" href="${ctx }/member/order/detail/applicant?id=${order.id}">完善资料</a>
+		<a class="float_y_hy_a" href="${ctx }/member/order/detail/applicant?id=${order.id}">查看详情</a>
+		<a class="float_y_hy_a" href="javascript:deleteOrder('${order.id }')">取消订单</a>
+	</c:when>
+	<c:when test="${order.status == '等待新越网审核' }">
+		<a class="float_y_hy_a" href="${ctx }/member/order/detail/document?id=${order.id}">附件补充</a>
+		<a class="float_y_hy_a" href="${ctx }/member/order/detail/applicant?id=${order.id}">完善资料</a>
+		<a class="float_y_hy_a" href="${ctx }/member/order/detail/applicant?id=${order.id}">查看详情</a>
+		<a class="float_y_hy_a" href="javascript:deleteOrder('${order.id }')">取消订单</a>
+	</c:when>
+	<c:when test="${order.status == '放款成功' }">
+		<a class="float_y_hy_a" href="${ctx }/member/order/detail?id=${order.id}">确认收款</a>
+	</c:when>
+	<c:otherwise>
+		<a class="float_y_hy_a" href="${ctx }/member/order/detail/applicant?id=${order.id}">查看详情</a>
+	</c:otherwise>
+</c:choose>
+</p>
 </div>
 <div class="clear"></div>
 </div>
@@ -218,7 +267,16 @@ function deleteOrder(id){
 <div class="hy_tjcp_nr">
 <ul class="tjcp_ul">
 <c:forEach items="${product }" var="list" varStatus="vs" >
-	<li class="tjcp_li"><a href="#"><img src="${ctx }undone" /><span>产品名称：<strong>${list.name }</strong></span></a></li>
+	<li class="tjcp_li">
+		<a href="${ctx }/product/detail?proid=${list.id}">
+				<c:if test="${empty list.logo }">
+					<img src="${ctx }/images1/cp_icon2.png" width="180" class="cp_tx"/>
+				</c:if>
+				<c:if test="${not empty list.logo }">
+					<img src="${propath }${list.logo}" width="180px" height="123px" class="cp_tx"/>
+				</c:if>
+			<span>产品名称：<strong>${list.name }</strong></span>
+		</a></li>
 </c:forEach>
 </ul>
 </div>

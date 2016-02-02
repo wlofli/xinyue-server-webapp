@@ -15,13 +15,13 @@
 	}
 	
 	function changePage(n){
-		$("#searchForm").attr("action","${ctx }/order/list?index=" + n);
+		$("#searchForm").attr("action","${ctx }/member/order/list?index=" + n);
 		changeStatus();
 	}
 	
 	function deleteOrder(id){
 		$.ajax({
-			url:"${ctx}/order/delete?list=" + id,
+			url:"${ctx}/member/order/delete?list=" + id,
 			type:'post',
 			async:false,
 			success:function(data){
@@ -46,7 +46,7 @@
 <div class="hy_right">
 <div class="ddxq_top">
 <ul class="sdlc_ul">
-<li class="bt"><img src="../images/sdlc_bt.png" /></li>
+<li class="bt"><img src="${ctx }/images/sdlc_bt.png" /></li>
 <li class="lc_num1"><i></i><p><strong>1</strong><span>填写信息<br />提交申请</span></p></li>
 <li class="lc_num2"><i></i><p><strong>2</strong><span>贷款顾问<br />辅导申请</span></p></li>
 <li class="lc_num3"><i></i><p><strong>3</strong><span>资料审核<br />确认放款</span></p></li>
@@ -66,7 +66,7 @@
 <div class="tab">
 <table class="sczl_table">
 <thead>
-<sf:form action="${ctx }/order/list?index=0" commandName="order" method="post" id="searchForm">
+<sf:form action="${ctx }/member/order/list?index=0" commandName="order" method="post" id="searchForm">
 <tr>
 <td colspan="1">序号</td>
 <td colspan="2">订单号</td>
@@ -95,22 +95,22 @@
 <tr>
 <td colspan="1"><c:out value="${vs.count + (page.pageNo)*10}" /></td>
 <td colspan="2">${list.code }</td>
-<td colspan="2"><a href="undone->不知道去哪">${list.productName }</a></td>
+<td colspan="2"><a href="${ctx }/product/detail?proid=${list.productCode}">${list.productName }</a></td>
 <td colspan="2">${list.bank }</td>
-<td colspan="2"><fmt:formatDate value="${list.createdTime }" pattern="yyyy-MM-dd h:m"/></td>
+<td colspan="2"><fmt:formatDate value="${list.createdTime }" pattern="yyyy-MM-dd H:m"/></td>
 <td colspan="1">${list.credit }</td>
 <td colspan="2">${list.status }</td>
 <td colspan="2">
 <c:choose>
 	<c:when test="${list.status == '需求填写中' || list.status == '等待新越网审核' }">
-		<a href="${ctx }/order/detail/document?id=${list.id}">附件补充</a>|<a href="${ctx }/order/detail/applicant?id=${list.id}">完善资料</a>
-		<a href="${ctx }/order/detail/applicant?id=${list.id}">查看详情</a>|<a href="javascript:deleteOrder('${list.id }')">取消订单</a>
+		<a href="${ctx }/member/order/detail/document?id=${list.id}">附件补充</a>|<a href="${ctx }/member/order/detail/applicant?id=${list.id}">完善资料</a>
+		<a href="${ctx }/member/order/detail/applicant?id=${list.id}">查看详情</a>|<a href="javascript:deleteOrder('${list.id }')">取消订单</a>
 	</c:when>
 	<c:when test="${list.status == '放款成功' }">
-		<a href="${ctx }/order/detail?id=${list.id}">确认收款</a>
+		<a href="${ctx }/member/order/detail?id=${list.id}">确认收款</a>
 	</c:when>
 	<c:otherwise>
-		<a href="${ctx }/order/detail/applicant?id=${list.id}">查看详情</a>
+		<a href="${ctx }/member/order/detail/applicant?id=${list.id}">查看详情</a>
 	</c:otherwise>
 </c:choose>
 </td>

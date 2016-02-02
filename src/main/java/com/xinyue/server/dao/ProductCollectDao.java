@@ -25,7 +25,24 @@ public interface ProductCollectDao {
 	
 	public Collect showDetail(@Param("id")int id);
 	
+	
+	
+	
+	
+	//2015-09-24
+	/**
+	 *  ywh 前台 产品页面 显示 分页
+	 * @param psearch
+	 * @param start
+	 * @param pageSize
+	 * @return
+	 */
 	public List<Product> findProductPage(@Param("psearch")ProductSearch psearch , @Param("start")int start , @Param("pageSize")int pageSize);
 	
-	public int getProductTypeCount(@Param("psearch")ProductSearch psearch);
+	/**
+	 *  ywh 前台 产品页面 显示 记录数
+	 * @param psearch
+	 * @return
+	 */
+	public int getProductCount(@Param("psearch")ProductSearch psearch);
 }

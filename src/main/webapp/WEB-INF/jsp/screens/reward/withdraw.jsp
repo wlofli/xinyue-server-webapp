@@ -20,6 +20,10 @@ function save(){
 		alert("提现金额必须小于或等于奖励账户余额");
 		return;
 	}
+	if($("#withdrawPrice").val() < 0){
+		alert("提现金额必须大于零");
+		return;
+	}
 	
 	
 	$("#form").submit();
@@ -42,7 +46,7 @@ function save(){
 <span class="f_r_s">累计奖励提现金额：<strong>${outline.withdrawTotal }</strong>元</span></div>
 </div> 
 <div class="tab">
-<form action="${ctx }/reward/addwithdraw" id="form" method="post">
+<form action="${ctx }/member/reward/addwithdraw" id="form" method="post">
 <p><span>提现金额：</span><input type="text" id="withdrawPrice" name="withdrawPrice" class="t1 number required" /><span class="yts">提现金额必须小于或等于奖励账户余额</span></p>
 <p>
 <input type="button" value="确认提现" name="withdrawPrice" onclick="save()"  class="b1" /></p>

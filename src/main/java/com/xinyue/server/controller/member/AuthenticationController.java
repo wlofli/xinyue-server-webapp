@@ -15,15 +15,21 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.xinyue.manage.model.Authentication;
 import com.xinyue.manage.model.Member;
 import com.xinyue.manage.service.AuthenticationService;
+import com.xinyue.manage.service.CommonService;
 import com.xinyue.manage.util.CommonFunction;
 import com.xinyue.manage.util.GlobalConstant;
-import com.xinyue.server.service.CommonService;
 
 /**
- * 实名认证
+ *  CommonService 2015-10-20 ywh 移走
+ * 实名认证 
  * @author MK)茅
  * @version v1.0
  * @date 创建时间：2015年7月18日
+ */
+
+/**
+ * 2015-11-24 lzc modifyAuth()删除修认证标志操作
+ *
  */
 @Controller
 @RequestMapping("/member")
@@ -129,16 +135,16 @@ public class AuthenticationController {
 		Member member = (Member) request.getSession().getAttribute(GlobalConstant.SESSION_MEMBER_INFO);
 		
 		Authentication authentication = authenticationService.findByMemberId(member.getId());
+		//modified by lzc 2015-11-24
+//		authentication.setAuthenticationStatus("0");
 		
-		authentication.setAuthenticationStatus("0");
+//		boolean result = authenticationService.updateAuthenticationStatusByCode(authentication, member.getId());
 		
-		boolean result = authenticationService.updateAuthenticationStatusByCode(authentication, member.getId());
-		
-		if (result) {
+//		if (result) {
 			model.addAttribute("authInfo", authentication);
 			model.addAttribute("imgPath", SHOWPATH);
-		}
-		
+//		}
+		//end 
 		return "screens/member/member_auth";
 	}
 	
